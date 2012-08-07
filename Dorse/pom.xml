@@ -1,0 +1,214 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>be.virtualsushi.jfx</groupId>
+	<artifactId>dorse</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Dorse</name>
+	<description>javafx client for dorse.me</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<fx.home>C:/Program Files/Oracle/JavaFX 2.0 SDK</fx.home>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>sonatype-snapshots</id>
+			<name>Sonatype OSS Snashot Repository</name>
+			<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>javafx</artifactId>
+			<version>2.0</version>
+			<scope>system</scope>
+			<systemPath>${fx.home}/rt/lib/jfxrt.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.zenjava</groupId>
+			<artifactId>jfxflow</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<exclusions>
+				<!-- Exclude provided javafx as we use our local one. -->
+				<exclusion>
+					<groupId>com.sun.javafx</groupId>
+					<artifactId>javafx</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.2</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>3.0.6.RELEASE</version>
+        </dependency>
+	
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</testResource>
+			<testResource>
+				<filtering>true</filtering>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<configuration>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<target>
+
+								<taskdef name="jfxdeploy" classname="com.sun.javafx.tools.ant.DeployFXTask"
+									classpathref="maven.plugin.classpath" />
+
+								<taskdef name="jfxsignjar" classname="com.sun.javafx.tools.ant.FXSignJarTask"
+									classpathref="maven.plugin.classpath" />
+
+
+								<jfxdeploy width="800" height="600"
+									outdir="${project.build.directory}/deploy" outfile="${build.finalName}">
+									<info title="${project.name}" />
+									<application name="${project.name}"
+										mainClass="be.virtualsushi.jfx.ArticleApplication" />
+									<resources>
+										<fileset dir="${project.build.directory}" includes="*.jar" />
+										<fileset dir="${project.build.directory}/dependency"
+											includes="*.jar" />
+									</resources>
+								</jfxdeploy>
+
+								<jfxsignjar destdir="${project.build.directory}/deploy"
+									keyStore="${keystore}" storePass="${keystore.password}" alias="${key.alias}"
+									keyPass="${key.password}">
+									<fileset dir="${project.build.directory}/deploy"
+										includes="*.jar" />
+								</jfxsignjar>
+
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<!-- this gives the ant plugin access to the ant-javafx.jar so it can 
+					run the custom ant tasks defined in there -->
+				<dependencies>
+					<dependency>
+						<groupId>com.sun.javafx</groupId>
+						<artifactId>javafx-ant</artifactId>
+						<version>2.0.beta</version>
+						<scope>system</scope>
+						<!-- change this to point to wherever you have installed JFX -->
+						<systemPath>${fx.home}/tools/ant-javafx.jar</systemPath>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<debug>true</debug>
+					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>
+											[2.0.0,)
+										</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+
+</project>

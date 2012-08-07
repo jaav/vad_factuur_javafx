@@ -1,0 +1,2 @@
+jfx.build.stagingdir = ${workspace}/Dorse/build
+jfx.build.apptitle = Dorse

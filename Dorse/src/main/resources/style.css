@@ -1,0 +1,65 @@
+@charset "utf-8";
+
+Button, TextField, TextArea, NumberTextField, PasswordField {
+	-fx-font-size: 20px;
+}
+
+MenuBar, Menu, MenuItem {
+	-fx-font-size: 16px;
+}
+
+.field-label {
+	-fx-font: normal 20px Tahoma; 
+	-fx-skin: "com.sun.javafx.scene.control.skin.LabelSkin";
+}
+
+.help-button {
+	-fx-skin: "com.sun.javafx.scene.control.skin.ButtonSkin";
+	-fx-graphic: url("help.png");
+	-fx-cursor: hand;
+}
+
+.settings-button {
+	-fx-skin: "com.sun.javafx.scene.control.skin.ButtonSkin";
+	-fx-graphic: url("gear.png");
+	-fx-cursor: hand;
+}
+
+.title-label {
+	-fx-skin: "com.sun.javafx.scene.control.skin.LabelSkin";
+	-fx-font-size: 20px;
+}
+
+.title {
+	-fx-background-image:url("bg.png");
+	-fx-background-image-repeat:repeat-x;
+	-fx-padding:5px;
+	-fx-border-color:#cfcfcf;
+	-fx-border-radius:3px;
+	-fx-border-style:solid outside;
+}
+
+.help-text {
+	-fx-font-size: 25px;
+	-fx-font-smoothing-type:gray;
+	-fx-skin: "com.sun.javafx.scene.control.skin.TextSkin";
+}
+
+.validation-panel {
+	-fx-text-fill: #B94A48;
+	-fx-background-color:#F2DEDE;
+	-fx-border-color:#EED3D7;
+	-fx-border-radius:3px;
+	-fx-border-style:solid;
+	-fx-font-size:14;
+	-fx-padding:10px;
+}
+
+.validation-title {
+	-fx-font-size:20;
+	-fx-padding:0px 0px 5px 0px;
+}
+
+.validation-message {
+	-fx-padding:0px 0px 2px 5px;
+}

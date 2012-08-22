@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.util.Duration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import be.virtualsushi.jfx.dorse.AppActivitiesNames;
 
 import com.zenjava.jfxflow.actvity.AbstractActivity;
@@ -31,8 +34,12 @@ import com.zenjava.jfxflow.transition.ViewTransition;
  */
 public class BasicAppActivity<V extends View<?>> extends AbstractActivity<V> implements HasEntryTransition, HasExitTransition {
 
+	@Autowired
 	private NavigationManager navigationManager;
+
+	@Autowired
 	private ResourceBundle resources;
+
 	private boolean isNew = true;
 
 	/**

@@ -1,5 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.virtualsushi.jfx</groupId>
 	<artifactId>dorse</artifactId>
@@ -9,7 +10,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<fx.home>C:/Program Files/Oracle/JavaFX 2.0 SDK</fx.home>
+		<fx.home>C:/Program Files/Oracle/JavaFX 2.2 SDK</fx.home>
+		<fx.version>2.2</fx.version>
+		<spring.version>3.0.6.RELEASE</spring.version>
 	</properties>
 
 	<repositories>
@@ -24,15 +27,15 @@
 	</repositories>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>javafx</artifactId>
-			<version>2.0</version>
+			<version>${fx.version}</version>
 			<scope>system</scope>
 			<systemPath>${fx.home}/rt/lib/jfxrt.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.zenjava</groupId>
 			<artifactId>jfxflow</artifactId>
@@ -45,31 +48,49 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.2</version>
 		</dependency>
-		
+
 		<dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>3.0.6.RELEASE</version>
-        </dependency>
-	
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -129,7 +150,7 @@
 									outdir="${project.build.directory}/deploy" outfile="${build.finalName}">
 									<info title="${project.name}" />
 									<application name="${project.name}"
-										mainClass="be.virtualsushi.jfx.ArticleApplication" />
+										mainClass="be.virtualsushi.jfx.drose.DorseApplication" />
 									<resources>
 										<fileset dir="${project.build.directory}" includes="*.jar" />
 										<fileset dir="${project.build.directory}/dependency"
@@ -209,6 +230,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
 
 </project>

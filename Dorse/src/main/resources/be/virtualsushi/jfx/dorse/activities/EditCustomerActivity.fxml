@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import java.lang.Object?>
+<?import be.virtualsushi.jfx.dorse.control.DeleteButton?>
+<?import be.virtualsushi.jfx.dorse.control.EditButton?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+			fx:controller="be.virtualsushi.jfx.dorse.activities.EditCustomerActivity">
+
+	<VBox spacing="10" >
+		<children>
+			<TextField text="Works!" />
+			<Button text="Button" />
+			<DeleteButton />
+			<EditButton text="Edit" />
+		</children>
+	</VBox>
+
+</AnchorPane>
+

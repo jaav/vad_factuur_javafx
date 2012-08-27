@@ -63,3 +63,8 @@ MenuBar, Menu, MenuItem {
 .validation-message {
 	-fx-padding:0px 0px 2px 5px;
 }
+
+.image-button {
+	-fx-padding: 7px 10px 7px 10px;
+	-fx-font-size: 20px;
+}

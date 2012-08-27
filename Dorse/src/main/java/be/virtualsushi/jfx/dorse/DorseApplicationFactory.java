@@ -2,91 +2,37 @@ package be.virtualsushi.jfx.dorse;
 
 import java.util.ResourceBundle;
 
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
-
-import com.zenjava.jfxflow.control.Browser;
-import com.zenjava.jfxflow.navigation.DefaultNavigationManager;
-import com.zenjava.jfxflow.navigation.NavigationManager;
-import com.zenjava.jfxflow.navigation.PlaceResolver;
+import be.virtualsushi.jfx.dorse.restapi.CustomerJsonHttpMessageConverter;
+import be.virtualsushi.jfx.dorse.restapi.CustomersListJsonHttpMessageConverter;
+import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 @Configuration
+@ComponentScan(basePackages = { "be.virtualsushi.jfx.dorse" })
 public class DorseApplicationFactory {
 
-	private DorseFxmlLoader fxmlLoader = new DorseFxmlLoader(ResourceBundle.getBundle("messages"));
-
-	@Bean
-	public Browser getBrowser() {
-		Browser browser = new Browser(getNavigationManager(), "VAD Factuur");
-		browser.setHeader(createMenu(getResources()));
-		mapActivities(browser.getPlaceResolvers());
-		return browser;
-	}
-
-	private Node createMenu(ResourceBundle resources) {
-		MenuBar menuBar = new MenuBar();
-
-		Menu menuVadFactuur = new Menu(resources.getString("vad.factuur"));
-
-		MenuItem aboutItem = new MenuItem(resources.getString("about"));
-		menuVadFactuur.getItems().add(aboutItem);
-
-		Menu menuObject = new Menu(resources.getString("object"));
-
-		Menu newItem = new Menu(resources.getString("new"));
-		MenuItem newInvoiceItem = new MenuItem(resources.getString("invoice"));
-		newInvoiceItem.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-
-			}
-		});
-
-		MenuItem newCustomer = new MenuItem(resources.getString("customer"));
-		MenuItem newArticle = new MenuItem(resources.getString("article"));
-		newItem.getItems().addAll(newInvoiceItem, newCustomer, newArticle);
-
-		Menu listItem = new Menu(resources.getString("list"));
-		MenuItem listInvoiceItem = new MenuItem(resources.getString("invoice"));
-		MenuItem listCustomer = new MenuItem(resources.getString("customer"));
-		MenuItem listArticle = new MenuItem(resources.getString("article"));
-		listItem.getItems().addAll(listInvoiceItem, listCustomer, listArticle);
-
-		menuObject.getItems().addAll(newItem, listItem);
-
-		menuBar.getMenus().addAll(menuVadFactuur, menuObject);
-
-		return menuBar;
-	}
-
-	private void mapActivities(ObservableList<PlaceResolver> placeResolvers) {
-
-	}
-
-	@Bean
-	public NavigationManager getNavigationManager() {
-		return new DefaultNavigationManager();
-	}
-
-	@Bean
+	@Bean(name = "resources")
 	public ResourceBundle getResources() {
 		return ResourceBundle.getBundle("messages");
 	}
 
 	@Bean
+	@Scope("prototype")
 	public LoginDialog getLoginDialog() {
-		return new LoginDialog(fxmlLoader, getResources());
+		return new LoginDialog(getResources());
+	}
+
+	@Bean(name = "restApiAccessor")
+	public RestApiAccessor getRestApiAccessor() {
+		RestApiAccessor accessor = new RestApiAccessor();
+		accessor.getMessageConverters().add(new CustomerJsonHttpMessageConverter());
+		accessor.getMessageConverters().add(new CustomersListJsonHttpMessageConverter());
+		return new RestApiAccessor();
 	}
 
 }

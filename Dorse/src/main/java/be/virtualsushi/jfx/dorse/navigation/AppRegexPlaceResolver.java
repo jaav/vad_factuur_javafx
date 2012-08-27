@@ -1,4 +1,5 @@
-package be.virtualsushi.jfx.dorse;
+package be.virtualsushi.jfx.dorse.navigation;
+
 
 import com.zenjava.jfxflow.actvity.Activity;
 import com.zenjava.jfxflow.navigation.RegexPlaceResolver;

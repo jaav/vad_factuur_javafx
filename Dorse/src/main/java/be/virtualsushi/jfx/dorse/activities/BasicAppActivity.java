@@ -3,17 +3,18 @@ package be.virtualsushi.jfx.dorse.activities;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javafx.scene.Node;
 import javafx.util.Duration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import be.virtualsushi.jfx.dorse.AppActivitiesNames;
+import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
+import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
+import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
+import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.zenjava.jfxflow.actvity.AbstractActivity;
-import com.zenjava.jfxflow.actvity.View;
-import com.zenjava.jfxflow.navigation.NavigationManager;
-import com.zenjava.jfxflow.navigation.Place;
-import com.zenjava.jfxflow.navigation.PlaceBuilder;
+import com.zenjava.jfxflow.actvity.SimpleView;
 import com.zenjava.jfxflow.transition.FlyTransition;
 import com.zenjava.jfxflow.transition.HasEntryTransition;
 import com.zenjava.jfxflow.transition.HasExitTransition;
@@ -32,34 +33,23 @@ import com.zenjava.jfxflow.transition.ViewTransition;
  *            - JFX Flow stuff seems that it's needed to construct activity's
  *            view.
  */
-public class BasicAppActivity<V extends View<?>> extends AbstractActivity<V> implements HasEntryTransition, HasExitTransition {
+public class BasicAppActivity<V extends Node> extends AbstractActivity<SimpleView<V>> implements HasEntryTransition, HasExitTransition {
 
-	@Autowired
-	private NavigationManager navigationManager;
+	private ActivityNavigator activityNavigator;
 
-	@Autowired
+	private RestApiAccessor restApiAccessor;
+
+	private LoginDialog loginDialog;
+
 	private ResourceBundle resources;
 
 	private boolean isNew = true;
 
 	/**
-	 * {@link NavigationManager} serves navigation between app's activities.
-	 * 
-	 * @return
-	 */
-	public NavigationManager getNavigationManager() {
-		return navigationManager;
-	}
-
-	public void setNavigationManager(NavigationManager navigationManager) {
-		this.navigationManager = navigationManager;
-	}
-
-	/**
 	 * Called any time activity get active.
 	 */
 	@Override
-	protected void activated() {
+	public void activated() {
 		super.activated();
 
 		if (isNew()) {
@@ -71,7 +61,7 @@ public class BasicAppActivity<V extends View<?>> extends AbstractActivity<V> imp
 	/**
 	 * Called when activity get active for the first time.
 	 */
-	protected void initialize() {
+	public void initialize() {
 
 	}
 
@@ -89,8 +79,8 @@ public class BasicAppActivity<V extends View<?>> extends AbstractActivity<V> imp
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected <P extends Object> P getParameter(String parameterName, Class<P> valueClass, P defaultValue) {
-		Map<String, Object> parameters = navigationManager.getCurrentPlace().getParameters();
+	public <P extends Object> P getParameter(String parameterName, Class<P> valueClass, P defaultValue) {
+		Map<String, Object> parameters = getActivityNavigator().getCurrentPlace().getParameters();
 		if (parameters != null && parameters.containsKey(parameterName)) {
 			Object result = parameters.get(parameterName);
 			if (valueClass.isInstance(result)) {
@@ -109,11 +99,11 @@ public class BasicAppActivity<V extends View<?>> extends AbstractActivity<V> imp
 		return FlyTransition.createFlyIn(getView().toNode(), Duration.millis(500), getEntrySide());
 	}
 
-	protected HorizontalPosition getExitSide() {
+	public HorizontalPosition getExitSide() {
 		return HorizontalPosition.right;
 	}
 
-	protected HorizontalPosition getEntrySide() {
+	public HorizontalPosition getEntrySide() {
 		return HorizontalPosition.right;
 	}
 
@@ -129,6 +119,11 @@ public class BasicAppActivity<V extends View<?>> extends AbstractActivity<V> imp
 		this.isNew = isNew;
 	}
 
+	public void showLoginDialog() {
+		loginDialog.show(getView().toNode());
+	}
+
+	@Autowired
 	public ResourceBundle getResources() {
 		return resources;
 	}
@@ -142,8 +137,8 @@ public class BasicAppActivity<V extends View<?>> extends AbstractActivity<V> imp
 	 * 
 	 * @param name
 	 */
-	protected void goTo(AppActivitiesNames name) {
-		getNavigationManager().goTo(new Place(name.name()));
+	public void goTo(AppActivitiesNames name) {
+		getActivityNavigator().goTo(name);
 	}
 
 	/**
@@ -155,14 +150,34 @@ public class BasicAppActivity<V extends View<?>> extends AbstractActivity<V> imp
 	 *            - list of parameters to pass to the activity. format -
 	 *            {param1Name, param1Value, param2Name, param2Valus...}.
 	 */
-	protected void goTo(AppActivitiesNames name, Object... parameters) {
-		assert (parameters.length % 2 == 0) : "parameters count should be even.";
-		PlaceBuilder placeBuilder = PlaceBuilder.create().name(name.name());
-		int index = 0;
-		while (index < parameters.length) {
-			placeBuilder.parameter((String) parameters[index], parameters[index + 1]);
-			index += 2;
-		}
-		getNavigationManager().goTo(placeBuilder.build());
+	public void goTo(AppActivitiesNames name, Object... parameters) {
+		getActivityNavigator().goTo(name, parameters);
+	}
+
+	@Autowired
+	public ActivityNavigator getActivityNavigator() {
+		return activityNavigator;
+	}
+
+	public void setActivityNavigator(ActivityNavigator activityNavigator) {
+		this.activityNavigator = activityNavigator;
+	}
+
+	@Autowired
+	public RestApiAccessor getRestApiAccessor() {
+		return restApiAccessor;
+	}
+
+	public void setRestApiAccessor(RestApiAccessor restApiAccessor) {
+		this.restApiAccessor = restApiAccessor;
+	}
+
+	@Autowired
+	public LoginDialog getLoginDialog() {
+		return loginDialog;
+	}
+
+	public void setLoginDialog(LoginDialog loginDialog) {
+		this.loginDialog = loginDialog;
 	}
 }

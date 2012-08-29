@@ -1,31 +1,22 @@
 package be.virtualsushi.jfx.dorse.dialogs;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
-import be.virtualsushi.jfx.dorse.fxml.AppUiComponent;
-import be.virtualsushi.jfx.dorse.fxml.DorseFxmlLoader;
+import be.virtualsushi.jfx.dorse.fxml.UiComponentBean;
 
-import com.zenjava.jfxflow.dialog.Dialog;
+import com.google.common.eventbus.EventBus;
 
-public class AbstractDialog extends Dialog implements AppUiComponent {
+public abstract class AbstractDialog extends UiComponentBean {
 
-	private DorseFxmlLoader dorseFxmlLoader;
+	private EventBus eventBus;
 
-	@Override
-	@PostConstruct
-	public void bindUi() {
-		setContent(dorseFxmlLoader.bindView(this));
+	public EventBus getEventBus() {
+		return eventBus;
 	}
 
 	@Autowired
-	public DorseFxmlLoader getDorseFxmlLoader() {
-		return dorseFxmlLoader;
-	}
-
-	public void setDorseFxmlLoader(DorseFxmlLoader dorseFxmlLoader) {
-		this.dorseFxmlLoader = dorseFxmlLoader;
+	public void setEventBus(EventBus eventBus) {
+		this.eventBus = eventBus;
 	}
 
 }

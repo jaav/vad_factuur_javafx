@@ -6,6 +6,9 @@ import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_INVOI
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.NEW_ARTICLE;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.NEW_CUSTOMER;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.NEW_INVOICE;
+
+import java.util.ResourceBundle;
+
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -15,18 +18,27 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import be.virtualsushi.jfx.dorse.activities.EditCustomerActivity;
-import be.virtualsushi.jfx.dorse.fxml.DorseFxmlLoader;
+import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
+import be.virtualsushi.jfx.dorse.events.authentication.LoginEvent;
+import be.virtualsushi.jfx.dorse.events.authentication.SessionExpiredEvent;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.navigation.AppRegexPlaceResolver;
+import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.zenjava.jfxflow.control.Browser;
+import com.zenjava.jfxflow.dialog.Dialog;
 import com.zenjava.jfxflow.navigation.PlaceResolver;
 
 public class DorseApplication extends Application {
+
+	public static final String LOGIN_DIALOG_TITLE_KEY = "login.dialog.title";
 
 	public static final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(DorseApplicationFactory.class);
 
@@ -34,19 +46,34 @@ public class DorseApplication extends Application {
 		launch(args);
 	}
 
+	private Dialog loginDialog;
+	private Browser browser;
+	private RestApiAccessor restApiAccessor;
+
 	@Override
 	public void start(Stage stage) throws Exception {
 
-		Browser browser = new Browser(applicationContext.getBean(ActivityNavigator.class), "VAD Factuur");
+		browser = new Browser(applicationContext.getBean(ActivityNavigator.class), "VAD Factuur");
 		browser.setHeader(createMenu(applicationContext.getBean(MenuFactory.class)));
-		mapActivities(browser.getPlaceResolvers(), applicationContext.getBean(DorseFxmlLoader.class));
-		BorderPane root = new BorderPane();
-		root.setCenter(browser);
-		Scene scene = new Scene(root, 800, 600);
+		mapActivities(browser.getPlaceResolvers());
+
+		BorderPane rootNode = new BorderPane();
+
+		initializeAuthenticationManagement();
+
+		rootNode.setCenter(browser);
+		Scene scene = new Scene(rootNode, 800, 600);
 		stage.setScene(scene);
 		scene.getStylesheets().add("style.css");
 		stage.show();
 
+	}
+
+	private void initializeAuthenticationManagement() {
+		applicationContext.getBean(EventBus.class).register(this);
+		restApiAccessor = applicationContext.getBean(RestApiAccessor.class);
+		loginDialog = new Dialog(applicationContext.getBean(ResourceBundle.class).getString(LOGIN_DIALOG_TITLE_KEY));
+		loginDialog.setContent(applicationContext.getBean(LoginDialog.class).asNode());
 	}
 
 	private Node createMenu(MenuFactory factory) {
@@ -62,8 +89,20 @@ public class DorseApplication extends Application {
 		return menuBar;
 	}
 
-	private void mapActivities(ObservableList<PlaceResolver> placeResolvers, DorseFxmlLoader loader) {
-		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.NEW_CUSTOMER, loader.loadActivity(EditCustomerActivity.class)));
+	private void mapActivities(ObservableList<PlaceResolver> placeResolvers) {
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.NEW_CUSTOMER, applicationContext.getBean(EditCustomerActivity.class)));
+	}
+
+	@Subscribe
+	public void onSessionExpired(SessionExpiredEvent event) {
+		loginDialog.show(browser);
+	}
+
+	@Subscribe
+	public void onLogin(LoginEvent event) {
+		if (StringUtils.isNotBlank(restApiAccessor.login(event.getUsername(), event.getPassword()))) {
+			loginDialog.hide();
+		}
 	}
 
 }

@@ -24,21 +24,25 @@ public class MenuFactory {
 	private ResourceBundle resources;
 
 	public Menu createMenu(String name, MenuItem... subItems) {
-		Menu result = new Menu(resources.containsKey(name) ? resources.getString(name) : name);
+		Menu result = new Menu(getTitle(name));
 		if (ArrayUtils.isNotEmpty(subItems)) {
 			result.getItems().addAll(subItems);
 		}
 		return result;
 	}
 
-	public MenuItem createMenuItem(String name, final AppActivitiesNames activity) {
-		MenuItem result = new MenuItem(resources.containsKey(name) ? resources.getString(name) : name);
-		if (activity != null) {
+	private String getTitle(String name) {
+		return resources.containsKey(name) ? resources.getString(name) : name;
+	}
+
+	public MenuItem createMenuItem(String name, final AppActivitiesNames activityName) {
+		MenuItem result = new MenuItem(getTitle(name));
+		if (activityName != null) {
 			result.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
-					activityNavigator.goTo(activity);
+					activityNavigator.goTo(activityName);
 				}
 			});
 		}
@@ -50,8 +54,8 @@ public class MenuFactory {
 	}
 
 	public Menu createMenu(String name, Object... subItemsParameters) {
-		assert (subItemsParameters == null || subItemsParameters.length % 2 == 0) : "parameters count should be even.";
-		Menu result = new Menu(resources.containsKey(name) ? resources.getString(name) : name);
+		assert (subItemsParameters == null || subItemsParameters.length % 2 == 0) : "no parameters or parameters count should be even.";
+		Menu result = new Menu(getTitle(name));
 		if (subItemsParameters == null) {
 			return result;
 		}

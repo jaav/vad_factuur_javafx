@@ -38,7 +38,7 @@ public class DorseFxmlLoader extends FxmlLoader {
 		return result;
 	}
 
-	public Node bindView(AppUiComponent component) {
+	public Node bindView(IUiComponent component) {
 		InputStream fxmlStream = null;
 		Class<?> clazz = component.getClass();
 		try {

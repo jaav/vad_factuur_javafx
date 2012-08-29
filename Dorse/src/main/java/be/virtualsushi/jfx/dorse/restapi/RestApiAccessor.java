@@ -49,4 +49,8 @@ public class RestApiAccessor extends RestTemplate {
 		return getForObject("http://dorse.me/customers/{id}", Customer.class, id);
 	}
 
+	public String login(String username, String password) {
+		return null;
+	}
+
 }

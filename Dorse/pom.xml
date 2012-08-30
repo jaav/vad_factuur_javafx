@@ -11,7 +11,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!--fx.home>C:/Program Files/Oracle/JavaFX 2.2 SDK</fx.home-->
-    <fx.home>/Library/Java/JavaVirtualMachines/jdk1.7.0_06.jdk/Contents/Home/jre/lib</fx.home>    
+        <fx.home>/Library/Java/JavaVirtualMachines/jdk1.7.0_06.jdk/Contents/Home/jre/lib</fx.home>
 		<fx.version>2.2</fx.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
 	</properties>

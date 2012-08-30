@@ -9,16 +9,24 @@
 <?import be.virtualsushi.jfx.dorse.control.DeleteButton?>
 <?import be.virtualsushi.jfx.dorse.control.EditButton?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import be.virtualsushi.jfx.dorse.control.TextFormField?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-			fx:controller="be.virtualsushi.jfx.dorse.activities.EditCustomerActivity">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" >
 
 	<VBox spacing="10" >
 		<children>
-			<TextField text="Works!" />
-			<Button text="Button" />
-			<DeleteButton />
-			<EditButton text="Edit" />
+			<Label fx:id="title"/>
+			<TextFormField fx:id="nameField" label="%name"/>
+			<TextFormField fx:id="vatField" label="%vat"/>
+			<TextFormField fx:id="ibanField" label="%iban"/>
+			<HBox >
+				<children>
+					<Button text="%save" onAction="#handleSave"/>
+					<Button text="%cancel" onAction="#handleCancel"/>
+				</children>
+			</HBox>
 		</children>
 	</VBox>
 

@@ -6,15 +6,21 @@ import java.util.ResourceBundle;
 import javafx.scene.Node;
 import javafx.util.Duration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.PostConstruct;
 
-import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
+import be.virtualsushi.jfx.dorse.fxml.IUiComponent;
+import be.virtualsushi.jfx.dorse.fxml.UiBinder;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
+import com.google.common.eventbus.EventBus;
 import com.zenjava.jfxflow.actvity.AbstractActivity;
 import com.zenjava.jfxflow.actvity.SimpleView;
+import com.zenjava.jfxflow.dialog.Dialog;
 import com.zenjava.jfxflow.transition.FlyTransition;
 import com.zenjava.jfxflow.transition.HasEntryTransition;
 import com.zenjava.jfxflow.transition.HasExitTransition;
@@ -22,28 +28,33 @@ import com.zenjava.jfxflow.transition.HorizontalPosition;
 import com.zenjava.jfxflow.transition.ViewTransition;
 
 /**
- * Basic class for all app's activities. Stores {@link DaoManager} instance to
- * access data layer and {@link ResourceBundle} for resources, also manages some
- * activity lifecycle like if activity have been just created or have came from
- * stack.
+ * Basic class for all app's activities. Manages some activity lifecycle like if
+ * activity have been just created or have came from stack.
  * 
  * @author Pavel Stinikov (van.frag@gmail.com)
  * 
  * @param <V>
- *            - JFX Flow stuff seems that it's needed to construct activity's
- *            view.
+ *            - Root node type.
  */
-public class BasicAppActivity<V extends Node> extends AbstractActivity<SimpleView<V>> implements HasEntryTransition, HasExitTransition {
+public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> implements HasEntryTransition, HasExitTransition, IUiComponent {
 
 	private ActivityNavigator activityNavigator;
 
 	private RestApiAccessor restApiAccessor;
 
-	private LoginDialog loginDialog;
+	private EventBus eventBus;
 
 	private ResourceBundle resources;
 
+	private ApplicationContext applicationContext;
+
+	private UiBinder uiBinder;
+
 	private boolean isNew = true;
+
+	private Dialog dialog = new Dialog();
+
+	private Class<? extends IUiComponent> currentlyShowingComponent;
 
 	/**
 	 * Called any time activity get active.
@@ -119,15 +130,25 @@ public class BasicAppActivity<V extends Node> extends AbstractActivity<SimpleVie
 		this.isNew = isNew;
 	}
 
-	public void showLoginDialog() {
-		loginDialog.show(getView().toNode());
+	protected void showDialog(String dialogTitle, Class<? extends IUiComponent> componentClass) {
+
+		currentlyShowingComponent = componentClass;
+		dialog.setTitle(dialogTitle);
+		dialog.setContent(applicationContext.getBean(componentClass).asNode());
+		dialog.show(getView().toNode());
 	}
 
-	@Autowired
+	protected void hideDialog(Class<? extends IUiComponent> componentClass) {
+		if (currentlyShowingComponent.equals(componentClass)) {
+			dialog.hide();
+		}
+	}
+
 	public ResourceBundle getResources() {
 		return resources;
 	}
 
+	@Autowired
 	public void setResources(ResourceBundle resources) {
 		this.resources = resources;
 	}
@@ -154,30 +175,61 @@ public class BasicAppActivity<V extends Node> extends AbstractActivity<SimpleVie
 		getActivityNavigator().goTo(name, parameters);
 	}
 
-	@Autowired
 	public ActivityNavigator getActivityNavigator() {
 		return activityNavigator;
 	}
 
+	@Autowired
 	public void setActivityNavigator(ActivityNavigator activityNavigator) {
 		this.activityNavigator = activityNavigator;
 	}
 
-	@Autowired
 	public RestApiAccessor getRestApiAccessor() {
 		return restApiAccessor;
 	}
 
+	@Autowired
 	public void setRestApiAccessor(RestApiAccessor restApiAccessor) {
 		this.restApiAccessor = restApiAccessor;
 	}
 
-	@Autowired
-	public LoginDialog getLoginDialog() {
-		return loginDialog;
+	@SuppressWarnings("unchecked")
+	@Override
+	@PostConstruct
+	public void bindUi() {
+		setView(new SimpleView<V>((V) uiBinder.bind(this)));
 	}
 
-	public void setLoginDialog(LoginDialog loginDialog) {
-		this.loginDialog = loginDialog;
+	@Override
+	public Node asNode() {
+		throw new IllegalStateException("Activity can't be presented as node.");
 	}
+
+	public ApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
+
+	@Autowired
+	public void setApplicationContext(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
+
+	public EventBus getEventBus() {
+		return eventBus;
+	}
+
+	@Autowired
+	public void setEventBus(EventBus eventBus) {
+		this.eventBus = eventBus;
+	}
+
+	public UiBinder getUiBinder() {
+		return uiBinder;
+	}
+
+	@Autowired
+	public void setUiBinder(UiBinder uiBinder) {
+		this.uiBinder = uiBinder;
+	}
+
 }

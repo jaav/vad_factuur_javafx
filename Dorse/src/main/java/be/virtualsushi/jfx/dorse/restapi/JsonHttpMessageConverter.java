@@ -1,6 +1,7 @@
 package be.virtualsushi.jfx.dorse.restapi;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
-public abstract class AbstractJsonHttpMessageConverter<M> implements HttpMessageConverter<M> {
+public class JsonHttpMessageConverter<M> implements HttpMessageConverter<M> {
 
 	public static final MediaType JSON_MEDIA_TYPE = new MediaType("application", "json");
 
@@ -47,7 +48,10 @@ public abstract class AbstractJsonHttpMessageConverter<M> implements HttpMessage
 		getJsonFactory().createJsonGenerator(outputMessage.getBody(), JsonEncoding.UTF8).writeObject(t);
 	}
 
-	protected abstract Class<M> getSupportedModelClass();
+	@SuppressWarnings("unchecked")
+	private Class<M> getSupportedModelClass() {
+		return (Class<M>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	}
 
 	private ObjectMapper getObjectMapper() {
 		if (objectMapper == null) {

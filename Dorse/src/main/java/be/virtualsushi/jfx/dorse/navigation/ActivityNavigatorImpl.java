@@ -2,9 +2,7 @@ package be.virtualsushi.jfx.dorse.navigation;
 
 import org.springframework.stereotype.Service;
 
-
 import com.zenjava.jfxflow.navigation.DefaultNavigationManager;
-import com.zenjava.jfxflow.navigation.NavigationManager;
 import com.zenjava.jfxflow.navigation.Place;
 import com.zenjava.jfxflow.navigation.PlaceBuilder;
 
@@ -40,11 +38,6 @@ public class ActivityNavigatorImpl extends DefaultNavigationManager implements A
 			index += 2;
 		}
 		goTo(placeBuilder.build());
-	}
-
-	@Override
-	public NavigationManager asNavigationManager() {
-		return this;
 	}
 
 }

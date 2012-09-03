@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.TextField;
-import be.virtualsushi.jfx.dorse.events.SaveSectorEvent;
+import be.virtualsushi.jfx.dorse.events.SaveEntityEvent;
 import be.virtualsushi.jfx.dorse.model.Sector;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
@@ -26,7 +26,7 @@ public class NewSectorDialog extends AbstractDialog {
 
 	@FXML
 	protected void handleSave(ActionEvent event) {
-		getEventBus().post(new SaveSectorEvent(null));
+		getEventBus().post(new SaveEntityEvent<Sector>(null));
 	}
 
 	@Override

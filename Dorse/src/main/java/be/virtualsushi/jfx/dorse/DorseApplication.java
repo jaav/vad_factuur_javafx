@@ -1,11 +1,11 @@
 package be.virtualsushi.jfx.dorse;
 
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_ARTICLES;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_CUSTOMERS;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_INVOICES;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_ARTICLE;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_CUSTOMER;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_INVOICE;
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_ARTICLES;
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_CUSTOMERS;
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_INVOICES;
 
 import java.util.ResourceBundle;
 
@@ -24,12 +24,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import be.virtualsushi.jfx.dorse.activities.EditArticleActivity;
 import be.virtualsushi.jfx.dorse.activities.EditCustomerActivity;
 import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
+import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.LoginEvent;
-import be.virtualsushi.jfx.dorse.events.authentication.SessionExpiredEvent;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.navigation.AppRegexPlaceResolver;
-import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -49,7 +48,6 @@ public class DorseApplication extends Application {
 
 	private Dialog loginDialog;
 	private Browser browser;
-	private RestApiAccessor restApiAccessor;
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -72,7 +70,6 @@ public class DorseApplication extends Application {
 
 	private void initializeAuthenticationManagement() {
 		applicationContext.getBean(EventBus.class).register(this);
-		restApiAccessor = applicationContext.getBean(RestApiAccessor.class);
 		loginDialog = new Dialog(applicationContext.getBean(ResourceBundle.class).getString(LOGIN_DIALOG_TITLE_KEY));
 		loginDialog.setContent(applicationContext.getBean(LoginDialog.class).asNode());
 	}
@@ -96,13 +93,13 @@ public class DorseApplication extends Application {
 	}
 
 	@Subscribe
-	public void onSessionExpired(SessionExpiredEvent event) {
+	public void onAuthorizationRequired(AuthorizationRequiredEvent event) {
 		loginDialog.show(browser);
 	}
 
 	@Subscribe
 	public void onLogin(LoginEvent event) {
-		if (StringUtils.isNotBlank(restApiAccessor.login(event.getUsername(), event.getPassword()))) {
+		if (StringUtils.isNotBlank(event.getAuthToken())) {
 			loginDialog.hide();
 		}
 	}

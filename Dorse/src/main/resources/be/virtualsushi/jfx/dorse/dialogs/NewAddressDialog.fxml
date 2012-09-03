@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10">
+
+	<FieldLabel value="%address.line.1" GridPane.columnIndex="0"
+		GridPane.rowIndex="0" />
+	<TextField fx:id="addressLine1Field" GridPane.columnIndex="1"
+		GridPane.rowIndex="0" fieldWidth="300" />
+
+	<FieldLabel value="%address.line.2" GridPane.columnIndex="0"
+		GridPane.rowIndex="1" />
+	<TextField fx:id="addressLine2Field" GridPane.columnIndex="1"
+		GridPane.rowIndex="1" fieldWidth="300" />
+
+	<FieldLabel value="%location" GridPane.columnIndex="0"
+		GridPane.rowIndex="2" />
+	<TextField fx:id="locationField" GridPane.columnIndex="1"
+		GridPane.rowIndex="2" fieldWidth="300" />
+
+	<FieldLabel value="%phone" GridPane.columnIndex="0"
+		GridPane.rowIndex="3" />
+	<TextField fx:id="phoneField" GridPane.columnIndex="1"
+		GridPane.rowIndex="3" fieldWidth="300" />
+
+	<FieldLabel value="%fax" GridPane.columnIndex="0"
+		GridPane.rowIndex="4" />
+	<TextField fx:id="faxField" GridPane.columnIndex="1"
+		GridPane.rowIndex="4" fieldWidth="300" />
+
+	<FieldLabel value="%email" GridPane.columnIndex="0"
+		GridPane.rowIndex="5" />
+	<TextField fx:id="emailField" GridPane.columnIndex="1"
+		GridPane.rowIndex="5" fieldWidth="300" />
+
+	<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="6"
+		alignment="BOTTOM_RIGHT">
+		<children>
+			<Button text="%save" onAction="#handleSave" />
+			<Button text="%cancel" onAction="#handleCancel" />
+		</children>
+	</HBox>
+
+</GridPane>
+

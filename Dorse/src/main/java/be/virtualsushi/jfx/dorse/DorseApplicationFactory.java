@@ -8,8 +8,13 @@ import org.springframework.context.annotation.Configuration;
 
 import be.virtualsushi.jfx.dorse.fxml.PackageBasedUiBinder;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
-import be.virtualsushi.jfx.dorse.restapi.CustomerJsonHttpMessageConverter;
-import be.virtualsushi.jfx.dorse.restapi.CustomersListJsonHttpMessageConverter;
+import be.virtualsushi.jfx.dorse.model.Article;
+import be.virtualsushi.jfx.dorse.model.ArticleType;
+import be.virtualsushi.jfx.dorse.model.Customer;
+import be.virtualsushi.jfx.dorse.model.Sector;
+import be.virtualsushi.jfx.dorse.model.Supplier;
+import be.virtualsushi.jfx.dorse.model.Unit;
+import be.virtualsushi.jfx.dorse.restapi.JsonHttpMessageConverter;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.google.common.eventbus.EventBus;
@@ -26,8 +31,18 @@ public class DorseApplicationFactory {
 	@Bean(name = "restApiAccessor")
 	public RestApiAccessor getRestApiAccessor() {
 		RestApiAccessor accessor = new RestApiAccessor();
-		accessor.getMessageConverters().add(new CustomerJsonHttpMessageConverter());
-		accessor.getMessageConverters().add(new CustomersListJsonHttpMessageConverter());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Customer>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Customer[]>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Sector>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Sector[]>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Article>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Article[]>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<ArticleType>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<ArticleType[]>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Unit>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Unit[]>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Supplier>());
+		accessor.getMessageConverters().add(new JsonHttpMessageConverter<Supplier[]>());
 		return new RestApiAccessor();
 	}
 

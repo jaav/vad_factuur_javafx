@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
+import be.virtualsushi.jfx.dorse.dialogs.AbstractDialog;
+import be.virtualsushi.jfx.dorse.events.CancelDialogEvent;
 import be.virtualsushi.jfx.dorse.fxml.IUiComponent;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
@@ -18,6 +20,7 @@ import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.zenjava.jfxflow.actvity.AbstractActivity;
 import com.zenjava.jfxflow.actvity.SimpleView;
 import com.zenjava.jfxflow.dialog.Dialog;
@@ -54,7 +57,7 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 
 	private Dialog dialog = new Dialog();
 
-	private Class<? extends IUiComponent> currentlyShowingComponent;
+	private Class<? extends AbstractDialog> currentlyShowingComponent;
 
 	/**
 	 * Called any time activity get active.
@@ -67,6 +70,14 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 			initialize();
 			setNew(false);
 		}
+
+		getEventBus().register(this);
+	}
+
+	@Override
+	protected void deactivated() {
+		super.deactivated();
+		getEventBus().unregister(this);
 	}
 
 	/**
@@ -111,7 +122,7 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 	}
 
 	public HorizontalPosition getExitSide() {
-		return HorizontalPosition.right;
+		return HorizontalPosition.left;
 	}
 
 	public HorizontalPosition getEntrySide() {
@@ -130,15 +141,17 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 		this.isNew = isNew;
 	}
 
-	protected void showDialog(String dialogTitle, Class<? extends IUiComponent> componentClass) {
+	protected void showDialog(String dialogTitle, Class<? extends AbstractDialog> componentClass) {
 
 		currentlyShowingComponent = componentClass;
 		dialog.setTitle(dialogTitle);
-		dialog.setContent(applicationContext.getBean(componentClass).asNode());
+		AbstractDialog dialogContent = applicationContext.getBean(componentClass);
+		dialog.setContent(dialogContent.asNode());
 		dialog.show(getView().toNode());
+		dialogContent.onShow();
 	}
 
-	protected void hideDialog(Class<? extends IUiComponent> componentClass) {
+	protected void hideDialog(Class<? extends AbstractDialog> componentClass) {
 		if (currentlyShowingComponent.equals(componentClass)) {
 			dialog.hide();
 		}
@@ -232,4 +245,8 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 		this.uiBinder = uiBinder;
 	}
 
+	@Subscribe
+	public void onCancelDialog(CancelDialogEvent event) {
+		hideDialog(event.getDialogClass());
+	}
 }

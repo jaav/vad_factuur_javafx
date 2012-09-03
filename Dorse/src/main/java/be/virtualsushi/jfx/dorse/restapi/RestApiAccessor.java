@@ -14,9 +14,11 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import be.virtualsushi.jfx.dorse.model.Customer;
+import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
 public class RestApiAccessor extends RestTemplate {
+
+	public static final String BASE_SERVICE_URI = "http://dorse.me/";
 
 	private static final int DEFAULT_MAX_TOTAL_CONNECTIONS = 100;
 	private static final int DEFAULT_MAX_CONNECTIONS_PER_ROUTE = 5;
@@ -36,21 +38,33 @@ public class RestApiAccessor extends RestTemplate {
 		setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
 	}
 
-	public List<Customer> getCustomersList(Integer offset, Integer count) {
-		ArrayList<Customer> result = new ArrayList<Customer>();
-		Customer[] ids = getForObject("http://dorse.me/customers", Customer[].class);
+	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, Class<E> entityClass, Class<E[]> arrayClass) {
+		ArrayList<E> result = new ArrayList<E>();
+		E[] ids = getForObject(BASE_SERVICE_URI + getEntitySubPath(entityClass) + "s", arrayClass);
 		for (int i = 0; i < count; i++) {
-			result.add(getCustomer(ids[i + offset].getId()));
+			result.add(get(ids[i + offset].getId(), entityClass));
 		}
 		return result;
 	}
 
-	public Customer getCustomer(Long id) {
-		return getForObject("http://dorse.me/customers/{id}", Customer.class, id);
+	public <E extends BaseEntity> E get(Long id, Class<E> clazz) {
+		return getForObject(BASE_SERVICE_URI + getEntitySubPath(clazz) + "/{id}", clazz, id);
+	}
+
+	public <E extends BaseEntity> void save(E entity) {
+		if (entity.getId() == null) {
+			postForObject(BASE_SERVICE_URI + getEntitySubPath(entity.getClass()), entity, entity.getClass());
+		} else {
+			postForObject(BASE_SERVICE_URI + getEntitySubPath(entity.getClass()) + "/{id}", entity, entity.getClass(), entity.getId());
+		}
 	}
 
 	public String login(String username, String password) {
 		return null;
+	}
+
+	private String getEntitySubPath(Class<? extends BaseEntity> entityClass) {
+		return entityClass.getSimpleName().toLowerCase();
 	}
 
 }

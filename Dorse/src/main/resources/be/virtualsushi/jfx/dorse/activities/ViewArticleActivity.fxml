@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import java.lang.String?>
+<?import javafx.scene.layout.GridPane?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
+	<children>
+		<Label fx:id="title">
+			<styleClass>
+				<String fx:value="activity-title" />
+			</styleClass>
+		</Label>
+
+		<GridPane vgap="5" hgap="10">
+
+			<FieldLabel value="%id" GridPane.columnIndex="0"
+				GridPane.rowIndex="0" />
+			<Label fx:id="idField" GridPane.columnIndex="1"
+				GridPane.rowIndex="0" GridPane.columnSpan="3" />
+			<FieldLabel value="%stock" GridPane.columnIndex="4"
+				GridPane.rowIndex="0" />
+			<Label fx:id="stockField" GridPane.columnIndex="5"
+				GridPane.rowIndex="0" />
+
+			<FieldLabel value="%code" GridPane.columnIndex="0"
+				GridPane.rowIndex="1" />
+			<Label fx:id="codeField" GridPane.columnIndex="1"
+				GridPane.rowIndex="1" GridPane.columnSpan="2" prefWidth="150" />
+			<FieldLabel value="%created" GridPane.columnIndex="3"
+				GridPane.rowIndex="1" />
+			<Label fx:id="createdField" GridPane.columnIndex="4"
+				GridPane.rowIndex="1" GridPane.columnSpan="3" />
+
+			<FieldLabel value="%name" GridPane.columnIndex="0"
+				GridPane.rowIndex="2" />
+			<Label fx:id="nameField" GridPane.columnIndex="1"
+				GridPane.rowIndex="2" GridPane.columnSpan="6" prefWidth="400" />
+
+			<FieldLabel value="%description" GridPane.columnIndex="0"
+				GridPane.rowIndex="3" />
+			<Label fx:id="descriptionField"
+				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="6"
+				prefWidth="400" prefHeight="100" />
+
+			<FieldLabel value="%type" GridPane.columnIndex="0"
+				GridPane.rowIndex="4" />
+			<Label fx:id="typeField" GridPane.columnIndex="1"
+				GridPane.rowIndex="4" prefWidth="360" GridPane.columnSpan="6" />
+
+			<FieldLabel value="%price" GridPane.columnIndex="0"
+				GridPane.rowIndex="5" />
+			<Label fx:id="priceField" GridPane.columnIndex="1"
+				GridPane.rowIndex="5" prefWidth="400" GridPane.columnSpan="6" />
+
+			<FieldLabel value="%weight" GridPane.columnIndex="0"
+				GridPane.rowIndex="6" />
+			<Label fx:id="weightField" GridPane.columnIndex="1"
+				GridPane.rowIndex="6" prefWidth="100" />
+			<Label text="g" GridPane.columnIndex="2" GridPane.rowIndex="6" alignment="CENTER_LEFT"/>
+			<FieldLabel value="%unit" GridPane.columnIndex="3"
+				GridPane.rowIndex="6" />
+			<Label fx:id="unitField" GridPane.columnIndex="4"
+				GridPane.rowIndex="6" GridPane.columnSpan="3" prefWidth="136" />
+
+			<FieldLabel value="%supplier" GridPane.columnIndex="0"
+				GridPane.rowIndex="7" />
+			<Label fx:id="supplierField"
+				GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="6"
+				prefWidth="360" />
+
+		</GridPane>
+	</children>
+</VBox>
+

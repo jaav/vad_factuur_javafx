@@ -16,7 +16,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
 	<children>
-		<Label fx:id="title" AnchorPane.topAnchor="$idField" >
+		<Label fx:id="title" >
 			<styleClass>
 				<String fx:value="activity-title"/>
 			</styleClass>

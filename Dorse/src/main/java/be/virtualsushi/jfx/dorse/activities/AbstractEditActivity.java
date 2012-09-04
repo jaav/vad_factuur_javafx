@@ -6,11 +6,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+
+import javax.validation.Validator;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
 public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity> extends UiActivity<N> {
 
 	public static final String EDITING_ENTITY_ID_PARAMETER = "editing_entity_id";
+
+	private Validator validator;
 
 	@FXML
 	public Label title;
@@ -44,6 +51,15 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 
 	protected E getEditingEntity() {
 		return editingEntity;
+	}
+
+	public Validator getValidator() {
+		return validator;
+	}
+
+	@Autowired
+	public void setValidator(Validator validator) {
+		this.validator = validator;
 	}
 
 	protected abstract String getEditTitleKey();

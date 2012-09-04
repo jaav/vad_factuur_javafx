@@ -23,6 +23,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import be.virtualsushi.jfx.dorse.activities.EditArticleActivity;
 import be.virtualsushi.jfx.dorse.activities.EditCustomerActivity;
+import be.virtualsushi.jfx.dorse.activities.EditInvoiceActivity;
+import be.virtualsushi.jfx.dorse.activities.ViewArticleActivity;
 import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
 import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.LoginEvent;
@@ -90,6 +92,8 @@ public class DorseApplication extends Application {
 	private void mapActivities(ObservableList<PlaceResolver> placeResolvers) {
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_CUSTOMER, applicationContext.getBean(EditCustomerActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_ARTICLE, applicationContext.getBean(EditArticleActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_ARTICLE, applicationContext.getBean(ViewArticleActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_INVOICE, applicationContext.getBean(EditInvoiceActivity.class)));
 	}
 
 	@Subscribe

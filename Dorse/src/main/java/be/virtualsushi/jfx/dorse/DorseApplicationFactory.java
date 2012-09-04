@@ -2,6 +2,9 @@ package be.virtualsushi.jfx.dorse;
 
 import java.util.ResourceBundle;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -54,6 +57,11 @@ public class DorseApplicationFactory {
 	@Bean(name = "uiBinder")
 	public UiBinder getUiBinder() {
 		return new PackageBasedUiBinder();
+	}
+
+	@Bean(name = "validator")
+	public Validator getValidator() {
+		return Validation.buildDefaultValidatorFactory().getValidator();
 	}
 
 }

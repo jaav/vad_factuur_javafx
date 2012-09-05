@@ -11,6 +11,7 @@ import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
 public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity> extends UiActivity<N> {
@@ -26,7 +27,7 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 
 	@FXML
 	public void handleCancel(ActionEvent event) {
-
+		getEventBus().post(new AuthorizationRequiredEvent());
 	}
 
 	@FXML

@@ -25,6 +25,7 @@ import be.virtualsushi.jfx.dorse.activities.EditArticleActivity;
 import be.virtualsushi.jfx.dorse.activities.EditCustomerActivity;
 import be.virtualsushi.jfx.dorse.activities.EditInvoiceActivity;
 import be.virtualsushi.jfx.dorse.activities.ViewArticleActivity;
+import be.virtualsushi.jfx.dorse.control.DialogPopup;
 import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
 import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.LoginEvent;
@@ -42,18 +43,18 @@ public class DorseApplication extends Application {
 
 	public static final String LOGIN_DIALOG_TITLE_KEY = "login.dialog.title";
 
-	public static final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(DorseApplicationFactory.class);
-
 	public static void main(String[] args) throws Exception {
 		launch(args);
 	}
 
 	private Dialog loginDialog;
 	private Browser browser;
+	private AnnotationConfigApplicationContext applicationContext;
 
 	@Override
 	public void start(Stage stage) throws Exception {
 
+		applicationContext = new AnnotationConfigApplicationContext(DorseApplicationFactory.class);
 		browser = new Browser(applicationContext.getBean(ActivityNavigator.class), "VAD Factuur");
 		browser.setHeader(createMenu(applicationContext.getBean(MenuFactory.class)));
 		mapActivities(browser.getPlaceResolvers());
@@ -72,7 +73,7 @@ public class DorseApplication extends Application {
 
 	private void initializeAuthenticationManagement() {
 		applicationContext.getBean(EventBus.class).register(this);
-		loginDialog = new Dialog(applicationContext.getBean(ResourceBundle.class).getString(LOGIN_DIALOG_TITLE_KEY));
+		loginDialog = new DialogPopup(applicationContext.getBean(ResourceBundle.class).getString(LOGIN_DIALOG_TITLE_KEY), false, true);
 		loginDialog.setContent(applicationContext.getBean(LoginDialog.class).asNode());
 	}
 

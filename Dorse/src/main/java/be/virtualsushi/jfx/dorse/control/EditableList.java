@@ -10,9 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 
-public class EditableList<V> extends HBox implements HasValue<V>, HasValidation {
+public class EditableList<V> extends HBox implements HasValue<V>, HasValidation, HasMask {
 
 	private ComboBox<V> comboBox;
 	private AddButton addButton;
@@ -81,6 +82,18 @@ public class EditableList<V> extends HBox implements HasValue<V>, HasValidation 
 	@Override
 	public boolean isValid() {
 		return valid;
+	}
+
+	@Override
+	public void mask(String maskText) {
+		setClip(new Text(20, 20, maskText));
+		setDisable(true);
+	}
+
+	@Override
+	public void unmask() {
+		setClip(null);
+		setDisable(false);
 	}
 
 }

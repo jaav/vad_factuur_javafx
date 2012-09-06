@@ -3,32 +3,67 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import java.lang.Object?>
-<?import be.virtualsushi.jfx.dorse.control.DeleteButton?>
-<?import be.virtualsushi.jfx.dorse.control.EditButton?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
-<?import be.virtualsushi.jfx.dorse.control.TextFormField?>
 <?import javafx.scene.layout.HBox?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import javafx.scene.layout.GridPane?>
+<?import be.virtualsushi.jfx.dorse.control.TextField?>
+<?import be.virtualsushi.jfx.dorse.control.TextAreaField?>
+<?import be.virtualsushi.jfx.dorse.control.EditableList?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import java.lang.String?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" >
-
-	<VBox spacing="10" >
-		<children>
-			<Label fx:id="title"/>
-			<TextFormField fx:id="nameField" label="%name"/>
-			<TextFormField fx:id="vatField" label="%vat"/>
-			<TextFormField fx:id="ibanField" label="%iban"/>
-			<HBox >
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
+	<children>
+		<Label fx:id="title" >
+			<styleClass>
+				<String fx:value="activity-title"/>
+			</styleClass>
+		</Label>
+	
+		<GridPane vgap="5" hgap="10">
+	
+			<FieldLabel value="%id" GridPane.columnIndex="0"
+				GridPane.rowIndex="0" alignment="CENTER_RIGHT" />
+			<Label fx:id="idField" GridPane.columnIndex="1"
+				GridPane.rowIndex="0" />
+	
+			<FieldLabel value="%name" GridPane.columnIndex="0"
+				GridPane.rowIndex="1" alignment="CENTER_RIGHT" />
+			<TextField fx:id="nameField" GridPane.columnIndex="1"
+				GridPane.rowIndex="1" fieldWidth="400" />
+	
+			<FieldLabel value="%vat" GridPane.columnIndex="0"
+				GridPane.rowIndex="2" alignment="CENTER_RIGHT" />
+			<TextField fx:id="vatField" GridPane.columnIndex="1"
+				GridPane.rowIndex="2" fieldWidth="400" />
+	
+			<FieldLabel value="%iban" GridPane.columnIndex="0"
+				GridPane.rowIndex="3" alignment="CENTER_RIGHT" />
+			<TextField fx:id="ibanField" GridPane.columnIndex="1"
+				GridPane.rowIndex="3" fieldWidth="400" />
+	
+			<FieldLabel labelFor="$remarkField" value="%remark"
+				GridPane.columnIndex="0" alignment="TOP_RIGHT" GridPane.rowIndex="4" />
+			<TextAreaField fx:id="remarkField" GridPane.columnIndex="1"
+				GridPane.rowIndex="4" fieldWidth="400" fieldHeight="100" />
+	
+			<FieldLabel value="%sector" GridPane.columnIndex="0"
+				GridPane.rowIndex="5" />
+			<EditableList fx:id="sectorField"
+				GridPane.columnIndex="1" GridPane.rowIndex="5" fieldWidth="360" />
+	
+			<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="7"
+				alignment="BOTTOM_LEFT">
 				<children>
-					<Button text="%save" onAction="#handleSave"/>
-					<Button text="%cancel" onAction="#handleCancel"/>
+					<Button text="%save" onAction="#handleSave" />
+					<Button text="%cancel" onAction="#handleCancel" />
 				</children>
 			</HBox>
-		</children>
-	</VBox>
+	
+		</GridPane>
+	</children>
 
-</AnchorPane>
+</VBox>
 

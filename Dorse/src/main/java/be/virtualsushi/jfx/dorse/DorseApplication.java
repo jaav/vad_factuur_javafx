@@ -1,11 +1,11 @@
 package be.virtualsushi.jfx.dorse;
 
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_ARTICLE;
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_CUSTOMER;
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_INVOICE;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_ARTICLES;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_CUSTOMERS;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_INVOICES;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.NEW_ARTICLE;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.NEW_CUSTOMER;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.NEW_INVOICE;
 
 import java.util.ResourceBundle;
 
@@ -21,14 +21,17 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import be.virtualsushi.jfx.dorse.activities.EditArticleActivity;
 import be.virtualsushi.jfx.dorse.activities.EditCustomerActivity;
+import be.virtualsushi.jfx.dorse.activities.EditInvoiceActivity;
+import be.virtualsushi.jfx.dorse.activities.ViewArticleActivity;
+import be.virtualsushi.jfx.dorse.control.DialogPopup;
 import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
+import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.LoginEvent;
-import be.virtualsushi.jfx.dorse.events.authentication.SessionExpiredEvent;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.navigation.AppRegexPlaceResolver;
-import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -40,19 +43,18 @@ public class DorseApplication extends Application {
 
 	public static final String LOGIN_DIALOG_TITLE_KEY = "login.dialog.title";
 
-	public static final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(DorseApplicationFactory.class);
-
 	public static void main(String[] args) throws Exception {
 		launch(args);
 	}
 
 	private Dialog loginDialog;
 	private Browser browser;
-	private RestApiAccessor restApiAccessor;
+	private AnnotationConfigApplicationContext applicationContext;
 
 	@Override
 	public void start(Stage stage) throws Exception {
 
+		applicationContext = new AnnotationConfigApplicationContext(DorseApplicationFactory.class);
 		browser = new Browser(applicationContext.getBean(ActivityNavigator.class), "VAD Factuur");
 		browser.setHeader(createMenu(applicationContext.getBean(MenuFactory.class)));
 		mapActivities(browser.getPlaceResolvers());
@@ -71,8 +73,7 @@ public class DorseApplication extends Application {
 
 	private void initializeAuthenticationManagement() {
 		applicationContext.getBean(EventBus.class).register(this);
-		restApiAccessor = applicationContext.getBean(RestApiAccessor.class);
-		loginDialog = new Dialog(applicationContext.getBean(ResourceBundle.class).getString(LOGIN_DIALOG_TITLE_KEY));
+		loginDialog = new DialogPopup(applicationContext.getBean(ResourceBundle.class).getString(LOGIN_DIALOG_TITLE_KEY), false, true);
 		loginDialog.setContent(applicationContext.getBean(LoginDialog.class).asNode());
 	}
 
@@ -81,7 +82,7 @@ public class DorseApplication extends Application {
 
 		Menu menuVadFactuur = factory.createMenu("vad.factuur", "about", null);
 
-		Menu menuObject = factory.createMenu("object", factory.createMenu("new", "invoice", NEW_INVOICE, "customer", NEW_CUSTOMER, "article", NEW_ARTICLE),
+		Menu menuObject = factory.createMenu("object", factory.createMenu("new", "invoice", EDIT_INVOICE, "customer", EDIT_CUSTOMER, "article", EDIT_ARTICLE),
 				factory.createMenu("list", "invoice", LIST_INVOICES, "customer", LIST_CUSTOMERS, "article", LIST_ARTICLES));
 
 		menuBar.getMenus().addAll(menuVadFactuur, menuObject);
@@ -90,17 +91,20 @@ public class DorseApplication extends Application {
 	}
 
 	private void mapActivities(ObservableList<PlaceResolver> placeResolvers) {
-		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.NEW_CUSTOMER, applicationContext.getBean(EditCustomerActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_CUSTOMER, applicationContext.getBean(EditCustomerActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_ARTICLE, applicationContext.getBean(EditArticleActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_ARTICLE, applicationContext.getBean(ViewArticleActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_INVOICE, applicationContext.getBean(EditInvoiceActivity.class)));
 	}
 
 	@Subscribe
-	public void onSessionExpired(SessionExpiredEvent event) {
+	public void onAuthorizationRequired(AuthorizationRequiredEvent event) {
 		loginDialog.show(browser);
 	}
 
 	@Subscribe
 	public void onLogin(LoginEvent event) {
-		if (StringUtils.isNotBlank(restApiAccessor.login(event.getUsername(), event.getPassword()))) {
+		if (StringUtils.isNotBlank(event.getAuthToken())) {
 			loginDialog.hide();
 		}
 	}

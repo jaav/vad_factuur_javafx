@@ -1,7 +1,11 @@
 @charset "utf-8";
 
-Button, TextField, TextArea, NumberTextField, PasswordField {
+TextField, TextArea, NumberTextField, PasswordField, ComboBox {
 	-fx-font-size: 20px;
+}
+
+Button {
+	-fx-font-size: 16px;
 }
 
 MenuBar, Menu, MenuItem {
@@ -30,13 +34,11 @@ MenuBar, Menu, MenuItem {
 	-fx-font-size: 20px;
 }
 
-.title {
+.activity-title {
 	-fx-background-image:url("bg.png");
 	-fx-background-image-repeat:repeat-x;
 	-fx-padding:5px;
-	-fx-border-color:#cfcfcf;
-	-fx-border-radius:3px;
-	-fx-border-style:solid outside;
+	-fx-font-size: 20px;
 }
 
 .help-text {
@@ -65,6 +67,6 @@ MenuBar, Menu, MenuItem {
 }
 
 .image-button {
-	-fx-padding: 7px 10px 7px 10px;
+	-fx-padding: 3px 6px 4px 6px;
 	-fx-font-size: 20px;
 }

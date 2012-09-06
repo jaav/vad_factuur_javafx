@@ -15,6 +15,12 @@ import be.virtualsushi.jfx.dorse.events.EventHandler;
 import com.google.common.eventbus.EventBus;
 import com.zenjava.jfxflow.actvity.FxmlLoadException;
 
+/**
+ * Loads ui markup from Fxml. 
+ * 
+ * @author Pavel Sitnikov (van.frga@gmail.com)
+ *
+ */
 public class PackageBasedUiBinder implements UiBinder {
 
 	@Autowired
@@ -31,7 +37,8 @@ public class PackageBasedUiBinder implements UiBinder {
 		InputStream fxmlStream = null;
 		Class<?> clazz = component.getClass();
 		try {
-			fxmlStream = clazz.getResourceAsStream(classToFxmlFileName(clazz));
+			String fxmlFileName = clazz.getAnnotation(FxmlFile.class) != null ? clazz.getAnnotation(FxmlFile.class).value() : classToFxmlFileName(clazz);
+			fxmlStream = clazz.getResourceAsStream(fxmlFileName);
 			FXMLLoader loader = new FXMLLoader();
 			if (resources != null) {
 				loader.setResources(resources);

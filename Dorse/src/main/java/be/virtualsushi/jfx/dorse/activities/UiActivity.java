@@ -3,7 +3,10 @@ package be.virtualsushi.jfx.dorse.activities;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.util.Duration;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +14,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
+import be.virtualsushi.jfx.dorse.control.DialogPopup;
+import be.virtualsushi.jfx.dorse.control.LoadingMask;
+import be.virtualsushi.jfx.dorse.dialogs.AbstractDialog;
+import be.virtualsushi.jfx.dorse.events.CancelDialogEvent;
 import be.virtualsushi.jfx.dorse.fxml.IUiComponent;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
@@ -18,6 +25,7 @@ import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.zenjava.jfxflow.actvity.AbstractActivity;
 import com.zenjava.jfxflow.actvity.SimpleView;
 import com.zenjava.jfxflow.dialog.Dialog;
@@ -52,9 +60,11 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 
 	private boolean isNew = true;
 
-	private Dialog dialog = new Dialog();
+	private Dialog dialog = new DialogPopup();
 
-	private Class<? extends IUiComponent> currentlyShowingComponent;
+	private LoadingMask loadingMask;
+
+	private Class<? extends AbstractDialog> currentlyShowingComponent;
 
 	/**
 	 * Called any time activity get active.
@@ -67,12 +77,35 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 			initialize();
 			setNew(false);
 		}
+
+		getEventBus().register(this);
+	}
+
+	@Override
+	protected void deactivated() {
+		super.deactivated();
+		getEventBus().unregister(this);
 	}
 
 	/**
 	 * Called when activity get active for the first time.
 	 */
 	public void initialize() {
+		loadingMask = new LoadingMask(getResources());
+	}
+
+	/**
+	 * Additional method to handle Activity state. Called when activity attached
+	 * to the {@link Scene}.
+	 */
+	protected void started() {
+
+	}
+
+	/**
+	 * Called when activity detached from the {@link Scene}
+	 */
+	protected void stopped() {
 
 	}
 
@@ -111,7 +144,7 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 	}
 
 	public HorizontalPosition getExitSide() {
-		return HorizontalPosition.right;
+		return HorizontalPosition.left;
 	}
 
 	public HorizontalPosition getEntrySide() {
@@ -130,18 +163,27 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 		this.isNew = isNew;
 	}
 
-	protected void showDialog(String dialogTitle, Class<? extends IUiComponent> componentClass) {
-
+	protected void showDialog(String dialogTitle, Class<? extends AbstractDialog> componentClass) {
 		currentlyShowingComponent = componentClass;
 		dialog.setTitle(dialogTitle);
-		dialog.setContent(applicationContext.getBean(componentClass).asNode());
+		AbstractDialog dialogContent = applicationContext.getBean(componentClass);
+		dialog.setContent(dialogContent.asNode());
 		dialog.show(getView().toNode());
+		dialogContent.onShow();
 	}
 
-	protected void hideDialog(Class<? extends IUiComponent> componentClass) {
+	protected void hideDialog(Class<? extends AbstractDialog> componentClass) {
 		if (currentlyShowingComponent.equals(componentClass)) {
 			dialog.hide();
 		}
+	}
+
+	protected void showLoadingMask() {
+		loadingMask.show(getView().toNode());
+	}
+
+	protected void hideLoadingMask() {
+		loadingMask.hide();
 	}
 
 	public ResourceBundle getResources() {
@@ -197,7 +239,19 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 	@Override
 	@PostConstruct
 	public void bindUi() {
-		setView(new SimpleView<V>((V) uiBinder.bind(this)));
+		V node = (V) uiBinder.bind(this);
+		node.sceneProperty().addListener(new ChangeListener<Scene>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Scene> source, Scene oldScene, Scene newScene) {
+				if (oldScene != null) {
+					stopped();
+				} else {
+					started();
+				}
+			}
+		});
+		setView(new SimpleView<V>(node));
 	}
 
 	@Override
@@ -232,4 +286,8 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 		this.uiBinder = uiBinder;
 	}
 
+	@Subscribe
+	public void onCancelDialog(CancelDialogEvent event) {
+		hideDialog(event.getDialogClass());
+	}
 }

@@ -9,6 +9,4 @@ public interface ActivityNavigator extends NavigationManager {
 	
 	public void goTo(AppActivitiesNames name, Object... parameters);
 	
-	public NavigationManager asNavigationManager();
-
 }

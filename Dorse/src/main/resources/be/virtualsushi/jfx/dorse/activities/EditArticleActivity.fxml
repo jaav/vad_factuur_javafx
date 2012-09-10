@@ -12,8 +12,14 @@
 <?import be.virtualsushi.jfx.dorse.control.EditableList?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
+	<padding>
+		<Insets bottom="10" left="10" right="10" top="10" />
+	</padding>
+
 	<children>
 		<Label fx:id="title">
 			<styleClass>
@@ -68,11 +74,12 @@
 				GridPane.rowIndex="6" />
 			<TextField fx:id="weightField" GridPane.columnIndex="1"
 				GridPane.rowIndex="6" fieldWidth="100" />
-			<Label text="g" GridPane.columnIndex="2" GridPane.rowIndex="6" alignment="CENTER_LEFT"/>
+			<Label text="g" GridPane.columnIndex="2" GridPane.rowIndex="6"
+				alignment="CENTER_LEFT" />
 			<FieldLabel value="%unit" GridPane.columnIndex="3"
 				GridPane.rowIndex="6" />
 			<EditableList fx:id="unitField" GridPane.columnIndex="4"
-				GridPane.rowIndex="6" GridPane.columnSpan="3" fieldWidth="136" />
+				GridPane.rowIndex="6" GridPane.columnSpan="3" fieldWidth="140" />
 
 			<FieldLabel value="%supplier" GridPane.columnIndex="0"
 				GridPane.rowIndex="7" />
@@ -80,13 +87,10 @@
 				GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="6"
 				fieldWidth="360" />
 
-			<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="9"
-				alignment="BOTTOM_LEFT">
-				<children>
-					<Button text="%save" onAction="#handleSave" />
-					<Button text="%cancel" onAction="#handleCancel" />
-				</children>
-			</HBox>
+			<ControlsButtonsBar GridPane.columnIndex="1" GridPane.columnSpan="6"
+				GridPane.rowIndex="9" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+				onCancelAction="#handleCancel" saveButtonTitle="%save"
+				cancelButtonTitle="%cancel" />
 
 		</GridPane>
 	</children>

@@ -1,6 +1,6 @@
 package be.virtualsushi.jfx.dorse.model;
 
-public class IdNamePairEntity extends BaseEntity {
+public class IdNamePairEntity extends BaseEntity implements Listable {
 
 	private String name;
 
@@ -15,6 +15,11 @@ public class IdNamePairEntity extends BaseEntity {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public String getPrintName() {
+		return getName();
 	}
 
 }

@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-TextField, TextArea, NumberTextField, PasswordField, ComboBox {
+TextField, TextArea, NumberTextField, PasswordField, ComboBox, DorseComboBox {
 	-fx-font-size: 20px;
 }
 

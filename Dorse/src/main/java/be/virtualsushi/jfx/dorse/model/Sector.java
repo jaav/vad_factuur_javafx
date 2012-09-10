@@ -1,6 +1,6 @@
 package be.virtualsushi.jfx.dorse.model;
 
-public class Sector extends BaseEntity {
+public class Sector extends BaseEntity implements Listable {
 
 	private String name;
 	private Long parent;
@@ -19,6 +19,11 @@ public class Sector extends BaseEntity {
 
 	public void setParent(Long parent) {
 		this.parent = parent;
+	}
+
+	@Override
+	public String getPrintName() {
+		return getName();
 	}
 
 }

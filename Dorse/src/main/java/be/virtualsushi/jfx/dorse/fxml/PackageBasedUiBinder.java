@@ -16,10 +16,10 @@ import com.google.common.eventbus.EventBus;
 import com.zenjava.jfxflow.actvity.FxmlLoadException;
 
 /**
- * Loads ui markup from Fxml. 
+ * Loads ui markup from Fxml.
  * 
  * @author Pavel Sitnikov (van.frga@gmail.com)
- *
+ * 
  */
 public class PackageBasedUiBinder implements UiBinder {
 
@@ -40,6 +40,7 @@ public class PackageBasedUiBinder implements UiBinder {
 			String fxmlFileName = clazz.getAnnotation(FxmlFile.class) != null ? clazz.getAnnotation(FxmlFile.class).value() : classToFxmlFileName(clazz);
 			fxmlStream = clazz.getResourceAsStream(fxmlFileName);
 			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(clazz.getResource(fxmlFileName));
 			if (resources != null) {
 				loader.setResources(resources);
 			}

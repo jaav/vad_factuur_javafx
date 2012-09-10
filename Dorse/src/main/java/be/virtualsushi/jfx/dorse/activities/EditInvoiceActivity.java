@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import be.virtualsushi.jfx.dorse.control.EditableList;
+import be.virtualsushi.jfx.dorse.control.ComboBoxField;
 import be.virtualsushi.jfx.dorse.control.TextAreaField;
 import be.virtualsushi.jfx.dorse.control.TextField;
 import be.virtualsushi.jfx.dorse.model.Customer;
@@ -29,7 +29,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	private TextAreaField remarkField;
 
 	@FXML
-	private EditableList<Customer> customerField;
+	private ComboBoxField<Customer> customerField;
 
 	@FXML
 	private VBox deliveryAddressBox, invoiceAddressBox;
@@ -75,14 +75,19 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	}
 
 	@Override
-	protected void mapFields() {
-		// TODO Auto-generated method stub
+	protected void mapFields(Invoice editingActivity) {
 
 	}
 
 	@Override
 	protected Invoice getEditedEntity() {
 		return null;
+	}
+
+	@Override
+	protected void doCustomBackgroundInitialization(Invoice editingEntity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

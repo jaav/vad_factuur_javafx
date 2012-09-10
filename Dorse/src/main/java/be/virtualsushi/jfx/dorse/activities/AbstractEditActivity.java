@@ -1,7 +1,5 @@
 package be.virtualsushi.jfx.dorse.activities;
 
-import java.lang.reflect.ParameterizedType;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -14,16 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
-public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity> extends UiActivity<N> {
-
-	public static final String EDITING_ENTITY_ID_PARAMETER = "editing_entity_id";
+public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity> extends AbstractManageEntityActivity<N, E> {
 
 	private Validator validator;
 
 	@FXML
 	public Label title;
-
-	private E editingEntity;
 
 	@FXML
 	public void handleCancel(ActionEvent event) {
@@ -35,23 +29,15 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 		getRestApiAccessor().save(getEditedEntity());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void activated() {
-		super.activated();
+	protected void started() {
+		super.started();
 
-		Long id = getParameter(EDITING_ENTITY_ID_PARAMETER, Long.class, null);
-		if (id != null) {
-			editingEntity = getRestApiAccessor().get(id, (Class<E>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1]);
+		if (getParameter(ENTITY_ID_PARAMETER, Long.class, null) != null) {
 			title.setText(getResources().getString(getEditTitleKey()));
 		} else {
-			editingEntity = newEntityInstance();
 			title.setText(getResources().getString(getNewTitleKey()));
 		}
-	}
-
-	protected E getEditingEntity() {
-		return editingEntity;
 	}
 
 	public Validator getValidator() {
@@ -63,13 +49,14 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 		this.validator = validator;
 	}
 
+	@Override
+	protected boolean canCreateNewEntity() {
+		return true;
+	}
+
 	protected abstract String getEditTitleKey();
 
 	protected abstract String getNewTitleKey();
-
-	protected abstract E newEntityInstance();
-
-	protected abstract void mapFields();
 
 	protected abstract E getEditedEntity();
 

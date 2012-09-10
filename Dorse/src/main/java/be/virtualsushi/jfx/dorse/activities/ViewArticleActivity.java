@@ -11,17 +11,23 @@ import be.virtualsushi.jfx.dorse.model.Article;
 
 @Component
 @Scope("prototype")
-public class ViewArticleActivity extends AbstractViewActivity<VBox, Article> {
+public class ViewArticleActivity extends AbstractManageEntityActivity<VBox, Article> {
 
 	@FXML
 	private Label codeField, idField, stockField, createdField, descriptionField, typeField, priceField, weightField, unitField, supplierField;
 
 	@Override
-	protected void mapFields() {
-		idField.setText(String.valueOf(getViewingEntity().getId()));
-		codeField.setText(getViewingEntity().getCode());
+	protected void mapFields(Article article) {
+		idField.setText(String.valueOf(article.getId()));
+		codeField.setText(article.getCode());
 		stockField.setText("0");
 		// TODO implement
+	}
+
+	@Override
+	protected void doCustomBackgroundInitialization(Article entity) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

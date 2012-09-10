@@ -1,6 +1,8 @@
 package be.virtualsushi.jfx.dorse.model;
 
-public class Customer extends BaseEntity {
+import java.util.List;
+
+public class Customer extends BaseEntity implements Listable {
 
 	private String name;
 	private String vat;
@@ -8,6 +10,7 @@ public class Customer extends BaseEntity {
 	private String remark;
 	private long sector;
 	private long subsector;
+	private List<Address> address;
 
 	public String getName() {
 		return name;
@@ -55,6 +58,19 @@ public class Customer extends BaseEntity {
 
 	public void setSubsector(long subsector) {
 		this.subsector = subsector;
+	}
+
+	@Override
+	public String getPrintName() {
+		return getName();
+	}
+
+	public List<Address> getAddress() {
+		return address;
+	}
+
+	public void setAddress(List<Address> address) {
+		this.address = address;
 	}
 
 }

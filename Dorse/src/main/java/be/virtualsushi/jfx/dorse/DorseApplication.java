@@ -25,10 +25,17 @@ import be.virtualsushi.jfx.dorse.activities.EditArticleActivity;
 import be.virtualsushi.jfx.dorse.activities.EditCustomerActivity;
 import be.virtualsushi.jfx.dorse.activities.EditInvoiceActivity;
 import be.virtualsushi.jfx.dorse.activities.ViewArticleActivity;
+import be.virtualsushi.jfx.dorse.activities.ViewCustomerActivity;
+import be.virtualsushi.jfx.dorse.activities.ViewInvoiceActivity;
 import be.virtualsushi.jfx.dorse.control.DialogPopup;
+import be.virtualsushi.jfx.dorse.control.LoadingMask;
+import be.virtualsushi.jfx.dorse.dialogs.AbstractDialog;
 import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
+import be.virtualsushi.jfx.dorse.events.HideDialogEvent;
+import be.virtualsushi.jfx.dorse.events.ShowDialogEvent;
+import be.virtualsushi.jfx.dorse.events.ShowLoadingMaskEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
-import be.virtualsushi.jfx.dorse.events.authentication.LoginEvent;
+import be.virtualsushi.jfx.dorse.events.authentication.LoginSuccessfulEvent;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.navigation.AppRegexPlaceResolver;
@@ -48,6 +55,9 @@ public class DorseApplication extends Application {
 	}
 
 	private Dialog loginDialog;
+	private Dialog customDialog;
+	private LoadingMask loadingMask;
+	private Dialog currentlyShowingDialog;
 	private Browser browser;
 	private AnnotationConfigApplicationContext applicationContext;
 
@@ -61,7 +71,7 @@ public class DorseApplication extends Application {
 
 		BorderPane rootNode = new BorderPane();
 
-		initializeAuthenticationManagement();
+		initializeDialogs();
 
 		rootNode.setCenter(browser);
 		Scene scene = new Scene(rootNode, 800, 600);
@@ -71,10 +81,13 @@ public class DorseApplication extends Application {
 
 	}
 
-	private void initializeAuthenticationManagement() {
+	private void initializeDialogs() {
 		applicationContext.getBean(EventBus.class).register(this);
-		loginDialog = new DialogPopup(applicationContext.getBean(ResourceBundle.class).getString(LOGIN_DIALOG_TITLE_KEY), false, true);
+		ResourceBundle resources = applicationContext.getBean(ResourceBundle.class);
+		loginDialog = new DialogPopup(resources.getString(LOGIN_DIALOG_TITLE_KEY), false, true);
 		loginDialog.setContent(applicationContext.getBean(LoginDialog.class).asNode());
+		loadingMask = new LoadingMask(resources);
+		customDialog = new DialogPopup();
 	}
 
 	private Node createMenu(MenuFactory factory) {
@@ -95,18 +108,53 @@ public class DorseApplication extends Application {
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_ARTICLE, applicationContext.getBean(EditArticleActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_ARTICLE, applicationContext.getBean(ViewArticleActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_INVOICE, applicationContext.getBean(EditInvoiceActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_CUSTOMER, applicationContext.getBean(ViewCustomerActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_INVOICE, applicationContext.getBean(ViewInvoiceActivity.class)));
 	}
 
 	@Subscribe
 	public void onAuthorizationRequired(AuthorizationRequiredEvent event) {
-		loginDialog.show(browser);
+		showDialog(loginDialog);
 	}
 
 	@Subscribe
-	public void onLogin(LoginEvent event) {
+	public void onLogin(LoginSuccessfulEvent event) {
 		if (StringUtils.isNotBlank(event.getAuthToken())) {
-			loginDialog.hide();
+			hideCurrentlyShowingDialog();
 		}
 	}
 
+	@Subscribe
+	public void onShowDialog(ShowDialogEvent event) {
+		customDialog.setTitle(event.getDialogTitle());
+		AbstractDialog dialogContent = applicationContext.getBean(event.getDialogControllerClass());
+		customDialog.setContent(dialogContent.asNode());
+		showDialog(customDialog);
+		dialogContent.onShow();
+	}
+
+	@Subscribe
+	public void onShowLoadingMask(ShowLoadingMaskEvent event) {
+		showDialog(loadingMask);
+	}
+
+	@Subscribe
+	public void onHideDiloag(HideDialogEvent event) {
+		hideCurrentlyShowingDialog();
+	}
+
+	private void showDialog(Dialog dialogToShow) {
+		if (currentlyShowingDialog != null) {
+			currentlyShowingDialog.hide();
+		}
+		dialogToShow.show(browser);
+		currentlyShowingDialog = dialogToShow;
+	}
+
+	private void hideCurrentlyShowingDialog() {
+		if (currentlyShowingDialog != null) {
+			currentlyShowingDialog.hide();
+			currentlyShowingDialog = null;
+		}
+	}
 }

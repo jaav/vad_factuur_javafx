@@ -8,10 +8,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10" >
+<GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10">
 	<padding>
-		<Insets top="15" right="15" bottom="15" left="15"/>
+		<Insets top="15" right="15" bottom="15" left="15" />
 	</padding>
 
 	<FieldLabel value="%old.value" GridPane.columnIndex="0"
@@ -24,13 +25,10 @@
 	<TextField fx:id="newValueField" GridPane.columnIndex="1"
 		GridPane.rowIndex="1" fieldWidth="200" />
 
-	<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2"
-		alignment="BOTTOM_RIGHT">
-		<children>
-			<Button text="%save" onAction="#handleSave" />
-			<Button text="%cancel" onAction="#handleCancel" />
-		</children>
-	</HBox>
+	<ControlsButtonsBar GridPane.columnIndex="1"
+		GridPane.rowIndex="2" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+		onCancelAction="#handleCancel" saveButtonTitle="%save"
+		cancelButtonTitle="%cancel" />
 
 </GridPane>
 

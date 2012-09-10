@@ -6,6 +6,7 @@
 <?import be.virtualsushi.jfx.dorse.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10">
 
@@ -39,13 +40,10 @@
 	<TextField fx:id="emailField" GridPane.columnIndex="1"
 		GridPane.rowIndex="5" fieldWidth="300" />
 
-	<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="6"
-		alignment="BOTTOM_RIGHT">
-		<children>
-			<Button text="%save" onAction="#handleSave" />
-			<Button text="%cancel" onAction="#handleCancel" />
-		</children>
-	</HBox>
+	<ControlsButtonsBar GridPane.columnIndex="1"
+		GridPane.rowIndex="2" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+		onCancelAction="#handleCancel" saveButtonTitle="%save"
+		cancelButtonTitle="%cancel" />
 
 </GridPane>
 

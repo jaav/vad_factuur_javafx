@@ -14,62 +14,75 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tab?>
+<?import be.virtualsushi.jfx.dorse.control.ComboBoxField?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
+	<padding>
+		<Insets bottom="10" left="10" right="10" top="10" />
+	</padding>
+
 	<children>
-		<Label fx:id="title" >
+		<Label fx:id="title">
 			<styleClass>
-				<String fx:value="activity-title"/>
+				<String fx:value="activity-title" />
 			</styleClass>
 		</Label>
-		
+
 		<GridPane hgap="10" vgap="5">
 
-			<FieldLabel value="%id" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-			<Label fx:id="idField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-			
-			<FieldLabel value="%number" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-			<TextField fx:id="numberField" GridPane.columnIndex="1" GridPane.rowIndex="1" fieldWidth="400" />
-			
-			<FieldLabel value="%customer" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-			<EditableList fx:id="customerField" GridPane.columnIndex="1" GridPane.rowIndex="2" fieldWidth="360" />
-			
-			<TabPane GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2" >
-				<Tab text="%delivery.address" closable="false" >
-					<VBox fx:id="deliveryAddressBox" spacing="10" prefWidth="400" >
+			<FieldLabel value="%id" GridPane.columnIndex="0"
+				GridPane.rowIndex="0" />
+			<Label fx:id="idField" GridPane.columnIndex="1"
+				GridPane.rowIndex="0" />
+
+			<FieldLabel value="%number" GridPane.columnIndex="0"
+				GridPane.rowIndex="1" />
+			<TextField fx:id="numberField" GridPane.columnIndex="1"
+				GridPane.rowIndex="1" fieldWidth="400" />
+
+			<FieldLabel value="%customer" GridPane.columnIndex="0"
+				GridPane.rowIndex="2" />
+			<ComboBoxField fx:id="customerField"
+				GridPane.columnIndex="1" GridPane.rowIndex="2" fieldWidth="400" />
+
+			<TabPane GridPane.columnIndex="0" GridPane.rowIndex="3"
+				GridPane.columnSpan="2" tabClosingPolicy="UNAVAILABLE">
+				<Tab text="%delivery.address">
+					<VBox fx:id="deliveryAddressBox" spacing="10" prefWidth="400">
 						<padding>
 							<Insets bottom="15" left="15" right="15" top="15" />
 						</padding>
-						
+
 						<children>
 							<Button text="%new.delivery.address" alignment="BOTTOM_CENTER" />
 						</children>
 					</VBox>
 				</Tab>
-				<Tab text="%invoice.address" closable="false" >
-					<VBox fx:id="invoiceAddressBox" spacing="10" prefWidth="400" >
+				<Tab text="%invoice.address">
+					<VBox fx:id="invoiceAddressBox" spacing="10" prefWidth="400">
 						<padding>
 							<Insets bottom="15" left="15" right="15" top="15" />
 						</padding>
-					
+
 						<children>
 							<Button text="%new.invoice.address" alignment="BOTTOM_CENTER" />
 						</children>
 					</VBox>
 				</Tab>
 			</TabPane>
-			
-			<FieldLabel value="%remark" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-			<TextAreaField fx:id="remarkField" GridPane.columnIndex="1" GridPane.rowIndex="4" fieldWidth="400" fieldHeight="100" />
-			
-			<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="6"
-				alignment="BOTTOM_RIGHT">
-				<children>
-					<Button text="%save" onAction="#handleSave" />
-					<Button text="%cancel" onAction="#handleCancel" />
-				</children>
-			</HBox>
-			
+
+			<FieldLabel value="%remark" GridPane.columnIndex="0"
+				GridPane.rowIndex="4" />
+			<TextAreaField fx:id="remarkField"
+				GridPane.columnIndex="1" GridPane.rowIndex="4" fieldWidth="400"
+				fieldHeight="100" />
+
+			<ControlsButtonsBar GridPane.columnIndex="1"
+				GridPane.rowIndex="6" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+				onCancelAction="#handleCancel" saveButtonTitle="%save"
+				cancelButtonTitle="%cancel" />
+
 		</GridPane>
 	</children>
 </VBox>

@@ -1,13 +1,12 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import java.util.List;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -37,6 +36,8 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	@FXML
 	protected EditableList<Sector> sectorField;
 
+	private List<Sector> acceptableSectors;
+
 	@Override
 	public void initialize() {
 		super.initialize();
@@ -45,23 +46,6 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 			@Override
 			public void handle(ActionEvent event) {
 				showDialog(getResources().getString("new.sector.dialog.title"), NewSectorDialog.class);
-			}
-		});
-		sectorField.setCellFactory(new Callback<ListView<Sector>, ListCell<Sector>>() {
-
-			@Override
-			public ListCell<Sector> call(ListView<Sector> param) {
-				return new ListCell<Sector>() {
-
-					@Override
-					protected void updateItem(Sector item, boolean empty) {
-						super.updateItem(item, empty);
-						if (item != null) {
-							setText(item.getName());
-						}
-					}
-
-				};
 			}
 		});
 	}
@@ -82,23 +66,35 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	}
 
 	@Override
-	protected void mapFields() {
-		idField.setText(String.valueOf(getEditingEntity().getId()));
-		nameField.setValue(getEditingEntity().getName());
-		ibanField.setValue(getEditingEntity().getIban());
-		vatField.setValue(getEditingEntity().getVat());
-		remarkField.setValue(getEditingEntity().getRemark());
+	protected void mapFields(Customer editingEntity) {
+		idField.setText(String.valueOf(editingEntity.getId()));
+		nameField.setValue(editingEntity.getName());
+		ibanField.setValue(editingEntity.getIban());
+		vatField.setValue(editingEntity.getVat());
+		remarkField.setValue(editingEntity.getRemark());
+		sectorField.setAcceptableValues(acceptableSectors);
+		for (Sector sector : sectorField.getAcceptableValues()) {
+			if (editingEntity.getSector() == sector.getId()) {
+				sectorField.setValue(sector);
+				break;
+			}
+		}
 	}
 
 	@Override
 	protected Customer getEditedEntity() {
-		Customer editedCustomer = getEditingEntity();
+		Customer editedCustomer = getEntity();
 		editedCustomer.setName(nameField.getValue());
 		editedCustomer.setIban(ibanField.getValue());
 		editedCustomer.setVat(vatField.getValue());
 		editedCustomer.setRemark(remarkField.getValue());
 		editedCustomer.setSector(sectorField.getValue().getId());
 		return editedCustomer;
+	}
+
+	@Override
+	protected void doCustomBackgroundInitialization(Customer editingEntity) {
+		acceptableSectors = getRestApiAccessor().getList(Sector.class, Sector[].class, false);
 	}
 
 }

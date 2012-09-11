@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import java.lang.String?>
+<?import javafx.scene.layout.GridPane?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import javafx.scene.control.Button?>
+<?import be.virtualsushi.jfx.dorse.control.AddButton?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="20" >
+	<padding>
+		<Insets bottom="10" left="10" right="10" top="10" />
+	</padding>
+
+	<children>
+		<Label fx:id="title">
+			<styleClass>
+				<String fx:value="activity-title" />
+			</styleClass>
+		</Label>
+		
+		<GridPane hgap="10" vgap="5">
+		
+			<FieldLabel value="%id" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+			<Label fx:id="idField" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="400" />
+			
+			<FieldLabel value="%vat" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+			<Label fx:id="vatField" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="400" />
+			
+			<FieldLabel value="%iban" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+			<Label fx:id="ibanField" GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="400" />
+			
+			<FieldLabel value="%remark" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+			<Label fx:id="remarkField" GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="400" />
+			
+			<AddButton onAction="#handleAddAddress" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2" alignment="BOTTOM_RIGHT" /> 
+		
+			<TabPane fx:id="addressesList" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2" />
+		
+		</GridPane>
+		
+	</children>
+</VBox>
+

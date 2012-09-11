@@ -5,24 +5,24 @@ import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import be.virtualsushi.jfx.dorse.model.Listable;
 
-public class EditableList<V> extends HBox implements HasValue<V>, HasValidation, HasMask {
+public class EditableList<V extends Listable> extends HBox implements HasValue<V>, HasValidation, HasMask {
 
-	private ComboBox<V> comboBox;
+	private DorseComboBox<V> comboBox;
 	private AddButton addButton;
 	private Label validationMessage;
 	private boolean valid;
 
 	public EditableList() {
 		setSpacing(3d);
-		comboBox = new ComboBox<V>();
+		comboBox = new DorseComboBox<V>();
 		addButton = new AddButton();
 		validationMessage = new Label();
 		validationMessage.getStyleClass().add("validation-message");
@@ -48,6 +48,10 @@ public class EditableList<V> extends HBox implements HasValue<V>, HasValidation,
 	public void setAcceptableValues(List<V> values) {
 		comboBox.getItems().clear();
 		comboBox.getItems().addAll(values);
+	}
+
+	public List<V> getAcceptableValues() {
+		return comboBox.getItems();
 	}
 
 	public void setEditHandler(EventHandler<ActionEvent> value) {

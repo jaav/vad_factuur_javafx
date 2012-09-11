@@ -97,7 +97,7 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	}
 
 	@Override
-	protected void mapFields() {
+	protected void mapFields(Article editingActivity) {
 
 	}
 
@@ -127,6 +127,12 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	public void onSaveSupplier(SaveEntityEvent<Supplier> event) {
 		getRestApiAccessor().save(event.getEntity());
 		hideDialog(SupplierEditDialog.class);
+	}
+
+	@Override
+	protected void doCustomBackgroundInitialization(Article editingEntity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

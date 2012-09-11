@@ -1,10 +1,10 @@
 package be.virtualsushi.jfx.dorse.events.authentication;
 
-public class LoginEvent {
+public class LoginSuccessfulEvent {
 
 	private final String authToken;
 
-	public LoginEvent(String authToken) {
+	public LoginSuccessfulEvent(String authToken) {
 		this.authToken = authToken;
 	}
 

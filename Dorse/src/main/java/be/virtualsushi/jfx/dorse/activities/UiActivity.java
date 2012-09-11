@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.util.Duration;
@@ -14,21 +16,23 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-import be.virtualsushi.jfx.dorse.control.DialogPopup;
-import be.virtualsushi.jfx.dorse.control.LoadingMask;
 import be.virtualsushi.jfx.dorse.dialogs.AbstractDialog;
 import be.virtualsushi.jfx.dorse.events.CancelDialogEvent;
+import be.virtualsushi.jfx.dorse.events.HideDialogEvent;
+import be.virtualsushi.jfx.dorse.events.ShowDialogEvent;
+import be.virtualsushi.jfx.dorse.events.ShowLoadingMaskEvent;
+import be.virtualsushi.jfx.dorse.events.authentication.LoginSuccessfulEvent;
 import be.virtualsushi.jfx.dorse.fxml.IUiComponent;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
+import be.virtualsushi.jfx.dorse.restapi.CallRestApiBackgroundTask;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.zenjava.jfxflow.actvity.AbstractActivity;
 import com.zenjava.jfxflow.actvity.SimpleView;
-import com.zenjava.jfxflow.dialog.Dialog;
 import com.zenjava.jfxflow.transition.FlyTransition;
 import com.zenjava.jfxflow.transition.HasEntryTransition;
 import com.zenjava.jfxflow.transition.HasExitTransition;
@@ -44,7 +48,7 @@ import com.zenjava.jfxflow.transition.ViewTransition;
  * @param <V>
  *            - Root node type.
  */
-public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> implements HasEntryTransition, HasExitTransition, IUiComponent {
+public abstract class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> implements HasEntryTransition, HasExitTransition, IUiComponent {
 
 	private ActivityNavigator activityNavigator;
 
@@ -60,11 +64,7 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 
 	private boolean isNew = true;
 
-	private Dialog dialog = new DialogPopup();
-
-	private LoadingMask loadingMask;
-
-	private Class<? extends AbstractDialog> currentlyShowingComponent;
+	private TaskCreator<?> pendingTaskCreator;
 
 	/**
 	 * Called any time activity get active.
@@ -91,7 +91,7 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 	 * Called when activity get active for the first time.
 	 */
 	public void initialize() {
-		loadingMask = new LoadingMask(getResources());
+
 	}
 
 	/**
@@ -164,26 +164,19 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 	}
 
 	protected void showDialog(String dialogTitle, Class<? extends AbstractDialog> componentClass) {
-		currentlyShowingComponent = componentClass;
-		dialog.setTitle(dialogTitle);
-		AbstractDialog dialogContent = applicationContext.getBean(componentClass);
-		dialog.setContent(dialogContent.asNode());
-		dialog.show(getView().toNode());
-		dialogContent.onShow();
+		getEventBus().post(new ShowDialogEvent(dialogTitle, componentClass));
 	}
 
 	protected void hideDialog(Class<? extends AbstractDialog> componentClass) {
-		if (currentlyShowingComponent.equals(componentClass)) {
-			dialog.hide();
-		}
+		getEventBus().post(new HideDialogEvent());
 	}
 
 	protected void showLoadingMask() {
-		loadingMask.show(getView().toNode());
+		getEventBus().post(new ShowLoadingMaskEvent());
 	}
 
 	protected void hideLoadingMask() {
-		loadingMask.hide();
+		getEventBus().post(new HideDialogEvent());
 	}
 
 	public ResourceBundle getResources() {
@@ -290,4 +283,25 @@ public class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> 
 	public void onCancelDialog(CancelDialogEvent event) {
 		hideDialog(event.getDialogClass());
 	}
+
+	@Subscribe
+	public void onLoginSuccessful(LoginSuccessfulEvent event) {
+		if (pendingTaskCreator != null) {
+			executeTask(pendingTaskCreator.createTask());
+		}
+	}
+
+	protected void loadDataInBackground(final CallRestApiBackgroundTask<?> task) {
+		pendingTaskCreator = task.getCreator();
+		task.setEventBus(eventBus);
+		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				pendingTaskCreator = null;
+			}
+		});
+		executeTask(task);
+	}
+
 }

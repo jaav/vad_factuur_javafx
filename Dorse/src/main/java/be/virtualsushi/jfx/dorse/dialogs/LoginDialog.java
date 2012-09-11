@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import be.virtualsushi.jfx.dorse.events.authentication.LoginEvent;
+import be.virtualsushi.jfx.dorse.events.authentication.LoginSuccessfulEvent;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 @Component
@@ -24,7 +24,7 @@ public class LoginDialog extends AbstractDialog {
 	protected void handleSubmitButtonAction(ActionEvent event) {
 		String authToken = restApiAccessor.login(usernameField.getText(), passwordField.getText());
 		if (StringUtils.isNotBlank(authToken)) {
-			getEventBus().post(new LoginEvent(authToken));
+			getEventBus().post(new LoginSuccessfulEvent(authToken));
 		} else {
 			// TODO display error message
 		}

@@ -13,8 +13,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
+	<padding>
+		<Insets bottom="10" left="10" right="10" top="10" />
+	</padding>
+	
 	<children>
 		<Label fx:id="title" >
 			<styleClass>
@@ -54,13 +60,10 @@
 			<EditableList fx:id="sectorField"
 				GridPane.columnIndex="1" GridPane.rowIndex="5" fieldWidth="360" />
 	
-			<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="7"
-				alignment="BOTTOM_LEFT">
-				<children>
-					<Button text="%save" onAction="#handleSave" />
-					<Button text="%cancel" onAction="#handleCancel" />
-				</children>
-			</HBox>
+			<ControlsButtonsBar GridPane.columnIndex="1"
+				GridPane.rowIndex="7" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+				onCancelAction="#handleCancel" saveButtonTitle="%save"
+				cancelButtonTitle="%cancel" />
 	
 		</GridPane>
 	</children>

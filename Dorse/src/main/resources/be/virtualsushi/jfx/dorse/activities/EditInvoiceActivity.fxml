@@ -16,6 +16,7 @@
 <?import javafx.scene.control.Tab?>
 <?import be.virtualsushi.jfx.dorse.control.ComboBoxField?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import javafx.scene.control.ScrollPane?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
 	<padding>
@@ -47,27 +48,37 @@
 				GridPane.columnIndex="1" GridPane.rowIndex="2" fieldWidth="400" />
 
 			<TabPane GridPane.columnIndex="0" GridPane.rowIndex="3"
-				GridPane.columnSpan="2" tabClosingPolicy="UNAVAILABLE">
+				GridPane.columnSpan="2" tabClosingPolicy="UNAVAILABLE" >
 				<Tab text="%delivery.address">
-					<VBox fx:id="deliveryAddressBox" spacing="10" prefWidth="400">
+					<VBox spacing="10" >
 						<padding>
-							<Insets bottom="15" left="15" right="15" top="15" />
+							<Insets bottom="5" left="5" right="5" top="5" />
 						</padding>
-
-						<children>
-							<Button text="%new.delivery.address" alignment="BOTTOM_CENTER" />
-						</children>
+					
+						<ScrollPane prefHeight="200">
+							<VBox fx:id="deliveryAddressBox" spacing="10" prefWidth="400" >
+								<padding>
+									<Insets bottom="15" left="15" right="15" top="15" />
+								</padding>
+							</VBox>
+						</ScrollPane>
+						<Button text="%new.delivery.address" onAction="#handleNewDeliveryAddress" alignment="BOTTOM_CENTER" />
 					</VBox>
 				</Tab>
 				<Tab text="%invoice.address">
-					<VBox fx:id="invoiceAddressBox" spacing="10" prefWidth="400">
+					<VBox spacing="10">
 						<padding>
-							<Insets bottom="15" left="15" right="15" top="15" />
+							<Insets bottom="5" left="5" right="5" top="5" />
 						</padding>
-
-						<children>
-							<Button text="%new.invoice.address" alignment="BOTTOM_CENTER" />
-						</children>
+					
+						<ScrollPane prefHeight="200">
+							<VBox fx:id="invoiceAddressBox" spacing="10" prefWidth="400" >
+								<padding>
+									<Insets bottom="15" left="15" right="15" top="15" />
+								</padding>
+							</VBox>
+						</ScrollPane>
+						<Button text="%new.invoice.address" onAction="#handleNewInvoiceAddress" alignment="BOTTOM_CENTER" />
 					</VBox>
 				</Tab>
 			</TabPane>

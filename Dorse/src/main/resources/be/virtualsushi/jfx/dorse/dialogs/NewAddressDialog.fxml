@@ -10,19 +10,19 @@
 
 <GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10">
 
-	<FieldLabel value="%address.line.1" GridPane.columnIndex="0"
+	<FieldLabel value="%address" GridPane.columnIndex="0"
 		GridPane.rowIndex="0" />
-	<TextField fx:id="addressLine1Field" GridPane.columnIndex="1"
+	<TextField fx:id="addressField" GridPane.columnIndex="1"
 		GridPane.rowIndex="0" fieldWidth="300" />
 
-	<FieldLabel value="%address.line.2" GridPane.columnIndex="0"
+	<FieldLabel value="%city" GridPane.columnIndex="0"
 		GridPane.rowIndex="1" />
-	<TextField fx:id="addressLine2Field" GridPane.columnIndex="1"
+	<TextField fx:id="cityField" GridPane.columnIndex="1"
 		GridPane.rowIndex="1" fieldWidth="300" />
 
-	<FieldLabel value="%location" GridPane.columnIndex="0"
+	<FieldLabel value="%zipcode" GridPane.columnIndex="0"
 		GridPane.rowIndex="2" />
-	<TextField fx:id="locationField" GridPane.columnIndex="1"
+	<TextField fx:id="zipcodeField" GridPane.columnIndex="1"
 		GridPane.rowIndex="2" fieldWidth="300" />
 
 	<FieldLabel value="%phone" GridPane.columnIndex="0"
@@ -41,7 +41,7 @@
 		GridPane.rowIndex="5" fieldWidth="300" />
 
 	<ControlsButtonsBar GridPane.columnIndex="1"
-		GridPane.rowIndex="2" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+		GridPane.rowIndex="6" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
 		onCancelAction="#handleCancel" saveButtonTitle="%save"
 		cancelButtonTitle="%cancel" />
 

@@ -4,4 +4,6 @@ public interface Listable {
 
 	String getPrintName();
 
+	String toString();
+
 }

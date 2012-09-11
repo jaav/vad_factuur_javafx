@@ -28,7 +28,7 @@ public abstract class AbstractDialog extends UiComponentBean {
 		getEventBus().post(new CancelDialogEvent(this.getClass()));
 	}
 
-	public void onShow() {
+	public void onShow(Object... parameters) {
 
 	}
 

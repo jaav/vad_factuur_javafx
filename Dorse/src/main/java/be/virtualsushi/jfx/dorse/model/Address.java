@@ -1,35 +1,61 @@
 package be.virtualsushi.jfx.dorse.model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
+import be.virtualsushi.jfx.dorse.restapi.ListResourcePath;
+
+@ListResourcePath("addresses")
 public class Address extends BaseEntity {
 
-	private String address1;
-	private String address2;
-	private String location;
+	private Long customer;
+
+	@JsonProperty("address_type")
+	private Integer addressType;
+
+	private String address;
+
+	private Long location;
+
+	@JsonProperty("tel")
 	private String phone;
+
 	private String fax;
+
 	private String email;
 
-	public String getAddress1() {
-		return address1;
+	private String city;
+
+	private String zipcode;
+
+	public Long getCustomer() {
+		return customer;
 	}
 
-	public void setAddress1(String address1) {
-		this.address1 = address1;
+	public void setCustomer(Long customer) {
+		this.customer = customer;
 	}
 
-	public String getAddress2() {
-		return address2;
+	public Integer getAddressType() {
+		return addressType;
 	}
 
-	public void setAddress2(String address2) {
-		this.address2 = address2;
+	public void setAddressType(Integer addressType) {
+		this.addressType = addressType;
 	}
 
-	public String getLocation() {
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Long getLocation() {
 		return location;
 	}
 
-	public void setLocation(String location) {
+	public void setLocation(Long location) {
 		this.location = location;
 	}
 
@@ -55,6 +81,22 @@ public class Address extends BaseEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 
 }

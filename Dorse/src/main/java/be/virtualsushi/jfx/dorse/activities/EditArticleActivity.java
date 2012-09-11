@@ -1,5 +1,11 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_ARTICLE;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,18 +22,59 @@ import be.virtualsushi.jfx.dorse.dialogs.ArticleTypeEditDialog;
 import be.virtualsushi.jfx.dorse.dialogs.ModifyStockDialog;
 import be.virtualsushi.jfx.dorse.dialogs.SupplierEditDialog;
 import be.virtualsushi.jfx.dorse.dialogs.UnitEditDialog;
-import be.virtualsushi.jfx.dorse.events.SaveEntityEvent;
-import be.virtualsushi.jfx.dorse.events.SetValueEvent;
+import be.virtualsushi.jfx.dorse.events.dialogs.SaveArticleTypeEvent;
+import be.virtualsushi.jfx.dorse.events.dialogs.SaveSupplierEvent;
+import be.virtualsushi.jfx.dorse.events.dialogs.SaveUnitEvent;
+import be.virtualsushi.jfx.dorse.events.dialogs.SetStockValueEvent;
 import be.virtualsushi.jfx.dorse.model.Article;
 import be.virtualsushi.jfx.dorse.model.ArticleType;
+import be.virtualsushi.jfx.dorse.model.IdNamePairEntity;
 import be.virtualsushi.jfx.dorse.model.Supplier;
 import be.virtualsushi.jfx.dorse.model.Unit;
+import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
+import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
 import com.google.common.eventbus.Subscribe;
 
 @Component
 @Scope("prototype")
 public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
+
+	private class SaveIdNamePairEntityTaskCreator<E extends IdNamePairEntity> implements TaskCreator<DorseBackgroundTask<E>> {
+
+		private final E entity;
+
+		public SaveIdNamePairEntityTaskCreator(E entityToSave) {
+			this.entity = entityToSave;
+		}
+
+		@Override
+		public DorseBackgroundTask<E> createTask() {
+			return new DorseBackgroundTask<E>(this, entity) {
+
+				@Override
+				protected void onPreExecute() {
+					showLoadingMask();
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				protected E call() throws Exception {
+					getRestApiAccessor().save((E) getParameters()[0]);
+					doCustomBackgroundInitialization(getEntity());
+					return (E) getParameters()[0];
+				}
+
+				@Override
+				protected void onSuccess(E value) {
+					mapLists(getEntity());
+					hideLoadingMask();
+				}
+
+			};
+		}
+
+	}
 
 	@FXML
 	private EditableList<ArticleType> typeField;
@@ -46,6 +93,10 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 
 	@FXML
 	private TextAreaField descriptionField;
+
+	private List<ArticleType> acceptableArticleTypes;
+	private List<Unit> acceptableUnits;
+	private List<Supplier> acceptableSuppliers;
 
 	@Override
 	public void initialize() {
@@ -78,7 +129,7 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 
 	@FXML
 	protected void handleEditStock(ActionEvent event) {
-		showDialog(getResources().getString("modify.stock.dialog.title"), ModifyStockDialog.class);
+		showDialog(getResources().getString("modify.stock.dialog.title"), ModifyStockDialog.class, getEntity().getStock());
 	}
 
 	@Override
@@ -97,42 +148,97 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	}
 
 	@Override
-	protected void mapFields(Article editingActivity) {
+	protected void mapFields(Article editingArticle) {
+		idField.setText(String.valueOf(editingArticle.getId()));
+		stockField.setText(String.valueOf(editingArticle.getStock()));
+		codeField.setValue(editingArticle.getCode());
+		nameField.setValue(editingArticle.getName());
+		descriptionField.setValue(editingArticle.getDescription());
+		if (editingArticle.getPrice() != null) {
+			priceField.setValue(String.valueOf(editingArticle.getPrice()));
+		}
+		if (editingArticle.getWeight() != null) {
+			weightField.setValue(String.valueOf(editingArticle.getWeight()));
+		}
+		if (editingArticle.getCreationDate() != null) {
+			createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(editingArticle.getCreationDate()));
+		}
+		mapLists(editingArticle);
+	}
 
+	private void mapLists(Article editingArticle) {
+		unitField.setAcceptableValues(acceptableUnits);
+		for (Unit unit : unitField.getAcceptableValues()) {
+			if (editingArticle.getUnit() == unit.getId()) {
+				unitField.setValue(unit);
+				break;
+			}
+		}
+		typeField.setAcceptableValues(acceptableArticleTypes);
+		for (ArticleType type : typeField.getAcceptableValues()) {
+			if (editingArticle.getArticleType() == type.getId()) {
+				typeField.setValue(type);
+				break;
+			}
+		}
+		supplierField.setAcceptableValues(acceptableSuppliers);
+		for (Supplier supplier : supplierField.getAcceptableValues()) {
+			if (editingArticle.getSupplier() == supplier.getId()) {
+				supplierField.setValue(supplier);
+				break;
+			}
+		}
 	}
 
 	@Override
 	protected Article getEditedEntity() {
-		return null;
+		Article result = getEntity();
+		result.setCode(codeField.getValue());
+		result.setName(nameField.getValue());
+		result.setDescription(descriptionField.getValue());
+		result.setArticleType(typeField.getValue().getId());
+		result.setPrice(Float.parseFloat(priceField.getValue()));
+		result.setWeight(Integer.parseInt(weightField.getValue()));
+		result.setUnit(unitField.getValue().getId());
+		result.setSupplier(supplierField.getValue().getId());
+		if (result.isNew()) {
+			result.setCreationDate(new Date());
+		}
+		return result;
 	}
 
 	@Subscribe
-	public void onSaveStock(SetValueEvent<Integer> event) {
-		// TODO save stock
+	public void onSaveStock(SetStockValueEvent event) {
+		getEntity().setStock(event.getValue());
+		stockField.setText(String.valueOf(event.getValue()));
+		hideDialog(ModifyStockDialog.class);
 	}
 
 	@Subscribe
-	public void onSaveUnit(SaveEntityEvent<Unit> event) {
-		getRestApiAccessor().save(event.getEntity());
-		hideDialog(UnitEditDialog.class);
+	public void onSaveUnit(SaveUnitEvent event) {
+		doInBackground(new SaveIdNamePairEntityTaskCreator<IdNamePairEntity>(event.getEntity()));
 	}
 
 	@Subscribe
-	public void onSaveArticleType(SaveEntityEvent<ArticleType> event) {
-		getRestApiAccessor().save(event.getEntity());
-		hideDialog(ArticleTypeEditDialog.class);
+	public void onSaveArticleType(SaveArticleTypeEvent event) {
+		doInBackground(new SaveIdNamePairEntityTaskCreator<IdNamePairEntity>(event.getEntity()));
 	}
 
 	@Subscribe
-	public void onSaveSupplier(SaveEntityEvent<Supplier> event) {
-		getRestApiAccessor().save(event.getEntity());
-		hideDialog(SupplierEditDialog.class);
+	public void onSaveSupplier(SaveSupplierEvent event) {
+		doInBackground(new SaveIdNamePairEntityTaskCreator<IdNamePairEntity>(event.getEntity()));
 	}
 
 	@Override
 	protected void doCustomBackgroundInitialization(Article editingEntity) {
-		// TODO Auto-generated method stub
-		
+		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, ArticleType[].class, false);
+		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, Supplier[].class, false);
+		acceptableUnits = getRestApiAccessor().getList(Unit.class, Unit[].class, false);
+	}
+
+	@Override
+	protected AppActivitiesNames getViewActivityName() {
+		return VIEW_ARTICLE;
 	}
 
 }

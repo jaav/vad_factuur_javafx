@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -47,25 +48,31 @@ public class RestApiAccessor extends RestTemplate {
 		setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
 	}
 
-	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, Class<E[]> arrayClass, boolean needFullInfo) {
+	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, Class<E[]> arrayClass, boolean needFullInfo, Object... parameters) {
 		return getList(null, null, entityClass, arrayClass, needFullInfo);
 	}
 
-	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, Class<E> entityClass, Class<E[]> arrayClass, boolean needFullInfo) {
+	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, Class<E> entityClass, Class<E[]> arrayClass, boolean needFullInfo, Object... parameters) {
 		ArrayList<E> result = new ArrayList<E>();
-		E[] ids = getForObject(BASE_SERVICE_URI + getEntitySubPath(entityClass) + "s", arrayClass);
+		E[] ids = getForObject(BASE_SERVICE_URI + getEntityListSubPath(entityClass), arrayClass, parameters);
 		if (needFullInfo) {
-			if (offset != null && count != null) {
-				for (int i = 0; i < count; i++) {
-					result.add(get(ids[i + offset].getId(), entityClass));
-				}
-			} else {
-				for (E id : ids) {
-					result.add(get(id.getId(), entityClass));
-				}
-			}
+			result.addAll(detailList(offset, count, entityClass, ids));
 		} else {
 			result.addAll(Arrays.asList(ids));
+		}
+		return result;
+	}
+
+	private <E extends BaseEntity> List<E> detailList(Integer offset, Integer count, Class<E> entityClass, E[] ids) {
+		ArrayList<E> result = new ArrayList<E>();
+		if (offset != null && count != null) {
+			for (int i = 0; i < count; i++) {
+				result.add(get(ids[i + offset].getId(), entityClass));
+			}
+		} else {
+			for (E id : ids) {
+				result.add(get(id.getId(), entityClass));
+			}
 		}
 		return result;
 	}
@@ -100,7 +107,17 @@ public class RestApiAccessor extends RestTemplate {
 	}
 
 	private String getEntitySubPath(Class<? extends BaseEntity> entityClass) {
-		return entityClass.getSimpleName().toLowerCase();
+		if (entityClass.getAnnotation(ItemResourcePath.class) != null) {
+			return entityClass.getAnnotation(ItemResourcePath.class).value();
+		}
+		return StringUtils.uncapitalize(entityClass.getSimpleName());
+	}
+
+	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass) {
+		if (entityClass.getAnnotation(ListResourcePath.class) != null) {
+			return entityClass.getAnnotation(ListResourcePath.class).value();
+		}
+		return StringUtils.uncapitalize(entityClass.getSimpleName()) + "s";
 	}
 
 }

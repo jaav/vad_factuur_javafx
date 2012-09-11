@@ -130,7 +130,7 @@ public class DorseApplication extends Application {
 		AbstractDialog dialogContent = applicationContext.getBean(event.getDialogControllerClass());
 		customDialog.setContent(dialogContent.asNode());
 		showDialog(customDialog);
-		dialogContent.onShow();
+		dialogContent.onShow(event.getParameters());
 	}
 
 	@Subscribe

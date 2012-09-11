@@ -26,7 +26,7 @@ import be.virtualsushi.jfx.dorse.fxml.IUiComponent;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
-import be.virtualsushi.jfx.dorse.restapi.CallRestApiBackgroundTask;
+import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.google.common.eventbus.EventBus;
@@ -48,7 +48,7 @@ import com.zenjava.jfxflow.transition.ViewTransition;
  * @param <V>
  *            - Root node type.
  */
-public abstract class UiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> implements HasEntryTransition, HasExitTransition, IUiComponent {
+public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<SimpleView<V>> implements HasEntryTransition, HasExitTransition, IUiComponent {
 
 	private ActivityNavigator activityNavigator;
 
@@ -163,8 +163,8 @@ public abstract class UiActivity<V extends Node> extends AbstractActivity<Simple
 		this.isNew = isNew;
 	}
 
-	protected void showDialog(String dialogTitle, Class<? extends AbstractDialog> componentClass) {
-		getEventBus().post(new ShowDialogEvent(dialogTitle, componentClass));
+	protected void showDialog(String dialogTitle, Class<? extends AbstractDialog> componentClass, Object... parameters) {
+		getEventBus().post(new ShowDialogEvent(dialogTitle, componentClass, parameters));
 	}
 
 	protected void hideDialog(Class<? extends AbstractDialog> componentClass) {
@@ -287,12 +287,16 @@ public abstract class UiActivity<V extends Node> extends AbstractActivity<Simple
 	@Subscribe
 	public void onLoginSuccessful(LoginSuccessfulEvent event) {
 		if (pendingTaskCreator != null) {
-			executeTask(pendingTaskCreator.createTask());
+			doTaskExecution(pendingTaskCreator.createTask());
 		}
 	}
 
-	protected void loadDataInBackground(final CallRestApiBackgroundTask<?> task) {
-		pendingTaskCreator = task.getCreator();
+	protected void doInBackground(final TaskCreator<?> taskCreator) {
+		pendingTaskCreator = taskCreator;
+		doTaskExecution(pendingTaskCreator.createTask());
+	}
+
+	private void doTaskExecution(DorseBackgroundTask<?> task) {
 		task.setEventBus(eventBus);
 		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 

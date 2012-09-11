@@ -14,14 +14,14 @@ import be.virtualsushi.jfx.dorse.model.BaseEntity;
 import com.google.common.eventbus.EventBus;
 import com.zenjava.jfxflow.worker.BackgroundTask;
 
-public abstract class CallRestApiBackgroundTask<E extends BaseEntity> extends BackgroundTask<E> {
+public abstract class DorseBackgroundTask<E extends BaseEntity> extends BackgroundTask<E> {
 
 	private EventBus eventBus;
 	private final Object[] parameters;
 
-	private final TaskCreator<CallRestApiBackgroundTask<E>> creator;
+	private final TaskCreator<DorseBackgroundTask<E>> creator;
 
-	public CallRestApiBackgroundTask(TaskCreator<CallRestApiBackgroundTask<E>> taskCreator, Object... parameters) {
+	public DorseBackgroundTask(TaskCreator<DorseBackgroundTask<E>> taskCreator, Object... parameters) {
 		super();
 		this.parameters = parameters;
 		this.creator = taskCreator;
@@ -53,6 +53,7 @@ public abstract class CallRestApiBackgroundTask<E extends BaseEntity> extends Ba
 		if (HttpServerErrorException.class.isInstance(exception)) {
 			System.out.println("server");
 		}
+		exception.printStackTrace();
 	}
 
 	public void setEventBus(EventBus eventBus) {
@@ -63,7 +64,7 @@ public abstract class CallRestApiBackgroundTask<E extends BaseEntity> extends Ba
 		return parameters;
 	}
 
-	public TaskCreator<CallRestApiBackgroundTask<E>> getCreator() {
+	public TaskCreator<DorseBackgroundTask<E>> getCreator() {
 		return creator;
 	}
 

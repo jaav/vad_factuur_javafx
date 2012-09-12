@@ -206,8 +206,8 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		result.setCode(numberField.getValue());
 		result.setRemark(remarkField.getValue());
 		result.setCustomer(customerField.getValue().getId());
-		result.setInvoiceAddress(((AddressesListToggle) invoiceAddressToggleGroup.getSelectedToggle()).getValue().getId());
-		result.setDeliveryAddress(((AddressesListToggle) deliveryAddressToggleGroup.getSelectedToggle()).getValue().getId());
+		result.setInvoiceAddress(((AddressesListToggle) invoiceAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
+		result.setDeliveryAddress(((AddressesListToggle) deliveryAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
 		return result;
 	}
 

@@ -4,6 +4,8 @@ import java.util.ResourceBundle;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -15,12 +17,20 @@ public class AddressesListToggle extends HBox implements Toggle, HasValue<Addres
 	private RadioButton button;
 	private ViewAddressControl addressView;
 
+	private ObjectProperty<ToggleGroup> toggleGroup;
+	private BooleanProperty selected;
+
 	public AddressesListToggle() {
 		button = new RadioButton();
 		addressView = new ViewAddressControl();
+		toggleGroup = new SimpleObjectProperty<ToggleGroup>();
+		toggleGroup.bindBidirectional(button.toggleGroupProperty());
+		selected = new SimpleBooleanProperty();
+		selected.bindBidirectional(button.selectedProperty());
 		setSpacing(10d);
 		getChildren().add(button);
 		getChildren().add(addressView);
+		button.setUserData(this);
 	}
 
 	@Override
@@ -35,7 +45,7 @@ public class AddressesListToggle extends HBox implements Toggle, HasValue<Addres
 
 	@Override
 	public BooleanProperty selectedProperty() {
-		return button.selectedProperty();
+		return selected;
 	}
 
 	@Override
@@ -50,7 +60,7 @@ public class AddressesListToggle extends HBox implements Toggle, HasValue<Addres
 
 	@Override
 	public ObjectProperty<ToggleGroup> toggleGroupProperty() {
-		return button.toggleGroupProperty();
+		return toggleGroup;
 	}
 
 	@Override

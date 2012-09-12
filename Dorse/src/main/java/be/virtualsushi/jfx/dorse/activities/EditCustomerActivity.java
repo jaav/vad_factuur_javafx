@@ -17,7 +17,7 @@ import be.virtualsushi.jfx.dorse.control.EditableList;
 import be.virtualsushi.jfx.dorse.control.TextAreaField;
 import be.virtualsushi.jfx.dorse.control.TextField;
 import be.virtualsushi.jfx.dorse.dialogs.NewSectorDialog;
-import be.virtualsushi.jfx.dorse.events.SaveEntityEvent;
+import be.virtualsushi.jfx.dorse.events.dialogs.SaveSectorEvent;
 import be.virtualsushi.jfx.dorse.model.Customer;
 import be.virtualsushi.jfx.dorse.model.Sector;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
@@ -141,7 +141,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	}
 
 	@Subscribe
-	protected void onSaveSector(SaveEntityEvent<Sector> event) {
+	public void onSaveSector(SaveSectorEvent event) {
 		doInBackground(new SaveSectorTaskCreator(event.getEntity()));
 	}
 

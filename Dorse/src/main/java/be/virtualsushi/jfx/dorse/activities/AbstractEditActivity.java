@@ -9,24 +9,58 @@ import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
+import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
+import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
 public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity> extends AbstractManageEntityActivity<N, E> {
 
 	private Validator validator;
+
+	private class SaveTaskCreator implements TaskCreator<DorseBackgroundTask<E>> {
+
+		private final E entity;
+
+		public SaveTaskCreator(E entityToSave) {
+			this.entity = entityToSave;
+		}
+
+		@Override
+		public DorseBackgroundTask<E> createTask() {
+			return new DorseBackgroundTask<E>(this, entity) {
+
+				@Override
+				protected void onPreExecute() {
+					showLoadingMask();
+				}
+
+				@Override
+				protected E call() throws Exception {
+					getRestApiAccessor().save(entity);
+					return entity;
+				}
+
+				@Override
+				protected void onSuccess(E value) {
+					hideLoadingMask();
+					goTo(getViewActivityName(), ENTITY_ID_PARAMETER, value.getId());
+				}
+			};
+		}
+
+	}
 
 	@FXML
 	public Label title;
 
 	@FXML
 	public void handleCancel(ActionEvent event) {
-		getEventBus().post(new AuthorizationRequiredEvent());
+		getActivityNavigator().goBack();
 	}
 
 	@FXML
 	public void handleSave(ActionEvent event) {
-		getRestApiAccessor().save(getEditedEntity());
+		doInBackground(new SaveTaskCreator(getEditedEntity()));
 	}
 
 	@Override
@@ -59,5 +93,7 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 	protected abstract String getNewTitleKey();
 
 	protected abstract E getEditedEntity();
+
+	protected abstract AppActivitiesNames getViewActivityName();
 
 }

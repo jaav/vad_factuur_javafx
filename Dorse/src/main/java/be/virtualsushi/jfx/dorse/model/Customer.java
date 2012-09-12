@@ -11,6 +11,7 @@ public class Customer extends BaseEntity implements Listable {
 	private long sector;
 	private long subsector;
 	private List<Address> address;
+	private List<Person> person;
 
 	public String getName() {
 		return name;
@@ -65,12 +66,25 @@ public class Customer extends BaseEntity implements Listable {
 		return getName();
 	}
 
+	@Override
+	public String toString() {
+		return getPrintName();
+	}
+
 	public List<Address> getAddress() {
 		return address;
 	}
 
 	public void setAddress(List<Address> address) {
 		this.address = address;
+	}
+
+	public List<Person> getPerson() {
+		return person;
+	}
+
+	public void setPerson(List<Person> person) {
+		this.person = person;
 	}
 
 }

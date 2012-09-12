@@ -1,8 +1,8 @@
 package be.virtualsushi.jfx.dorse.activities;
 
-import com.zenjava.jfxflow.worker.BackgroundTask;
+import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
-public interface TaskCreator<T extends BackgroundTask<?>> {
+public interface TaskCreator<T extends DorseBackgroundTask<?>> {
 
 	public T createTask();
 

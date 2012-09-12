@@ -4,13 +4,13 @@ import java.lang.reflect.ParameterizedType;
 
 import javafx.scene.Node;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
-import be.virtualsushi.jfx.dorse.restapi.CallRestApiBackgroundTask;
+import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
-public abstract class AbstractManageEntityActivity<N extends Node, E extends BaseEntity> extends UiActivity<N> {
+public abstract class AbstractManageEntityActivity<N extends Node, E extends BaseEntity> extends DorseUiActivity<N> {
 
 	public static final String ENTITY_ID_PARAMETER = "entity_id";
 
-	private class LoadEntityTaskCreator implements TaskCreator<CallRestApiBackgroundTask<E>> {
+	private class LoadEntityTaskCreator implements TaskCreator<DorseBackgroundTask<E>> {
 
 		private final Object[] parameters;
 
@@ -19,8 +19,8 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 		}
 
 		@Override
-		public CallRestApiBackgroundTask<E> createTask() {
-			return new CallRestApiBackgroundTask<E>(this, parameters) {
+		public DorseBackgroundTask<E> createTask() {
+			return new DorseBackgroundTask<E>(this, parameters) {
 
 				@Override
 				protected void onPreExecute() {
@@ -38,7 +38,7 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 						result = newEntityInstance();
 					}
 					doCustomBackgroundInitialization(result);
-					return null;
+					return result;
 				}
 
 				@Override
@@ -63,7 +63,7 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 		if (id == null && !canCreateNewEntity()) {
 			throw new IllegalStateException("Nothing to display. Did you forget to pass " + ENTITY_ID_PARAMETER + " parameter");
 		} else {
-			loadDataInBackground(new LoadEntityTaskCreator(id).createTask());
+			doInBackground(new LoadEntityTaskCreator(id));
 		}
 
 	}

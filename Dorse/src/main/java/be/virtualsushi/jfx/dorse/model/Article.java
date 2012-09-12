@@ -15,6 +15,7 @@ public class Article extends BaseEntity {
 	private Long supplier;
 	private Long creator;
 	private Float vat;
+	private Integer stock;
 
 	public Long getArticleType() {
 		return articleType;
@@ -102,6 +103,14 @@ public class Article extends BaseEntity {
 
 	public void setVat(Float vat) {
 		this.vat = vat;
+	}
+
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
 	}
 
 }

@@ -1,5 +1,7 @@
 package be.virtualsushi.jfx.dorse.control;
 
+import java.util.List;
+
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -15,6 +17,7 @@ public class DorseComboBox<T extends Listable> extends ComboBox<T> {
 			@Override
 			public ListCell<T> call(ListView<T> param) {
 				return new ListCell<T>() {
+
 					@Override
 					protected void updateItem(T item, boolean empty) {
 						super.updateItem(item, empty);
@@ -22,9 +25,19 @@ public class DorseComboBox<T extends Listable> extends ComboBox<T> {
 							setText(item.getPrintName());
 						}
 					}
+
 				};
 			}
 		});
+	}
+
+	public void setAcceptableValues(List<T> acceptableValues) {
+		getItems().clear();
+		getItems().addAll(acceptableValues);
+	}
+
+	public List<T> getAcceptableValues() {
+		return getItems();
 	}
 
 }

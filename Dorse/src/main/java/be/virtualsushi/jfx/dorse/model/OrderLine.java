@@ -1,5 +1,8 @@
 package be.virtualsushi.jfx.dorse.model;
 
+import be.virtualsushi.jfx.dorse.restapi.ListResourcePath;
+
+@ListResourcePath("invoiceLineByInvoice/{id}")
 public class OrderLine extends BaseEntity {
 
 	private Long article;

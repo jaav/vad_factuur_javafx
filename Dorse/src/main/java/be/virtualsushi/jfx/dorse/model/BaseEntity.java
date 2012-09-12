@@ -1,6 +1,6 @@
 package be.virtualsushi.jfx.dorse.model;
 
-public class BaseEntity {
+public abstract class BaseEntity {
 
 	private Long id;
 

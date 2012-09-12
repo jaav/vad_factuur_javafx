@@ -26,4 +26,9 @@ public class Sector extends BaseEntity implements Listable {
 		return getName();
 	}
 
+	@Override
+	public String toString() {
+		return getPrintName();
+	}
+
 }

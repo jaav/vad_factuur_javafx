@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 import be.virtualsushi.jfx.dorse.fxml.PackageBasedUiBinder;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
+import be.virtualsushi.jfx.dorse.restapi.DorseMappingJacksonHttpMessageConverter;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 import com.google.common.eventbus.EventBus;
@@ -27,34 +28,7 @@ public class DorseApplicationFactory {
 	@Bean(name = "restApiAccessor")
 	public RestApiAccessor getRestApiAccessor() {
 		RestApiAccessor accessor = new RestApiAccessor();
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Customer>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Customer[]>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Sector>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Sector[]>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Article>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Article[]>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<ArticleType>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<ArticleType[]>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Unit>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Unit[]>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Supplier>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<Supplier[]>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<OrderLine>());
-		// accessor.getMessageConverters().add(new
-		// JsonHttpMessageConverter<OrderLine[]>());
+		accessor.getMessageConverters().add(new DorseMappingJacksonHttpMessageConverter());
 		return accessor;
 	}
 

@@ -14,7 +14,7 @@ public class IdNamePairEntity extends BaseEntity implements Listable {
 
 	@Override
 	public String toString() {
-		return name;
+		return getPrintName();
 	}
 
 	@Override

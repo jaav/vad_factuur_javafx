@@ -37,10 +37,7 @@ public class ViewCustomerActivity extends AbstractManageEntityActivity<VBox, Cus
 			Tab tab = new Tab(getResources().getString("address") + " " + String.valueOf(addressIndex));
 			ViewAddressControl addressView = new ViewAddressControl();
 			addressView.setResources(getResources());
-			addressView.setAddressLine1(address.getAddress1());
-			addressView.setAddressLine2(address.getAddress2());
-			addressView.setLocation(address.getLocation());
-			addressView.setPhone(address.getPhone());
+			addressView.setValue(address);
 			tab.setContent(addressView);
 			addressesList.getTabs().add(tab);
 		}

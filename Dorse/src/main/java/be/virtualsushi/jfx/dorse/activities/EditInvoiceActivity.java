@@ -2,6 +2,7 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_INVOICE;
 
+import java.util.Date;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -208,6 +209,11 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		result.setCustomer(customerField.getValue().getId());
 		result.setInvoiceAddress(((AddressesListToggle) invoiceAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
 		result.setDeliveryAddress(((AddressesListToggle) deliveryAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
+		if (result.isNew()) {
+			result.setCreationDate(new Date());
+		}
+		result.setDeliveryDate(new Date());
+		result.setPaidDate(new Date());
 		return result;
 	}
 

@@ -3,9 +3,13 @@ package be.virtualsushi.jfx.dorse.model;
 public class Person extends BaseEntity {
 
 	private String title;
+
 	private String name;
+
 	private String email;
+
 	private String mobile;
+
 	private Long customer;
 
 	public String getTitle() {

@@ -131,7 +131,9 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 		editedCustomer.setIban(ibanField.getValue());
 		editedCustomer.setVat(vatField.getValue());
 		editedCustomer.setRemark(remarkField.getValue());
-		editedCustomer.setSector(sectorField.getValue().getId());
+		Sector sector = sectorField.getValue();
+		editedCustomer.setSubsector(sector.getId());
+		editedCustomer.setSector(sector.getParent());
 		return editedCustomer;
 	}
 

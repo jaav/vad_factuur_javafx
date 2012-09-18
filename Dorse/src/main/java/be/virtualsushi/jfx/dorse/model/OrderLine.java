@@ -6,7 +6,9 @@ import be.virtualsushi.jfx.dorse.restapi.ListResourcePath;
 public class OrderLine extends BaseEntity {
 
 	private Long article;
+
 	private Float discount;
+
 	private Integer quantity;
 
 	public Long getArticle() {

@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse.model;
 public class Sector extends BaseEntity implements Listable {
 
 	private String name;
+
 	private Long parent;
 
 	public String getName() {

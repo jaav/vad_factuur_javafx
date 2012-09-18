@@ -2,19 +2,38 @@ package be.virtualsushi.jfx.dorse.model;
 
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateDeserializer;
+import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
+
 public class Article extends BaseEntity {
 
 	private Long articleType;
+
 	private String code;
+
 	private String name;
+
 	private String description;
+
 	private Float price;
+
 	private Long unit;
+
 	private Integer weight;
+
+	@JsonSerialize(using = CustomDateSerializer.class)
+	@JsonDeserialize(using = CustomDateDeserializer.class)
 	private Date creationDate;
+
 	private Long supplier;
+
 	private Long creator;
+
 	private Float vat;
+
 	private Integer stock;
 
 	public Long getArticleType() {

@@ -2,21 +2,46 @@ package be.virtualsushi.jfx.dorse.model;
 
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateDeserializer;
+import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
+
 public class Invoice extends BaseEntity {
 
 	private Long customer;
+
 	private Long invoiceAddress;
+
 	private Long deliveryAddress;
+
 	private String code;
+
 	private String remark;
+
 	private Float shipping;
+
 	private Float total;
+
 	private Float vat;
+
+	@JsonSerialize(using = CustomDateSerializer.class)
+	@JsonDeserialize(using = CustomDateDeserializer.class)
 	private Date creationDate;
+
+	@JsonSerialize(using = CustomDateSerializer.class)
+	@JsonDeserialize(using = CustomDateDeserializer.class)
 	private Date deliveryDate;
+
+	@JsonSerialize(using = CustomDateSerializer.class)
+	@JsonDeserialize(using = CustomDateDeserializer.class)
 	private Date paidDate;
+
 	private Float weight;
+
 	private Integer status;
+
 	private Long creator;
 
 	public Long getCustomer() {

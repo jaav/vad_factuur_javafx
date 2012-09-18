@@ -5,12 +5,19 @@ import java.util.List;
 public class Customer extends BaseEntity implements Listable {
 
 	private String name;
+
 	private String vat;
+
 	private String iban;
+
 	private String remark;
+
 	private long sector;
+
 	private long subsector;
+
 	private List<Address> address;
+
 	private List<Person> person;
 
 	public String getName() {

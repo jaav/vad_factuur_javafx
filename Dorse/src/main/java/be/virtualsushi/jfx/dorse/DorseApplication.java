@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import be.virtualsushi.jfx.dorse.activities.CustomerListActivity;
 import be.virtualsushi.jfx.dorse.activities.EditArticleActivity;
 import be.virtualsushi.jfx.dorse.activities.EditCustomerActivity;
 import be.virtualsushi.jfx.dorse.activities.EditInvoiceActivity;
@@ -110,6 +111,7 @@ public class DorseApplication extends Application {
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_INVOICE, applicationContext.getBean(EditInvoiceActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_CUSTOMER, applicationContext.getBean(ViewCustomerActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_INVOICE, applicationContext.getBean(ViewInvoiceActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.LIST_CUSTOMERS, applicationContext.getBean(CustomerListActivity.class)));
 	}
 
 	@Subscribe

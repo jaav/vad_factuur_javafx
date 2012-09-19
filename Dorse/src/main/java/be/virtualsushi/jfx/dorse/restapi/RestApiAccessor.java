@@ -29,7 +29,7 @@ public class RestApiAccessor extends RestTemplate {
 	public static final String BASE_SERVICE_URI = "http://www.dorse.me/";
 
 	private static final int DEFAULT_MAX_TOTAL_CONNECTIONS = 100;
-	private static final int DEFAULT_MAX_CONNECTIONS_PER_ROUTE = 5;
+	private static final int DEFAULT_MAX_CONNECTIONS_PER_ROUTE = 30;
 
 	private HttpClient httpClient;
 
@@ -48,13 +48,13 @@ public class RestApiAccessor extends RestTemplate {
 		setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
 	}
 
-	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, Class<E[]> arrayClass, boolean needFullInfo, Object... parameters) {
-		return getList(null, null, entityClass, arrayClass, needFullInfo);
+	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, boolean needFullInfo, Object... parameters) {
+		return getList(null, null, entityClass, needFullInfo);
 	}
 
-	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, Class<E> entityClass, Class<E[]> arrayClass, boolean needFullInfo, Object... parameters) {
+	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, Class<E> entityClass, boolean needFullInfo, Object... parameters) {
 		ArrayList<E> result = new ArrayList<E>();
-		E[] ids = getForObject(BASE_SERVICE_URI + getEntityListSubPath(entityClass), arrayClass, parameters);
+		E[] ids = getForObject(BASE_SERVICE_URI + getEntityListSubPath(entityClass, offset, count), getEntityArrayClass(entityClass), parameters);
 		if (needFullInfo) {
 			result.addAll(detailList(offset, count, entityClass, ids));
 		} else {
@@ -65,7 +65,7 @@ public class RestApiAccessor extends RestTemplate {
 
 	private <E extends BaseEntity> List<E> detailList(Integer offset, Integer count, Class<E> entityClass, E[] ids) {
 		ArrayList<E> result = new ArrayList<E>();
-		if (offset != null && count != null) {
+		if (offset != null && count != null && ids.length > count) {
 			for (int i = 0; i < count; i++) {
 				result.add(get(ids[i + offset].getId(), entityClass));
 			}
@@ -113,11 +113,30 @@ public class RestApiAccessor extends RestTemplate {
 		return StringUtils.uncapitalize(entityClass.getSimpleName());
 	}
 
-	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass) {
+	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass, Integer offset, Integer count) {
+		StringBuilder result = new StringBuilder();
 		if (entityClass.getAnnotation(ListResourcePath.class) != null) {
-			return entityClass.getAnnotation(ListResourcePath.class).value();
+			result.append(entityClass.getAnnotation(ListResourcePath.class).value());
+		} else {
+			result.append(StringUtils.uncapitalize(entityClass.getSimpleName())).append("s");
 		}
-		return StringUtils.uncapitalize(entityClass.getSimpleName()) + "s";
+		result.append("?");
+		if (offset != null) {
+			result.append("from=").append(offset).append("&");
+		}
+		if (count != null) {
+			result.append("quantity=").append(count);
+		}
+		return result.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	private <E extends BaseEntity> Class<E[]> getEntityArrayClass(Class<E> entityClass) {
+		try {
+			return (Class<E[]>) Class.forName("[L" + entityClass.getName() + ";");
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Unable to create array class for " + entityClass.getName(), e);
+		}
 	}
 
 }

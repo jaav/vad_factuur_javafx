@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import be.virtualsushi.jfx.dorse.control.AddButton?>
+<?import java.lang.String?>
+<?import java.lang.Double?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" >
+	<padding>
+		<Insets bottom="10" left="10" right="10" top="10" />
+	</padding>
+	
+	<top>
+		<HBox spacing="7" alignment="BASELINE_CENTER">
+			<Label fx:id="listTitle" > 
+				<styleClass>
+					<String fx:value="activity-title" />
+				</styleClass>
+			</Label>
+			
+			<AddButton onAction="#handleAddAction" />
+		</HBox>
+	</top>
+	
+	<center>
+		<Pagination fx:id="listPage" >
+			<prefHeight>
+				<Double fx:constant="MAX_VALUE" />
+			</prefHeight>
+			<prefWidth>
+				<Double fx:constant="MAX_VALUE" />
+			</prefWidth>
+		</Pagination>
+	</center>
+	
+</BorderPane>

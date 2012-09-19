@@ -219,7 +219,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 
 	@Override
 	protected void doCustomBackgroundInitialization(Invoice editingEntity) {
-		acceptableCustomers = getRestApiAccessor().getList(Customer.class, Customer[].class, false);
+		acceptableCustomers = getRestApiAccessor().getList(Customer.class, false);
 	}
 
 	@Override

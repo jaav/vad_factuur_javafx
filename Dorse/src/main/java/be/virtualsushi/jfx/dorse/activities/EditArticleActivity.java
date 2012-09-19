@@ -201,7 +201,7 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 		result.setWeight(Integer.parseInt(weightField.getValue()));
 		result.setUnit(unitField.getValue().getId());
 		result.setSupplier(supplierField.getValue().getId());
-		if (result.isNew()) {
+		if (result.isNew() || result.getCreationDate() == null) {
 			result.setCreationDate(new Date());
 		}
 		return result;
@@ -231,9 +231,9 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 
 	@Override
 	protected void doCustomBackgroundInitialization(Article editingEntity) {
-		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, ArticleType[].class, false);
-		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, Supplier[].class, false);
-		acceptableUnits = getRestApiAccessor().getList(Unit.class, Unit[].class, false);
+		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, false);
+		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, false);
+		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);
 	}
 
 	@Override

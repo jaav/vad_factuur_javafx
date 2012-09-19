@@ -89,7 +89,7 @@ public class ViewInvoiceActivity extends AbstractManageEntityActivity<VBox, Invo
 		invoiceAddressValue = getRestApiAccessor().get(entity.getInvoiceAddress(), Address.class);
 		deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
 		customerValue = getRestApiAccessor().get(entity.getCustomer(), Customer.class);
-		orderLines = getRestApiAccessor().getList(OrderLine.class, OrderLine[].class, true, entity.getId());
+		orderLines = getRestApiAccessor().getList(OrderLine.class, true, entity.getId());
 	}
 
 }

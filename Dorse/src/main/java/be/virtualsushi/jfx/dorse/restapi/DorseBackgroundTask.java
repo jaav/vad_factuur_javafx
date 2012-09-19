@@ -9,12 +9,11 @@ import org.springframework.web.client.HttpServerErrorException;
 
 import be.virtualsushi.jfx.dorse.activities.TaskCreator;
 import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
-import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
 import com.google.common.eventbus.EventBus;
 import com.zenjava.jfxflow.worker.BackgroundTask;
 
-public abstract class DorseBackgroundTask<E extends BaseEntity> extends BackgroundTask<E> {
+public abstract class DorseBackgroundTask<E> extends BackgroundTask<E> {
 
 	private EventBus eventBus;
 	private final Object[] parameters;

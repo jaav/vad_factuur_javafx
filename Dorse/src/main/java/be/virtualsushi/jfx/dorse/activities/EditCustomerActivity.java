@@ -1,6 +1,6 @@
 package be.virtualsushi.jfx.dorse.activities;
 
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_CUSTOMER;
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_CUSTOMERS;
 
 import java.util.List;
 
@@ -139,7 +139,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 
 	@Override
 	protected void doCustomBackgroundInitialization(Customer editingEntity) {
-		acceptableSectors = getRestApiAccessor().getList(Sector.class, Sector[].class, false);
+		acceptableSectors = getRestApiAccessor().getList(Sector.class, false);
 	}
 
 	@Subscribe
@@ -149,7 +149,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 
 	@Override
 	protected AppActivitiesNames getViewActivityName() {
-		return VIEW_CUSTOMER;
+		return LIST_CUSTOMERS;
 	}
 
 }

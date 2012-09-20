@@ -23,7 +23,7 @@
 			</styleClass>
 		</Label>
 		
-		<GridPane hgap="10" vgap="5">
+		<GridPane hgap="10" vgap="10">
 		
 			<FieldLabel value="%id" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 			<Label fx:id="idField" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="400" />
@@ -37,7 +37,7 @@
 			<FieldLabel value="%remark" GridPane.columnIndex="0" GridPane.rowIndex="3" />
 			<Label fx:id="remarkField" GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="400" />
 			
-			<AddButton onAction="#handleAddAddress" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2" alignment="BOTTOM_RIGHT" /> 
+			<AddButton text="%add.address" onAction="#handleAddAddress" GridPane.columnIndex="1" GridPane.rowIndex="4" alignment="BOTTOM_RIGHT" /> 
 		
 			<TabPane fx:id="addressesList" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2" />
 		

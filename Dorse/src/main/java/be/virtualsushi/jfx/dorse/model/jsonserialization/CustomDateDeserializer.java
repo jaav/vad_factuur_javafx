@@ -14,6 +14,7 @@ import org.codehaus.jackson.map.JsonDeserializer;
 public class CustomDateDeserializer extends JsonDeserializer<Date> {
 
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyy");
+	public static final SimpleDateFormat FULL_DATE_FORMAT = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 
 	@Override
 	public Date deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
@@ -22,7 +23,11 @@ public class CustomDateDeserializer extends JsonDeserializer<Date> {
 			try {
 				return DATE_FORMAT.parse(jp.getText());
 			} catch (ParseException e) {
-				throw ctxt.mappingException(Date.class);
+				try {
+					return FULL_DATE_FORMAT.parse(jp.getText());
+				} catch (ParseException e1) {
+					return null;
+				}
 			}
 		}
 		throw ctxt.mappingException(Date.class);

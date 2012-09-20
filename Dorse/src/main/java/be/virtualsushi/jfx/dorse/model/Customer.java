@@ -12,13 +12,21 @@ public class Customer extends BaseEntity implements Listable {
 
 	private String remark;
 
-	private long sector;
+	private Long sector;
 
-	private long subsector;
+	private Long subsector;
 
 	private List<Address> address;
 
 	private List<Person> person;
+
+	public Customer() {
+
+	}
+
+	public Customer(Integer id) {
+		setId(id.longValue());
+	}
 
 	public String getName() {
 		return name;
@@ -52,19 +60,19 @@ public class Customer extends BaseEntity implements Listable {
 		this.remark = remark;
 	}
 
-	public long getSector() {
+	public Long getSector() {
 		return sector;
 	}
 
-	public void setSector(long sector) {
+	public void setSector(Long sector) {
 		this.sector = sector;
 	}
 
-	public long getSubsector() {
+	public Long getSubsector() {
 		return subsector;
 	}
 
-	public void setSubsector(long subsector) {
+	public void setSubsector(Long subsector) {
 		this.subsector = subsector;
 	}
 

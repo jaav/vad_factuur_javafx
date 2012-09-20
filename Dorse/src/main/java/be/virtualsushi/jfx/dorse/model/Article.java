@@ -2,14 +2,16 @@ package be.virtualsushi.jfx.dorse.model;
 
 import java.util.Date;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateDeserializer;
 import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
 
-public class Article extends BaseEntity {
+public class Article extends BaseEntity implements Listable {
 
+	@JsonProperty("article_type")
 	private Long articleType;
 
 	private String code;
@@ -18,12 +20,14 @@ public class Article extends BaseEntity {
 
 	private String description;
 
+	@JsonProperty("listPrice")
 	private Float price;
 
 	private Long unit;
 
 	private Integer weight;
 
+	@JsonProperty("create_date")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@JsonDeserialize(using = CustomDateDeserializer.class)
 	private Date creationDate;
@@ -130,6 +134,11 @@ public class Article extends BaseEntity {
 
 	public void setStock(Integer stock) {
 		this.stock = stock;
+	}
+
+	@Override
+	public String getPrintName() {
+		return getName();
 	}
 
 }

@@ -16,16 +16,15 @@ import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.ViewAddressControl;
 import be.virtualsushi.jfx.dorse.model.Address;
-import be.virtualsushi.jfx.dorse.model.Customer;
 import be.virtualsushi.jfx.dorse.model.Invoice;
 import be.virtualsushi.jfx.dorse.model.OrderLine;
 
 @Component
 @Scope("prototype")
-public class ViewInvoiceActivity extends AbstractManageEntityActivity<VBox, Invoice> {
+public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoice> {
 
 	@FXML
-	private Label idField, customerField, createdField, title;
+	private Label idField, customerField, createdField;
 
 	@FXML
 	private ViewAddressControl invoiceAddressField, deliveryAddressField;
@@ -47,8 +46,6 @@ public class ViewInvoiceActivity extends AbstractManageEntityActivity<VBox, Invo
 
 	private Address invoiceAddressValue, deliveryAddressValue;
 
-	private Customer customerValue;
-
 	private List<OrderLine> orderLines;
 
 	@Override
@@ -66,11 +63,12 @@ public class ViewInvoiceActivity extends AbstractManageEntityActivity<VBox, Invo
 
 	@Override
 	protected void mapFields(Invoice viewingEntity) {
+		super.mapFields(viewingEntity);
 		title.setText(String.format(getResources().getString("view.invoice"), viewingEntity.getCode()));
 		invoiceAddressField.setValue(invoiceAddressValue);
 		deliveryAddressField.setValue(deliveryAddressValue);
 		idField.setText(String.valueOf(viewingEntity.getId()));
-		customerField.setText(customerValue.getName());
+		customerField.setText(viewingEntity.getCustomer().getName());
 		createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(viewingEntity.getCreationDate()));
 		updateTableData();
 	}
@@ -88,7 +86,6 @@ public class ViewInvoiceActivity extends AbstractManageEntityActivity<VBox, Invo
 	protected void doCustomBackgroundInitialization(Invoice entity) {
 		invoiceAddressValue = getRestApiAccessor().get(entity.getInvoiceAddress(), Address.class);
 		deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
-		customerValue = getRestApiAccessor().get(entity.getCustomer(), Customer.class);
 		orderLines = getRestApiAccessor().getList(OrderLine.class, true, entity.getId());
 	}
 

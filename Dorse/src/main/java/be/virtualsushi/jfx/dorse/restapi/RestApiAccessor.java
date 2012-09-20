@@ -19,6 +19,8 @@ import org.apache.http.impl.client.DecompressingHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,6 +29,8 @@ import be.virtualsushi.jfx.dorse.model.BaseEntity;
 public class RestApiAccessor extends RestTemplate {
 
 	public static final String BASE_SERVICE_URI = "http://www.dorse.me/";
+
+	private static final Logger log = LoggerFactory.getLogger(RestApiAccessor.class);
 
 	private static final int DEFAULT_MAX_TOTAL_CONNECTIONS = 100;
 	private static final int DEFAULT_MAX_CONNECTIONS_PER_ROUTE = 30;
@@ -54,7 +58,9 @@ public class RestApiAccessor extends RestTemplate {
 
 	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, Class<E> entityClass, boolean needFullInfo, Object... parameters) {
 		ArrayList<E> result = new ArrayList<E>();
-		E[] ids = getForObject(BASE_SERVICE_URI + getEntityListSubPath(entityClass, offset, count), getEntityArrayClass(entityClass), parameters);
+		String url = BASE_SERVICE_URI + getEntityListSubPath(entityClass, offset, count);
+		log.debug("Getting list of " + entityClass + " URL: " + url);
+		E[] ids = getForObject(url, getEntityArrayClass(entityClass), parameters);
 		if (needFullInfo) {
 			result.addAll(detailList(offset, count, entityClass, ids));
 		} else {
@@ -78,7 +84,9 @@ public class RestApiAccessor extends RestTemplate {
 	}
 
 	public <E extends BaseEntity> E get(Long id, Class<E> clazz) {
-		return getForObject(BASE_SERVICE_URI + getEntitySubPath(clazz) + "/{id}", clazz, id);
+		String url = BASE_SERVICE_URI + getEntitySubPath(clazz) + "/{id}";
+		logger.debug("Getting " + clazz + " URL: " + url);
+		return getForObject(url, clazz, id);
 	}
 
 	public <E extends BaseEntity> void save(E entity) {

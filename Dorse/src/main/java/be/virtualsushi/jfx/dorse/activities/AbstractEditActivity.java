@@ -3,7 +3,6 @@ package be.virtualsushi.jfx.dorse.activities;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 
 import javax.validation.Validator;
 
@@ -49,9 +48,6 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 		}
 
 	}
-
-	@FXML
-	public Label title;
 
 	@FXML
 	public void handleCancel(ActionEvent event) {

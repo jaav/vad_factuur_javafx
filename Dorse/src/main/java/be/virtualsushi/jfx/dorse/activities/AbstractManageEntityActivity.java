@@ -2,7 +2,9 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.lang.reflect.ParameterizedType;
 
+import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
@@ -52,13 +54,16 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 		}
 
 	}
+	
+	@FXML
+	public Label title;
 
 	private E entity;
 
 	@Override
 	protected void started() {
 		super.started();
-
+	
 		Long id = getParameter(ENTITY_ID_PARAMETER, Long.class, null);
 		if (id == null && !canCreateNewEntity()) {
 			throw new IllegalStateException("Nothing to display. Did you forget to pass " + ENTITY_ID_PARAMETER + " parameter");

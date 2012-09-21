@@ -53,7 +53,7 @@ public class RestApiAccessor extends RestTemplate {
 	}
 
 	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, boolean needFullInfo, Object... parameters) {
-		return getList(null, null, entityClass, needFullInfo);
+		return getList(null, null, entityClass, needFullInfo, parameters);
 	}
 
 	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, Class<E> entityClass, boolean needFullInfo, Object... parameters) {
@@ -97,6 +97,10 @@ public class RestApiAccessor extends RestTemplate {
 		}
 	}
 
+	public <E extends BaseEntity> void delete(E entity) {
+		delete(BASE_SERVICE_URI + getEntitySubPath(entity.getClass()) + "/{id}", entity.getId());
+	}
+
 	public String login(String username, String password) {
 		HttpPost loginPost = new HttpPost(BASE_SERVICE_URI + "login");
 		try {
@@ -110,7 +114,6 @@ public class RestApiAccessor extends RestTemplate {
 		} catch (Exception e) {
 			return null;
 		}
-
 		return null;
 	}
 

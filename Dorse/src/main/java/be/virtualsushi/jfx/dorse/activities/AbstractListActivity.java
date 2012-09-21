@@ -32,6 +32,8 @@ import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
 public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUiActivity<BorderPane> {
 
+	public static final String FORCE_RELOAD_PARAMETER = "force_reload";
+
 	private class LoadPageDataTaskCreator implements TaskCreator<DorseBackgroundTask<List<E>>> {
 
 		private final Integer from;
@@ -135,6 +137,15 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				return listContainer;
 			}
 		});
+	}
+
+	@Override
+	protected void started() {
+		super.started();
+
+		if (getParameter(FORCE_RELOAD_PARAMETER, Boolean.class, false)) {
+			listPage.setCurrentPageIndex(0);
+		}
 	}
 
 	private void createPage(List<E> data) {

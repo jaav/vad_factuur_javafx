@@ -2,7 +2,7 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.util.List;
 
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -39,10 +39,10 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 		TableColumn<Customer, String> sectorColumn = createTableColumn("sector", new EntityStringPropertyValueFactory<Customer>() {
 
 			@Override
-			protected void setPropertyValue(SimpleStringProperty property, Customer value) {
+			protected void setPropertyValue(ObjectProperty<String> property, Customer value) {
 				if (sectors != null) {
 					for (Sector sector : sectors) {
-						if (sector.getId() == value.getSubsector()) {
+						if (sector.getId().equals(value.getSubsector())) {
 							property.set(sector.getName());
 							break;
 						}
@@ -55,7 +55,7 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 		TableColumn<Customer, String> zipColumn = createTableColumn("zipcode", new EntityStringPropertyValueFactory<Customer>() {
 
 			@Override
-			protected void setPropertyValue(SimpleStringProperty property, Customer value) {
+			protected void setPropertyValue(ObjectProperty<String> property, Customer value) {
 				if (CollectionUtils.isNotEmpty(value.getAddress())) {
 					property.set(value.getAddress().get(0).getZipcode());
 				}
@@ -66,7 +66,7 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 		TableColumn<Customer, String> locationColumn = createTableColumn("location", new EntityStringPropertyValueFactory<Customer>() {
 
 			@Override
-			protected void setPropertyValue(SimpleStringProperty property, Customer value) {
+			protected void setPropertyValue(ObjectProperty<String> property, Customer value) {
 				if (CollectionUtils.isNotEmpty(value.getAddress())) {
 					property.set(value.getAddress().get(0).getCity());
 				}
@@ -77,7 +77,7 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 		TableColumn<Customer, String> phoneColumn = createTableColumn("phone", new EntityStringPropertyValueFactory<Customer>() {
 
 			@Override
-			protected void setPropertyValue(SimpleStringProperty property, Customer value) {
+			protected void setPropertyValue(ObjectProperty<String> property, Customer value) {
 				if (CollectionUtils.isNotEmpty(value.getAddress())) {
 					property.set(value.getAddress().get(0).getPhone());
 				}
@@ -88,7 +88,7 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 		TableColumn<Customer, String> emailColumn = createTableColumn("email", new EntityStringPropertyValueFactory<Customer>() {
 
 			@Override
-			protected void setPropertyValue(SimpleStringProperty property, Customer value) {
+			protected void setPropertyValue(ObjectProperty<String> property, Customer value) {
 				if (CollectionUtils.isNotEmpty(value.getAddress())) {
 					property.set(value.getAddress().get(0).getEmail());
 				}

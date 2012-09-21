@@ -138,7 +138,12 @@ public class Article extends BaseEntity implements Listable {
 
 	@Override
 	public String getPrintName() {
-		return getName();
+		return getCode();
+	}
+
+	@Override
+	public String toString() {
+		return getCode();
 	}
 
 }

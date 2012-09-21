@@ -1,6 +1,7 @@
 package be.virtualsushi.jfx.dorse.control;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.Property;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -15,11 +16,21 @@ public abstract class FieldWithValidation<F extends Control, V> extends HBox imp
 	public FieldWithValidation() {
 		validationMessage = new Label();
 		validationMessage.getStyleClass().add("validation-message");
-		field = initializeField();
+		field = initializeDisplayField();
 		field.getStyleClass().add("field");
 		clearInvalid();
 		getChildren().add(field);
 		getChildren().add(validationMessage);
+	}
+
+	@Override
+	public V getValue() {
+		return valueProperty().getValue();
+	}
+
+	@Override
+	public void setValue(V value) {
+		valueProperty().setValue(value);
 	}
 
 	@Override
@@ -40,8 +51,6 @@ public abstract class FieldWithValidation<F extends Control, V> extends HBox imp
 		return valid;
 	}
 
-	protected abstract F initializeField();
-
 	public DoubleProperty fieldWidthProperty() {
 		return field.prefWidthProperty();
 	}
@@ -57,5 +66,9 @@ public abstract class FieldWithValidation<F extends Control, V> extends HBox imp
 	protected F getField() {
 		return field;
 	}
+
+	protected abstract F initializeDisplayField();
+
+	public abstract Property<V> valueProperty();
 
 }

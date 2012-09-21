@@ -2,6 +2,7 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.text.SimpleDateFormat;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -32,7 +33,7 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 		TableColumn<Invoice, String> customerColumn = createTableColumn("customer", new EntityStringPropertyValueFactory<Invoice>() {
 
 			@Override
-			protected void setPropertyValue(SimpleStringProperty property, Invoice value) {
+			protected void setPropertyValue(ObjectProperty<String> property, Invoice value) {
 				property.set(value.getCustomer().getName());
 			}
 		});
@@ -41,7 +42,7 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 		TableColumn<Invoice, String> dateColumn = createTableColumn("date", new EntityStringPropertyValueFactory<Invoice>() {
 
 			@Override
-			protected void setPropertyValue(SimpleStringProperty property, Invoice value) {
+			protected void setPropertyValue(ObjectProperty<String> property, Invoice value) {
 				if (value.getCreationDate() != null) {
 					property.set(new SimpleDateFormat(getResources().getString("date.format")).format(value.getCreationDate()));
 				}

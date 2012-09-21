@@ -54,7 +54,7 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 		}
 
 	}
-	
+
 	@FXML
 	public Label title;
 
@@ -63,7 +63,7 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 	@Override
 	protected void started() {
 		super.started();
-	
+
 		Long id = getParameter(ENTITY_ID_PARAMETER, Long.class, null);
 		if (id == null && !canCreateNewEntity()) {
 			throw new IllegalStateException("Nothing to display. Did you forget to pass " + ENTITY_ID_PARAMETER + " parameter");
@@ -88,5 +88,5 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 	protected abstract void doCustomBackgroundInitialization(E entity);
 
 	protected abstract void mapFields(E entity);
-	
+
 }

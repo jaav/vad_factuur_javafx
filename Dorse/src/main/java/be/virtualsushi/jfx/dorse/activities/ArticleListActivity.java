@@ -2,7 +2,7 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.util.List;
 
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -45,10 +45,10 @@ public class ArticleListActivity extends AbstractListActivity<Article> {
 		TableColumn<Article, String> supplierColumn = createTableColumn("supplier", new EntityStringPropertyValueFactory<Article>() {
 
 			@Override
-			protected void setPropertyValue(SimpleStringProperty property, Article value) {
+			protected void setPropertyValue(ObjectProperty<String> property, Article value) {
 				if (CollectionUtils.isNotEmpty(suppliers)) {
 					for (Supplier supplier : suppliers) {
-						if (supplier.getId() == value.getSupplier()) {
+						if (supplier.getId().equals(value.getSupplier())) {
 							property.set(supplier.getName());
 							break;
 						}

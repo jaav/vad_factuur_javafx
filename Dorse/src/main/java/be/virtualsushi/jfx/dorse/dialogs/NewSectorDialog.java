@@ -7,19 +7,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.TextField;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveSectorEvent;
 import be.virtualsushi.jfx.dorse.model.Sector;
-import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 
 @Component
 public class NewSectorDialog extends AbstractDialog {
-
-	@Autowired
-	private RestApiAccessor restApiAccessor;
 
 	@FXML
 	protected TextField nameField;

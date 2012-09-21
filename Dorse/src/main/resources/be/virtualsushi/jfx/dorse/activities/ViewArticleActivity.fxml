@@ -64,7 +64,7 @@
 				GridPane.rowIndex="6" />
 			<Label fx:id="weightField" GridPane.columnIndex="1"
 				GridPane.rowIndex="6" prefWidth="100" />
-			<Label text="g" GridPane.columnIndex="2" GridPane.rowIndex="6" alignment="CENTER_LEFT"/>
+			<Label text="%g" GridPane.columnIndex="2" GridPane.rowIndex="6" GridPane.halignment="LEFT"/>
 			<FieldLabel value="%unit" GridPane.columnIndex="3"
 				GridPane.rowIndex="6" />
 			<Label fx:id="unitField" GridPane.columnIndex="4"

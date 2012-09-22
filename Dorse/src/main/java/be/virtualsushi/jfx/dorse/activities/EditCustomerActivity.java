@@ -148,7 +148,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	}
 
 	@Override
-	protected AppActivitiesNames getViewActivityName() {
+	protected AppActivitiesNames getListActivityName() {
 		return LIST_CUSTOMERS;
 	}
 

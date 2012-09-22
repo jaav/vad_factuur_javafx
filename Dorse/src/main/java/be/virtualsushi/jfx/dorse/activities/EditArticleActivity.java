@@ -16,7 +16,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.EditableList;
-import be.virtualsushi.jfx.dorse.control.NumberField;
+import be.virtualsushi.jfx.dorse.control.FloatNumberField;
+import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
 import be.virtualsushi.jfx.dorse.control.TextAreaField;
 import be.virtualsushi.jfx.dorse.control.TextField;
 import be.virtualsushi.jfx.dorse.dialogs.ArticleTypeEditDialog;
@@ -93,10 +94,10 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	private TextField codeField, nameField;
 
 	@FXML
-	private NumberField<Float> priceField;
+	private FloatNumberField priceField;
 
 	@FXML
-	private NumberField<Integer> weightField;
+	private IntegerNumberField weightField;
 
 	@FXML
 	private TextAreaField descriptionField;
@@ -246,7 +247,7 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	}
 
 	@Override
-	protected AppActivitiesNames getViewActivityName() {
+	protected AppActivitiesNames getListActivityName() {
 		return VIEW_ARTICLE;
 	}
 

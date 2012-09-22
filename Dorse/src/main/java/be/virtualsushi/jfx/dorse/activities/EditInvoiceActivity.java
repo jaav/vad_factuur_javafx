@@ -223,7 +223,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	}
 
 	@Override
-	protected AppActivitiesNames getViewActivityName() {
+	protected AppActivitiesNames getListActivityName() {
 		return VIEW_INVOICE;
 	}
 

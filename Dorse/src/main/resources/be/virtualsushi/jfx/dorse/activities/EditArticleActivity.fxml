@@ -14,7 +14,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
-<?import be.virtualsushi.jfx.dorse.control.NumberField?>
+<?import be.virtualsushi.jfx.dorse.control.FloatNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
 	<padding>
@@ -68,12 +69,12 @@
 
 			<FieldLabel value="%price" GridPane.columnIndex="0"
 				GridPane.rowIndex="5" />
-			<NumberField fx:id="priceField" GridPane.columnIndex="1"
+			<FloatNumberField fx:id="priceField" GridPane.columnIndex="1"
 				GridPane.rowIndex="5" fieldWidth="400" GridPane.columnSpan="6" />
 
 			<FieldLabel value="%weight" GridPane.columnIndex="0"
 				GridPane.rowIndex="6" />
-			<NumberField fx:id="weightField" GridPane.columnIndex="1"
+			<IntegerNumberField fx:id="weightField" GridPane.columnIndex="1"
 				GridPane.rowIndex="6" fieldWidth="100" />
 			<Label text="%g" GridPane.columnIndex="2" GridPane.rowIndex="6"
 				GridPane.halignment="LEFT" />

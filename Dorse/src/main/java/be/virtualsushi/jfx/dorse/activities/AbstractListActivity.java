@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse.activities;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -18,7 +19,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
@@ -70,9 +70,45 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		}
 	}
 
+	private class DeleteEntityTaskCreator implements TaskCreator<DorseBackgroundTask<List<E>>> {
+
+		private final E entity;
+
+		public DeleteEntityTaskCreator(E entityToDelete) {
+			this.entity = entityToDelete;
+		}
+
+		@Override
+		public DorseBackgroundTask<List<E>> createTask() {
+			return new DorseBackgroundTask<List<E>>(this, entity) {
+
+				@Override
+				protected void onPreExecute() {
+					showLoadingMask();
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				protected List<E> call() throws Exception {
+					getRestApiAccessor().delete((E) getParameters()[0]);
+					return getRestApiAccessor().getList(0, getItemsPerPageCount(),
+							(Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0], true);
+				}
+
+				@Override
+				protected void onSuccess(List<E> value) {
+					listPage.setCurrentPageIndex(0);
+					createPage(value);
+					hideLoadingMask();
+				}
+			};
+		}
+
+	}
+
 	private class ActionsBar extends HBox {
 
-		public ActionsBar(final Long entityId) {
+		public ActionsBar(final E entity) {
 			super();
 			setSpacing(3);
 			EditButton editButton = new EditButton();
@@ -80,7 +116,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 				@Override
 				public void handle(ActionEvent event) {
-					getActivityNavigator().goTo(getEditActivityName(), AbstractManageEntityActivity.ENTITY_ID_PARAMETER, entityId);
+					getActivityNavigator().goTo(getEditActivityName(), AbstractManageEntityActivity.ENTITY_ID_PARAMETER, entity.getId());
 				}
 			});
 			editButton.setTooltip(new Tooltip(getResources().getString("edit")));
@@ -90,7 +126,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 				@Override
 				public void handle(ActionEvent event) {
-					getActivityNavigator().goTo(getViewActivityName(), AbstractManageEntityActivity.ENTITY_ID_PARAMETER, entityId);
+					getActivityNavigator().goTo(getViewActivityName(), AbstractManageEntityActivity.ENTITY_ID_PARAMETER, entity.getId());
 				}
 			});
 			detailsButton.setTooltip(new Tooltip(getResources().getString("details")));
@@ -100,7 +136,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 				@Override
 				public void handle(ActionEvent event) {
-
+					doInBackground(new DeleteEntityTaskCreator(entity));
 				}
 			});
 			deleteButton.setTooltip(new Tooltip(getResources().getString("delete")));
@@ -145,6 +181,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 		if (getParameter(FORCE_RELOAD_PARAMETER, Boolean.class, false)) {
 			listPage.setCurrentPageIndex(0);
+			doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount()));
 		}
 	}
 
@@ -166,13 +203,19 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		return 25;
 	}
 
-	protected TableColumn<E, Long> createActionsColumn() {
-		TableColumn<E, Long> result = new TableColumn<E, Long>(getResources().getString("actions"));
-		result.setCellValueFactory(new PropertyValueFactory<E, Long>("id"));
-		result.setCellFactory(new Callback<TableColumn<E, Long>, TableCell<E, Long>>() {
+	protected TableColumn<E, E> createActionsColumn() {
+		TableColumn<E, E> result = new TableColumn<E, E>(getResources().getString("actions"));
+		result.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<E, E>, ObservableValue<E>>() {
 
 			@Override
-			public TableCell<E, Long> call(TableColumn<E, Long> param) {
+			public ObservableValue<E> call(CellDataFeatures<E, E> param) {
+				return new SimpleObjectProperty<E>(param.getValue());
+			}
+		});
+		result.setCellFactory(new Callback<TableColumn<E, E>, TableCell<E, E>>() {
+
+			@Override
+			public TableCell<E, E> call(TableColumn<E, E> param) {
 				return createActionsCell();
 			}
 		});
@@ -180,10 +223,10 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		return result;
 	}
 
-	private TableCell<E, Long> createActionsCell() {
-		return new TableCell<E, Long>() {
+	private TableCell<E, E> createActionsCell() {
+		return new TableCell<E, E>() {
 			@Override
-			protected void updateItem(Long item, boolean empty) {
+			protected void updateItem(E item, boolean empty) {
 				super.updateItem(item, empty);
 				if (empty) {
 					setText(null);

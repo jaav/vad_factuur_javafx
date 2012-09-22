@@ -1,6 +1,7 @@
 package be.virtualsushi.jfx.dorse.activities;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.ObjectProperty;
@@ -100,6 +101,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@Override
 				protected void onSuccess(List<OrderLine> value) {
 					orderLines = value;
+					orderLineTable.setItems(FXCollections.observableArrayList(new ArrayList<OrderLine>()));
 					orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
 					hideLoadingMask();
 				}
@@ -298,7 +300,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 	}
 
 	@Subscribe
-	protected void onSaveOrderLine(SaveOrderLineEvent event) {
+	public void onSaveOrderLine(SaveOrderLineEvent event) {
 		doInBackground(new SaveOrderLineTaskCreator(event.getEntity()));
 	}
 

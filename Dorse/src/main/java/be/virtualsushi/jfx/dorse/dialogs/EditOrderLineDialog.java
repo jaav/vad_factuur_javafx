@@ -12,7 +12,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.ComboBoxField;
-import be.virtualsushi.jfx.dorse.control.NumberField;
+import be.virtualsushi.jfx.dorse.control.FloatNumberField;
+import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveOrderLineEvent;
 import be.virtualsushi.jfx.dorse.model.Article;
 import be.virtualsushi.jfx.dorse.model.OrderLine;
@@ -27,10 +28,10 @@ public class EditOrderLineDialog extends AbstractDialog {
 	private ComboBoxField<Article> articleField;
 
 	@FXML
-	private NumberField<Float> discountField;
+	private FloatNumberField discountField;
 
 	@FXML
-	private NumberField<Integer> quantityField;
+	private IntegerNumberField quantityField;
 
 	@FXML
 	private Label articleInfoField, lineTotalField;
@@ -86,6 +87,7 @@ public class EditOrderLineDialog extends AbstractDialog {
 			public void changed(ObservableValue<? extends Article> observable, Article oldValue, Article newValue) {
 				if (newValue != null) {
 					updateArticleInfoField(newValue);
+					updateLineTotalField(quantityField.getValue(), discountField.getValue(), newValue.getPrice());
 				}
 			}
 
@@ -94,8 +96,17 @@ public class EditOrderLineDialog extends AbstractDialog {
 
 			@Override
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-				if (newValue != null) {
-					updateLineTotalField(newValue);
+				if (newValue != null && articleField.getValue() != null) {
+					updateLineTotalField(newValue, discountField.getValue(), articleField.getValue().getPrice());
+				}
+			}
+		});
+		discountField.valueProperty().addListener(new ChangeListener<Float>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Float> observable, Float oldValue, Float newValue) {
+				if (newValue != null && articleField.getValue() != null) {
+					updateLineTotalField(quantityField.getValue(), newValue, articleField.getValue().getPrice());
 				}
 			}
 		});
@@ -108,9 +119,9 @@ public class EditOrderLineDialog extends AbstractDialog {
 		articleInfoField.setText(String.format(ARTICLE_INFO_VALUE_PATTERN, articlePrice, articleCode, articleUnit));
 	}
 
-	private void updateLineTotalField(Integer value) {
-		if (articleField.getValue().getPrice() != null && discountField.getValue() != null) {
-			lineTotalField.setText(String.valueOf((articleField.getValue().getPrice() - discountField.getValue()) * value));
+	private void updateLineTotalField(Integer quantity, Float discount, Float price) {
+		if (price != null && discount != null && quantity != null) {
+			lineTotalField.setText(String.valueOf((price - discount) * quantity));
 		}
 	}
 

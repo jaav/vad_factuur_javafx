@@ -42,7 +42,7 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 				@Override
 				protected void onSuccess(E value) {
 					hideLoadingMask();
-					goTo(getViewActivityName(), ENTITY_ID_PARAMETER, value.getId());
+					goTo(getListActivityName(), AbstractListActivity.FORCE_RELOAD_PARAMETER, true);
 				}
 			};
 		}
@@ -90,6 +90,6 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 
 	protected abstract E getEditedEntity();
 
-	protected abstract AppActivitiesNames getViewActivityName();
+	protected abstract AppActivitiesNames getListActivityName();
 
 }

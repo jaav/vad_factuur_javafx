@@ -3,7 +3,6 @@ package be.virtualsushi.jfx.dorse.activities;
 import java.text.SimpleDateFormat;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 

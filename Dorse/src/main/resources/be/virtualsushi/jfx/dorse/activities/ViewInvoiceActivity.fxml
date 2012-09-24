@@ -12,6 +12,8 @@
 <?import be.virtualsushi.jfx.dorse.control.ViewAddressControl?>
 <?import java.lang.String?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
 	<padding>
@@ -25,9 +27,12 @@
 			</styleClass>
 		</Label>
 
-		<TabPane tabClosingPolicy="UNAVAILABLE">
+		<TabPane tabClosingPolicy="UNAVAILABLE" minHeight="150">
 			<Tab text="%invoice.data">
 				<GridPane vgap="10" hgap="5">
+					<padding>
+						<Insets bottom="5" left="5" right="5" top="10" />
+					</padding>
 
 					<FieldLabel value="%id" GridPane.columnIndex="0"
 						GridPane.rowIndex="0" />
@@ -48,28 +53,43 @@
 			</Tab>
 			<Tab text="%invoice.address" >
 
-				<ViewAddressControl fx:id="invoiceAddressField" />
+				<ViewAddressControl fx:id="invoiceAddressField" >
+					<padding>
+						<Insets bottom="5" left="5" right="5" top="10" />
+					</padding>
+				</ViewAddressControl>
 
 			</Tab>
 			<Tab text="%delivery.address" >
 		
-				<ViewAddressControl fx:id="deliveryAddressField" />
+				<ViewAddressControl fx:id="deliveryAddressField" >
+					<padding>
+						<Insets bottom="5" left="5" right="5" top="10" />
+					</padding>
+				</ViewAddressControl>
 		
 			</Tab>
 		</TabPane>
 
 		<TableView fx:id="orderLineTable" prefHeight="600" >
 			<columns>
-				<TableColumn fx:id="idColumn" prefWidth="30" text="%id" />
-				<TableColumn fx:id="codeColumn" prefWidth="80" text="%code" />
-				<TableColumn fx:id="articleNameColumn" prefWidth="120" text="%article.name" />
-				<TableColumn fx:id="priceColumn" prefWidth="80" text="%price" />
-				<TableColumn fx:id="discountColumn" prefWidth="80" text="%discount" />
-				<TableColumn fx:id="quantityColumn" prefWidth="80" text="%quantity" />
-				<TableColumn fx:id="lineTotalColumn" prefWidth="80" text="%line.total" />
-				<TableColumn fx:id="actionColumn" prefWidth="80" text="%actions" />
+				<TableColumn fx:id="idColumn" minWidth="40" text="%id" />
+				<TableColumn fx:id="codeColumn" minWidth="80" text="%code" />
+				<TableColumn fx:id="articleNameColumn" minWidth="120" text="%article.name" />
+				<TableColumn fx:id="priceColumn" minWidth="80" text="%price" />
+				<TableColumn fx:id="discountColumn" minWidth="80" text="%discount" />
+				<TableColumn fx:id="quantityColumn" minWidth="80" text="%quantity" />
+				<TableColumn fx:id="lineTotalColumn" minWidth="80" text="%line.total" />
+				<TableColumn fx:id="actionsColumn" minWidth="80" text="%actions" />
 			</columns>
 		</TableView>
+		
+		<HBox spacing="10">
+			
+			<Button text="%add.order.line" onAction="#handleAddOrderLine" />
+			<Button text="%print.invoice" onAction="#handlePrintInvoice" />
+			
+		</HBox>
 
 	</children>
 </VBox>

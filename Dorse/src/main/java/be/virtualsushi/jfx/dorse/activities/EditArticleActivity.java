@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.EditableList;
+import be.virtualsushi.jfx.dorse.control.FloatNumberField;
+import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
 import be.virtualsushi.jfx.dorse.control.TextAreaField;
 import be.virtualsushi.jfx.dorse.control.TextField;
 import be.virtualsushi.jfx.dorse.dialogs.ArticleTypeEditDialog;
@@ -89,7 +91,13 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	private Label idField, stockField, createdField;
 
 	@FXML
-	private TextField codeField, nameField, priceField, weightField;
+	private TextField codeField, nameField;
+
+	@FXML
+	private FloatNumberField priceField;
+
+	@FXML
+	private IntegerNumberField weightField;
 
 	@FXML
 	private TextAreaField descriptionField;
@@ -154,12 +162,8 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 		codeField.setValue(editingArticle.getCode());
 		nameField.setValue(editingArticle.getName());
 		descriptionField.setValue(editingArticle.getDescription());
-		if (editingArticle.getPrice() != null) {
-			priceField.setValue(String.valueOf(editingArticle.getPrice()));
-		}
-		if (editingArticle.getWeight() != null) {
-			weightField.setValue(String.valueOf(editingArticle.getWeight()));
-		}
+		priceField.setValue(editingArticle.getPrice());
+		weightField.setValue(editingArticle.getWeight());
 		if (editingArticle.getCreationDate() != null) {
 			createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(editingArticle.getCreationDate()));
 		}
@@ -196,12 +200,18 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 		result.setCode(codeField.getValue());
 		result.setName(nameField.getValue());
 		result.setDescription(descriptionField.getValue());
-		result.setArticleType(typeField.getValue().getId());
-		result.setPrice(Float.parseFloat(priceField.getValue()));
-		result.setWeight(Integer.parseInt(weightField.getValue()));
-		result.setUnit(unitField.getValue().getId());
-		result.setSupplier(supplierField.getValue().getId());
-		if (result.isNew()) {
+		if (typeField.getValue() != null) {
+			result.setArticleType(typeField.getValue().getId());
+		}
+		result.setPrice(priceField.getValue());
+		result.setWeight(weightField.getValue());
+		if (unitField.getValue() != null) {
+			result.setUnit(unitField.getValue().getId());
+		}
+		if (supplierField.getValue() != null) {
+			result.setSupplier(supplierField.getValue().getId());
+		}
+		if (result.isNew() || result.getCreationDate() == null) {
 			result.setCreationDate(new Date());
 		}
 		return result;
@@ -231,13 +241,13 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 
 	@Override
 	protected void doCustomBackgroundInitialization(Article editingEntity) {
-		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, ArticleType[].class, false);
-		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, Supplier[].class, false);
-		acceptableUnits = getRestApiAccessor().getList(Unit.class, Unit[].class, false);
+		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, false);
+		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, false);
+		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);
 	}
 
 	@Override
-	protected AppActivitiesNames getViewActivityName() {
+	protected AppActivitiesNames getListActivityName() {
 		return VIEW_ARTICLE;
 	}
 

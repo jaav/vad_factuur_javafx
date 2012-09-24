@@ -2,7 +2,9 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.lang.reflect.ParameterizedType;
 
+import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
@@ -53,6 +55,9 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 
 	}
 
+	@FXML
+	public Label title;
+
 	private E entity;
 
 	@Override
@@ -83,5 +88,5 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 	protected abstract void doCustomBackgroundInitialization(E entity);
 
 	protected abstract void mapFields(E entity);
-	
+
 }

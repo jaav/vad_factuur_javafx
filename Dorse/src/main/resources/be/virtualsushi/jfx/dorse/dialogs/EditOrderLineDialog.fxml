@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.ComboBoxField?>
+<?import javafx.scene.control.Label?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import be.virtualsushi.jfx.dorse.control.FloatNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml" hgap="10" vgap="10">
+
+	<FieldLabel value="%article" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+	<ComboBoxField fx:id="articleField" GridPane.columnIndex="1" GridPane.rowIndex="0" fieldWidth="300" />
+	
+	<FieldLabel value="%article.info"  GridPane.columnIndex="0" GridPane.rowIndex="1" />
+	<Label fx:id="articleInfoField" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="300" />
+	
+	<FieldLabel value="%discount" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+	<FloatNumberField fx:id="discountField" GridPane.columnIndex="1" GridPane.rowIndex="2" fieldWidth="300" />
+	
+	<FieldLabel  value="%quantity" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+	<IntegerNumberField fx:id="quantityField"  GridPane.columnIndex="1" GridPane.rowIndex="3" fieldWidth="300" />
+	
+	<FieldLabel value="%line.total" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+	<Label fx:id="lineTotalField"  GridPane.columnIndex="1" GridPane.rowIndex="4" prefWidth="300" />
+	
+	<ControlsButtonsBar GridPane.columnIndex="1"
+		GridPane.rowIndex="6" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+		onCancelAction="#handleCancel" saveButtonTitle="%save"
+		cancelButtonTitle="%cancel" />
+
+</GridPane>
+

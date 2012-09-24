@@ -29,6 +29,15 @@ public class UiComponentBean implements IUiComponent {
 	@PostConstruct
 	public void bindUi() {
 		node = uiBinder.bind(this);
+		onUiBinded();
+	}
+
+	/**
+	 * Lifecycle method to perform any custom initializations in subclasses
+	 * after ui has been binded.
+	 */
+	protected void onUiBinded() {
+
 	}
 
 	public Node getNode() {

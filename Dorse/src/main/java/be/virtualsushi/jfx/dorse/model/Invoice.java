@@ -2,6 +2,7 @@ package be.virtualsushi.jfx.dorse.model;
 
 import java.util.Date;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -10,10 +11,12 @@ import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
 
 public class Invoice extends BaseEntity {
 
-	private Long customer;
+	private Customer customer;
 
+	@JsonProperty("inv_address")
 	private Long invoiceAddress;
 
+	@JsonProperty("del_address")
 	private Long deliveryAddress;
 
 	private String code;
@@ -26,14 +29,17 @@ public class Invoice extends BaseEntity {
 
 	private Float vat;
 
+	@JsonProperty("creation_date")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@JsonDeserialize(using = CustomDateDeserializer.class)
 	private Date creationDate;
 
+	@JsonProperty("delivery_date")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@JsonDeserialize(using = CustomDateDeserializer.class)
 	private Date deliveryDate;
 
+	@JsonProperty("paid_date")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@JsonDeserialize(using = CustomDateDeserializer.class)
 	private Date paidDate;
@@ -44,11 +50,11 @@ public class Invoice extends BaseEntity {
 
 	private Long creator;
 
-	public Long getCustomer() {
+	public Customer getCustomer() {
 		return customer;
 	}
 
-	public void setCustomer(Long customer) {
+	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
 

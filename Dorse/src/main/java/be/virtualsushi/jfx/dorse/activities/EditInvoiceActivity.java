@@ -194,7 +194,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 
 	private void mapCustomer(Invoice editingInvoice) {
 		for (Customer customer : customerField.getAcceptableValues()) {
-			if (editingInvoice.getCustomer() == customer.getId()) {
+			if (editingInvoice.getCustomer().equals(customer)) {
 				customerField.setValue(customer);
 				break;
 			}
@@ -206,7 +206,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		Invoice result = getEntity();
 		result.setCode(numberField.getValue());
 		result.setRemark(remarkField.getValue());
-		result.setCustomer(customerField.getValue().getId());
+		result.setCustomer(customerField.getValue());
 		result.setInvoiceAddress(((AddressesListToggle) invoiceAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
 		result.setDeliveryAddress(((AddressesListToggle) deliveryAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
 		if (result.isNew()) {
@@ -219,11 +219,11 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 
 	@Override
 	protected void doCustomBackgroundInitialization(Invoice editingEntity) {
-		acceptableCustomers = getRestApiAccessor().getList(Customer.class, Customer[].class, false);
+		acceptableCustomers = getRestApiAccessor().getList(Customer.class, false);
 	}
 
 	@Override
-	protected AppActivitiesNames getViewActivityName() {
+	protected AppActivitiesNames getListActivityName() {
 		return VIEW_INVOICE;
 	}
 

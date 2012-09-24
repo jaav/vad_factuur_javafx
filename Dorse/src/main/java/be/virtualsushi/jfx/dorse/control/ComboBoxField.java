@@ -9,17 +9,7 @@ import be.virtualsushi.jfx.dorse.model.Listable;
 public class ComboBoxField<V extends Listable> extends FieldWithValidation<DorseComboBox<V>, V> {
 
 	@Override
-	public V getValue() {
-		return valueProperty().get();
-	}
-
-	@Override
-	public void setValue(V value) {
-		valueProperty().set(value);
-	}
-
-	@Override
-	protected DorseComboBox<V> initializeField() {
+	protected DorseComboBox<V> initializeDisplayField() {
 		return new DorseComboBox<V>();
 	}
 
@@ -43,6 +33,7 @@ public class ComboBoxField<V extends Listable> extends FieldWithValidation<Dorse
 		return getField().getAcceptableValues();
 	}
 
+	@Override
 	public ObjectProperty<V> valueProperty() {
 		return getField().valueProperty();
 	}

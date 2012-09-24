@@ -17,7 +17,7 @@ import be.virtualsushi.jfx.dorse.model.Unit;
 
 @Component
 @Scope("prototype")
-public class ViewArticleActivity extends AbstractManageEntityActivity<VBox, Article> {
+public class ViewArticleActivity extends AbstractViewEntityActivity<VBox, Article> {
 
 	@FXML
 	private Label codeField, idField, stockField, createdField, descriptionField, typeField;
@@ -31,10 +31,13 @@ public class ViewArticleActivity extends AbstractManageEntityActivity<VBox, Arti
 
 	@Override
 	protected void mapFields(Article article) {
+		super.mapFields(article);
 		idField.setText(String.valueOf(article.getId()));
 		codeField.setText(article.getCode());
 		stockField.setText(String.valueOf(article.getStock()));
-		createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(article.getCreationDate()));
+		if (article.getCreationDate() != null) {
+			createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(article.getCreationDate()));
+		}
 		descriptionField.setText(article.getDescription());
 		for (ArticleType type : acceptableTypes) {
 			if (type.getId() == article.getArticleType()) {
@@ -60,9 +63,9 @@ public class ViewArticleActivity extends AbstractManageEntityActivity<VBox, Arti
 
 	@Override
 	protected void doCustomBackgroundInitialization(Article entity) {
-		acceptableTypes = getRestApiAccessor().getList(ArticleType.class, ArticleType[].class, false);
-		acceptableUnits = getRestApiAccessor().getList(Unit.class, Unit[].class, false);
-		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, Supplier[].class, false);
+		acceptableTypes = getRestApiAccessor().getList(ArticleType.class, false);
+		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);
+		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, false);
 	}
 
 }

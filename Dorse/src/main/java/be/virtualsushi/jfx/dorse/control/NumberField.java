@@ -1,22 +1,52 @@
 package be.virtualsushi.jfx.dorse.control;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.util.StringConverter;
+
+import org.apache.commons.lang3.StringUtils;
+
 public abstract class NumberField<N extends Number> extends FieldWithValidation<NumberTextField, N> {
 
-	@Override
-	public N getValue() {
-		return parseValue(getField().getText());
+	private ObjectProperty<N> valueProperty;
+
+	public NumberField() {
+		super();
+		valueProperty = new SimpleObjectProperty<N>();
+		getField().textProperty().bindBidirectional(valueProperty, new StringConverter<N>() {
+
+			@Override
+			public N fromString(String string) {
+				if (StringUtils.isEmpty(string)) {
+					return null;
+				} else {
+					return parseValueFromString(string);
+				}
+			}
+
+			@Override
+			public String toString(N object) {
+				if (object == null) {
+					return "";
+				}
+				return String.valueOf(object);
+			}
+		});
 	}
 
 	@Override
-	public void setValue(N value) {
-		getField().setText(String.valueOf(value));
+	protected NumberTextField initializeDisplayField() {
+		return new NumberTextField(isDecimal());
 	}
 
 	@Override
-	protected NumberTextField initializeField() {
-		return new NumberTextField();
+	public Property<N> valueProperty() {
+		return valueProperty;
 	}
 
-	protected abstract N parseValue(String value);
+	protected abstract boolean isDecimal();
+
+	protected abstract N parseValueFromString(String string);
 
 }

@@ -1,20 +1,17 @@
 package be.virtualsushi.jfx.dorse.control;
 
+import javafx.beans.property.Property;
+
 public class TextField extends FieldWithValidation<javafx.scene.control.TextField, String> {
 
 	@Override
-	public String getValue() {
-		return getField().getText();
-	}
-
-	@Override
-	public void setValue(String value) {
-		getField().setText(value);
-	}
-
-	@Override
-	protected javafx.scene.control.TextField initializeField() {
+	protected javafx.scene.control.TextField initializeDisplayField() {
 		return new javafx.scene.control.TextField();
+	}
+
+	@Override
+	public Property<String> valueProperty() {
+		return getField().textProperty();
 	}
 
 }

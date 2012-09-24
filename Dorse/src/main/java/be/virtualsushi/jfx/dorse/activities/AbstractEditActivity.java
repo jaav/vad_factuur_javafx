@@ -3,7 +3,6 @@ package be.virtualsushi.jfx.dorse.activities;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 
 import javax.validation.Validator;
 
@@ -43,15 +42,12 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 				@Override
 				protected void onSuccess(E value) {
 					hideLoadingMask();
-					goTo(getViewActivityName(), ENTITY_ID_PARAMETER, value.getId());
+					goTo(getListActivityName(), AbstractListActivity.FORCE_RELOAD_PARAMETER, true);
 				}
 			};
 		}
 
 	}
-
-	@FXML
-	public Label title;
 
 	@FXML
 	public void handleCancel(ActionEvent event) {
@@ -94,6 +90,6 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 
 	protected abstract E getEditedEntity();
 
-	protected abstract AppActivitiesNames getViewActivityName();
+	protected abstract AppActivitiesNames getListActivityName();
 
 }

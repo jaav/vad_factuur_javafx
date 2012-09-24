@@ -14,9 +14,11 @@ import javafx.scene.input.KeyEvent;
  */
 public class NumberTextField extends TextField {
 
-	public NumberTextField() {
-		super();
+	private boolean decimalInput;
 
+	public NumberTextField(boolean decimalInput) {
+		super();
+		this.decimalInput = decimalInput;
 		setOnKeyReleased(new EventHandler<KeyEvent>() {
 
 			@Override
@@ -50,7 +52,7 @@ public class NumberTextField extends TextField {
 		if (keyCodeOrd == KeyCode.BACK_SPACE.ordinal() || keyCodeOrd == KeyCode.DELETE.ordinal()) {
 			return true;
 		}
-		if (keyCodeOrd == KeyCode.PERIOD.ordinal() && getText().lastIndexOf(".") == getText().indexOf(".")) {
+		if (keyCodeOrd == KeyCode.PERIOD.ordinal() && getText().lastIndexOf(".") == getText().indexOf(".") && decimalInput) {
 			return true;
 		}
 		if (keyCodeOrd == KeyCode.LEFT.ordinal() || keyCodeOrd == KeyCode.RIGHT.ordinal() || keyCodeOrd == KeyCode.UP.ordinal() || keyCodeOrd == KeyCode.DOWN.ordinal()) {

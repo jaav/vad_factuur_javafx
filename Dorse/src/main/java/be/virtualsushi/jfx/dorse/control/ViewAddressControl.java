@@ -20,10 +20,12 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 	private FieldLabel addressLabel = new FieldLabel();
 	private FieldLabel cityLabel = new FieldLabel();
 	private FieldLabel phoneLabel = new FieldLabel();
+	private FieldLabel emailLabel = new FieldLabel();
 
 	private Label addressField = new Label();
 	private Label cityField = new Label();
 	private Label phoneField = new Label();
+	private Label emailField = new Label();
 
 	public ViewAddressControl() {
 		super();
@@ -47,6 +49,7 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 					addressField.setText(newValue.getAddress());
 					cityField.setText(newValue.getZipcode() + " " + newValue.getCity());
 					phoneField.setText(newValue.getPhone());
+					emailField.setText(newValue.getEmail());
 				}
 			}
 		});
@@ -57,6 +60,7 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 		addressLabel.setValue(resrouces.getString("address"));
 		cityLabel.setValue(resrouces.getString("city"));
 		phoneLabel.setValue(resrouces.getString("phone"));
+		emailLabel.setValue(resrouces.getString("email"));
 	}
 
 	public ObjectProperty<ResourceBundle> resourcesProperty() {
@@ -81,6 +85,8 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 		add(cityField, 1, 1);
 		add(phoneLabel, 0, 2);
 		add(phoneField, 1, 2);
+		add(emailLabel, 0, 3);
+		add(emailField, 1, 3);
 	}
 
 	@Override

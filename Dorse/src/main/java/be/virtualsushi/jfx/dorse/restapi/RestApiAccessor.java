@@ -26,7 +26,8 @@ import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
 public class RestApiAccessor extends RestTemplate {
 
-	public static final String BASE_SERVICE_URI = "http://www.dorse.me/";
+	//public static final String BASE_SERVICE_URI = "http://www.dorse.me/";
+  public static final String BASE_SERVICE_URI = "http://localhost:8070/";
 
 	private static final int DEFAULT_MAX_TOTAL_CONNECTIONS = 100;
 	private static final int DEFAULT_MAX_CONNECTIONS_PER_ROUTE = 5;

@@ -91,6 +91,7 @@ public class RestApiAccessor extends RestTemplate {
 	}
 
 	public <E extends BaseEntity> void save(E entity) {
+    String test = getEntitySubPath(entity.getClass());
 		if (entity.getId() == null) {
 			postForObject(BASE_SERVICE_URI + getEntitySubPath(entity.getClass()), entity, entity.getClass());
 		} else {

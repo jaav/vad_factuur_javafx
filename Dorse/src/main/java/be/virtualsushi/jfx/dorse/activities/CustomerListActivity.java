@@ -2,11 +2,18 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.resources.Images;
 import javafx.beans.property.ObjectProperty;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.control.*;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +28,10 @@ import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 @FxmlFile("ListActivity.fxml")
 public class CustomerListActivity extends AbstractListActivity<Customer> {
 
+  private static final Logger log = LoggerFactory.getLogger(CustomerListActivity.class);
+
 	private List<Sector> sectors;
+
 
 	@Override
 	protected String getTitle() {
@@ -32,6 +42,18 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 	@Override
 	protected void fillTableColumns(TableView<Customer> table) {
 		TableColumn<Customer, Long> idColumn = createTableColumn("id");
+    idColumn.setText("");
+    idColumn.setSortable(false);
+    Button sorter = new Button("id", new ImageView(Images.IMG_DOWN));
+    sorter.getStyleClass().add("borderless");
+    sorter.setOnMouseClicked(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent event) {
+        log.debug("EVENT : " + event.toString());
+        activityNavigator.goTo(AppActivitiesNames.LIST_ARTICLES);
+      }
+    });
+    idColumn.setGraphic(sorter);
 
 		TableColumn<Customer, String> nameColumn = createTableColumn("name");
 		nameColumn.setMinWidth(150);

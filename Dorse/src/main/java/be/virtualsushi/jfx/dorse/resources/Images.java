@@ -12,4 +12,9 @@ public interface Images {
 
 	public static final Image IMG_DETAILS = new Image(Images.class.getResource("details.png").toString());
 
+  public static final Image IMG_DOWN = new Image(Images.class.getResource("down.png").toString());
+
+  public static final Image IMG_UP = new Image(Images.class.getResource("up.png").toString());
+
+
 }

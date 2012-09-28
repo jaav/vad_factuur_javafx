@@ -34,7 +34,7 @@ public class ViewArticleActivity extends AbstractViewEntityActivity<VBox, Articl
 		super.mapFields(article);
 		idField.setText(String.valueOf(article.getId()));
 		codeField.setText(article.getCode());
-		stockField.setText(String.valueOf(article.getStock()));
+		stockField.setText(String.valueOf(article.getStock().getQuantity()));
 		if (article.getCreationDate() != null) {
 			createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(article.getCreationDate()));
 		}

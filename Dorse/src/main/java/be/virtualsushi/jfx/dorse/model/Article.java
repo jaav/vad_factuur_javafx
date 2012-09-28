@@ -23,6 +23,9 @@ public class Article extends BaseEntity implements Listable {
 	@JsonProperty("listPrice")
 	private Float price;
 
+  @JsonProperty("stock")
+ 	private Stock stock;
+
 	private Long unit;
 
 	private Integer weight;
@@ -37,8 +40,6 @@ public class Article extends BaseEntity implements Listable {
 	private Long creator;
 
 	private Float vat;
-
-	private Integer stock;
 
 	public Long getArticleType() {
 		return articleType;
@@ -128,15 +129,15 @@ public class Article extends BaseEntity implements Listable {
 		this.vat = vat;
 	}
 
-	public Integer getStock() {
-		return stock;
-	}
+  public Stock getStock() {
+    return stock;
+  }
 
-	public void setStock(Integer stock) {
-		this.stock = stock;
-	}
+  public void setStock(Stock stock) {
+    this.stock = stock;
+  }
 
-	@Override
+  @Override
 	public String getPrintName() {
 		return getCode();
 	}

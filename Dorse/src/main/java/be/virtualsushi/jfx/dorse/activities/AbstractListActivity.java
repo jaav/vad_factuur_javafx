@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse.activities;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -29,10 +30,14 @@ import be.virtualsushi.jfx.dorse.control.table.EntityPropertyTableColumn;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUiActivity<BorderPane> {
 
 	public static final String FORCE_RELOAD_PARAMETER = "force_reload";
+
+  @Autowired
+ 	protected ActivityNavigator activityNavigator;
 
 	private class LoadPageDataTaskCreator implements TaskCreator<DorseBackgroundTask<List<E>>> {
 
@@ -200,7 +205,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 	}
 
 	protected Integer getItemsPerPageCount() {
-		return 25;
+		return 10;
 	}
 
 	protected TableColumn<E, E> createActionsColumn() {

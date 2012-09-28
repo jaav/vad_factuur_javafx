@@ -1,11 +1,14 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_ARTICLES;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_ARTICLE;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.events.dialogs.SaveStockEvent;
+import be.virtualsushi.jfx.dorse.model.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,12 +30,6 @@ import be.virtualsushi.jfx.dorse.dialogs.UnitEditDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveArticleTypeEvent;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveSupplierEvent;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveUnitEvent;
-import be.virtualsushi.jfx.dorse.events.dialogs.SetStockValueEvent;
-import be.virtualsushi.jfx.dorse.model.Article;
-import be.virtualsushi.jfx.dorse.model.ArticleType;
-import be.virtualsushi.jfx.dorse.model.IdNamePairEntity;
-import be.virtualsushi.jfx.dorse.model.Supplier;
-import be.virtualsushi.jfx.dorse.model.Unit;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
@@ -78,6 +75,42 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 
 	}
 
+  private class SaveStockTaskCreator<Stock> implements TaskCreator<DorseBackgroundTask<Stock>> {
+
+  		private final Stock stock;
+
+  		public SaveStockTaskCreator(Stock entityToSave) {
+  			this.stock = entityToSave;
+  		}
+
+  		@Override
+  		public DorseBackgroundTask<Stock> createTask() {
+  			return new DorseBackgroundTask<Stock>(this, stock) {
+
+  				@Override
+  				protected void onPreExecute() {
+  					showLoadingMask();
+  				}
+
+  				@SuppressWarnings("unchecked")
+  				@Override
+  				protected Stock call() throws Exception {
+  					getRestApiAccessor().save((BaseEntity) getParameters()[0]);
+  					//doCustomBackgroundInitialization(getEntity());
+  					return (Stock) getParameters()[0];
+  				}
+
+  				@Override
+  				protected void onSuccess(Stock value) {
+  					mapLists(getEntity());
+  					hideLoadingMask();
+  				}
+
+  			};
+  		}
+
+  	}
+
 	@FXML
 	private EditableList<ArticleType> typeField;
 
@@ -88,7 +121,7 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	private EditableList<Supplier> supplierField;
 
 	@FXML
-	private Label idField, stockField, createdField;
+	private Label idField, stockField, stockIdField, createdField;
 
 	@FXML
 	private TextField codeField, nameField;
@@ -158,7 +191,10 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	@Override
 	protected void mapFields(Article editingArticle) {
 		idField.setText(String.valueOf(editingArticle.getId()));
-		stockField.setText(String.valueOf(editingArticle.getStock()));
+    if(editingArticle.getStock()!=null){
+      stockField.setText(String.valueOf(editingArticle.getStock().getQuantity()));
+      stockIdField.setText(String.valueOf(editingArticle.getStock().getId()));
+    }
 		codeField.setValue(editingArticle.getCode());
 		nameField.setValue(editingArticle.getName());
 		descriptionField.setValue(editingArticle.getDescription());
@@ -218,9 +254,9 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	}
 
 	@Subscribe
-	public void onSaveStock(SetStockValueEvent event) {
-		getEntity().setStock(event.getValue());
-		stockField.setText(String.valueOf(event.getValue()));
+	public void onSaveStock(SaveStockEvent event) {
+    doInBackground(new SaveStockTaskCreator<Stock>(event.getEntity()));
+		stockField.setText(String.valueOf(((Stock)(event.getEntity())).getQuantity()));
 		hideDialog(ModifyStockDialog.class);
 	}
 
@@ -248,7 +284,7 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 
 	@Override
 	protected AppActivitiesNames getListActivityName() {
-		return VIEW_ARTICLE;
+		return LIST_ARTICLES;
 	}
 
 }

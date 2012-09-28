@@ -39,6 +39,8 @@
 				GridPane.rowIndex="0" />
 			<Label fx:id="stockField" GridPane.columnIndex="5"
 				GridPane.rowIndex="0" />
+            <Label fx:id="stockIdField" visible="false"
+                GridPane.columnIndex="0" GridPane.rowIndex="0" />
 			<EditButton onAction="#handleEditStock"
 				GridPane.columnIndex="6" GridPane.rowIndex="0" />
 
@@ -76,11 +78,9 @@
 				GridPane.rowIndex="6" />
 			<IntegerNumberField fx:id="weightField" GridPane.columnIndex="1"
 				GridPane.rowIndex="6" fieldWidth="100" />
-			<Label text="%g" GridPane.columnIndex="2" GridPane.rowIndex="6"
-				GridPane.halignment="LEFT" />
-			<FieldLabel value="%unit" GridPane.columnIndex="3"
+			<FieldLabel value="%unit" GridPane.columnIndex="2"
 				GridPane.rowIndex="6" />
-			<EditableList fx:id="unitField" GridPane.columnIndex="4"
+			<EditableList fx:id="unitField" GridPane.columnIndex="3"
 				GridPane.rowIndex="6" GridPane.columnSpan="3" fieldWidth="140" />
 
 			<FieldLabel value="%supplier" GridPane.columnIndex="0"

@@ -19,6 +19,8 @@
 		GridPane.rowIndex="0" />
 	<Label fx:id="oldValueField" GridPane.columnIndex="1"
 		GridPane.rowIndex="0" />
+    <Label fx:id="idField" visible="false"
+        GridPane.columnIndex="0" GridPane.rowIndex="0" />
 
 	<FieldLabel value="%new.value" GridPane.columnIndex="0"
 		GridPane.rowIndex="1" />

@@ -15,58 +15,62 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
-	<padding>
-		<Insets bottom="10" left="10" right="10" top="10" />
-	</padding>
-	
-	<children>
-		<Label fx:id="title" >
+<HBox xmlns:fx="http://javafx.com/fxml" spacing="20">
+	<VBox spacing="20">
+		<padding>
+			<Insets bottom="10" left="10" right="10" top="10" />
+		</padding>
+
+		<Label fx:id="title">
 			<styleClass>
-				<String fx:value="activity-title"/>
+				<String fx:value="activity-title" />
 			</styleClass>
 		</Label>
-	
+
 		<GridPane vgap="5" hgap="10">
-	
+
 			<FieldLabel value="%id" GridPane.columnIndex="0"
 				GridPane.rowIndex="0" alignment="CENTER_RIGHT" />
 			<Label fx:id="idField" GridPane.columnIndex="1"
 				GridPane.rowIndex="0" />
-	
+
 			<FieldLabel value="%name" GridPane.columnIndex="0"
 				GridPane.rowIndex="1" alignment="CENTER_RIGHT" />
 			<TextField fx:id="nameField" GridPane.columnIndex="1"
 				GridPane.rowIndex="1" fieldWidth="400" />
-	
+
 			<FieldLabel value="%vat" GridPane.columnIndex="0"
 				GridPane.rowIndex="2" alignment="CENTER_RIGHT" />
 			<TextField fx:id="vatField" GridPane.columnIndex="1"
 				GridPane.rowIndex="2" fieldWidth="400" />
-	
+
 			<FieldLabel value="%iban" GridPane.columnIndex="0"
 				GridPane.rowIndex="3" alignment="CENTER_RIGHT" />
 			<TextField fx:id="ibanField" GridPane.columnIndex="1"
 				GridPane.rowIndex="3" fieldWidth="400" />
-	
+
 			<FieldLabel labelFor="$remarkField" value="%remark"
 				GridPane.columnIndex="0" alignment="TOP_RIGHT" GridPane.rowIndex="4" />
-			<TextAreaField fx:id="remarkField" GridPane.columnIndex="1"
-				GridPane.rowIndex="4" fieldWidth="400" fieldHeight="100" />
-	
+			<TextAreaField fx:id="remarkField"
+				GridPane.columnIndex="1" GridPane.rowIndex="4" fieldWidth="400"
+				fieldHeight="100" />
+
 			<FieldLabel value="%sector" GridPane.columnIndex="0"
 				GridPane.rowIndex="5" />
-			<EditableList fx:id="sectorField"
-				GridPane.columnIndex="1" GridPane.rowIndex="5" fieldWidth="360" />
-	
+			<EditableList fx:id="sectorField" GridPane.columnIndex="1"
+				GridPane.rowIndex="5" fieldWidth="360" />
+
 			<ControlsButtonsBar GridPane.columnIndex="1"
 				GridPane.rowIndex="7" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
 				onCancelAction="#handleCancel" saveButtonTitle="%save"
 				cancelButtonTitle="%cancel" />
-	
-		</GridPane>
-	</children>
 
-</VBox>
+		</GridPane>
+
+	</VBox>
+	
+	<ValidationErrorPanel fx:id="validationPanel" visible="false" />
+</HBox>
 

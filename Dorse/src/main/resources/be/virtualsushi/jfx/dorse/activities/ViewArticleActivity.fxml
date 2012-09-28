@@ -50,7 +50,7 @@
 				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="6"
 				prefWidth="400" prefHeight="100" />
 
-			<FieldLabel value="%type" GridPane.columnIndex="0"
+			<FieldLabel value="%articleType" GridPane.columnIndex="0"
 				GridPane.rowIndex="4" />
 			<Label fx:id="typeField" GridPane.columnIndex="1"
 				GridPane.rowIndex="4" prefWidth="360" GridPane.columnSpan="6" />

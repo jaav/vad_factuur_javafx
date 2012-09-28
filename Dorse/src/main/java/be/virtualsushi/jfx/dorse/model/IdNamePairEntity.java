@@ -1,7 +1,10 @@
 package be.virtualsushi.jfx.dorse.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class IdNamePairEntity extends BaseEntity implements Listable {
 
+	@NotBlank
 	private String name;
 
 	public String getName() {

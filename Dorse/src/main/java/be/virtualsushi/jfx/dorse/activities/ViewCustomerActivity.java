@@ -49,7 +49,7 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
 
 	@FXML
 	protected void handleAddAddress(ActionEvent event) {
-		showDialog(String.format(getResources().getString("new.customer.address.dialog.title"), getEntity().getName()), NewAddressDialog.class);
+		showDialog(String.format(getResources().getString("new.customer.address.dialog.title"), getEntity().getName()), NewAddressDialog.class, getEntity().getId());
 	}
 
 	@Override

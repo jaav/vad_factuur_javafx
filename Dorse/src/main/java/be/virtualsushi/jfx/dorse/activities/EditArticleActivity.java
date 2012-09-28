@@ -4,22 +4,25 @@ import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_ARTIC
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.EditableList;
 import be.virtualsushi.jfx.dorse.control.FloatNumberField;
+import be.virtualsushi.jfx.dorse.control.HasValidation;
 import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
 import be.virtualsushi.jfx.dorse.control.TextAreaField;
 import be.virtualsushi.jfx.dorse.control.TextField;
+import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.dialogs.ArticleTypeEditDialog;
 import be.virtualsushi.jfx.dorse.dialogs.ModifyStockDialog;
 import be.virtualsushi.jfx.dorse.dialogs.SupplierEditDialog;
@@ -40,7 +43,7 @@ import com.google.common.eventbus.Subscribe;
 
 @Component
 @Scope("prototype")
-public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
+public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 
 	private class SaveIdNamePairEntityTaskCreator<E extends IdNamePairEntity> implements TaskCreator<DorseBackgroundTask<E>> {
 
@@ -102,6 +105,9 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	@FXML
 	private TextAreaField descriptionField;
 
+	@FXML
+	private ValidationErrorPanel validationPanel;
+
 	private List<ArticleType> acceptableArticleTypes;
 	private List<Unit> acceptableUnits;
 	private List<Supplier> acceptableSuppliers;
@@ -152,7 +158,9 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 
 	@Override
 	protected Article newEntityInstance() {
-		return new Article();
+		Article article = new Article();
+		article.setCreationDate(new Date());
+		return article;
 	}
 
 	@Override
@@ -214,6 +222,9 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 		if (result.isNew() || result.getCreationDate() == null) {
 			result.setCreationDate(new Date());
 		}
+		if (result.getCreator() == null) {
+			result.setCreator(0l);
+		}
 		return result;
 	}
 
@@ -249,6 +260,23 @@ public class EditArticleActivity extends AbstractEditActivity<VBox, Article> {
 	@Override
 	protected AppActivitiesNames getListActivityName() {
 		return VIEW_ARTICLE;
+	}
+
+	@Override
+	protected ValidationErrorPanel getValidationPanel() {
+		return validationPanel;
+	}
+
+	@Override
+	protected void fillFieldsMap(HashMap<String, HasValidation> fieldsMap) {
+		fieldsMap.put("articleType", typeField);
+		fieldsMap.put("unit", unitField);
+		fieldsMap.put("supplier", supplierField);
+		fieldsMap.put("code", codeField);
+		fieldsMap.put("name", nameField);
+		fieldsMap.put("price", priceField);
+		fieldsMap.put("weight", weightField);
+		fieldsMap.put("description", descriptionField);
 	}
 
 }

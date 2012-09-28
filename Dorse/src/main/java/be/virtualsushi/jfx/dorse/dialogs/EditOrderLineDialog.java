@@ -1,28 +1,36 @@
 package be.virtualsushi.jfx.dorse.dialogs;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.ComboBoxField;
 import be.virtualsushi.jfx.dorse.control.FloatNumberField;
+import be.virtualsushi.jfx.dorse.control.HasValidation;
 import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
+import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveOrderLineEvent;
 import be.virtualsushi.jfx.dorse.model.Article;
 import be.virtualsushi.jfx.dorse.model.OrderLine;
 import be.virtualsushi.jfx.dorse.model.Unit;
 
 @Component
-public class EditOrderLineDialog extends AbstractDialog {
+public class EditOrderLineDialog extends AbstractDialog implements HasValidationDialog {
 
 	private static final String ARTICLE_INFO_VALUE_PATTERN = "%s - %s - %s";
+
+	@FXML
+	protected VBox container;
 
 	@FXML
 	private ComboBoxField<Article> articleField;
@@ -36,13 +44,17 @@ public class EditOrderLineDialog extends AbstractDialog {
 	@FXML
 	private Label articleInfoField, lineTotalField;
 
+	private ValidationErrorPanel validationPanel;
+
 	private OrderLine editingOrderLine;
 
 	private List<Unit> units;
 
+	private Map<String, HasValidation> fieldsMap;
+
 	@FXML
 	protected void handleSave(ActionEvent event) {
-		getEventBus().post(new SaveOrderLineEvent(getEditedValue()));
+		postSaveEvent(new SaveOrderLineEvent(getEditedValue()));
 	}
 
 	private OrderLine getEditedValue() {
@@ -58,6 +70,8 @@ public class EditOrderLineDialog extends AbstractDialog {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onShow(Object... parameters) {
+		super.onShow(parameters);
+		
 		if (ArrayUtils.isNotEmpty(parameters)) {
 			articleField.setAcceptableValues((List<Article>) parameters[0]);
 			units = (List<Unit>) parameters[1];
@@ -110,6 +124,12 @@ public class EditOrderLineDialog extends AbstractDialog {
 				}
 			}
 		});
+		validationPanel = new ValidationErrorPanel(false);
+		fieldsMap = new HashMap<String, HasValidation>();
+		fieldsMap.put("article", articleField);
+		fieldsMap.put("discount", discountField);
+		fieldsMap.put("quantity", quantityField);
+
 	}
 
 	private void updateArticleInfoField(Article value) {
@@ -132,6 +152,26 @@ public class EditOrderLineDialog extends AbstractDialog {
 			}
 		}
 		throw new IllegalStateException("Can't find unit with id=" + article.getUnit());
+	}
+
+	@Override
+	public ValidationErrorPanel getValidationPanel() {
+		return validationPanel;
+	}
+
+	@Override
+	public Map<String, HasValidation> getFieldsMap() {
+		return fieldsMap;
+	}
+
+	@Override
+	public void showValidationPanel() {
+		container.getChildren().add(0, validationPanel);
+	}
+
+	@Override
+	public void hideValidationPanel() {
+		container.getChildren().remove(validationPanel);
 	}
 
 }

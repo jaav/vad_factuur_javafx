@@ -1,15 +1,24 @@
 package be.virtualsushi.jfx.dorse.model;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 public class Person extends BaseEntity {
 
+	@NotBlank
 	private String title;
 
+	@NotBlank
 	private String name;
 
+	@NotBlank
 	private String email;
 
+	@NotBlank
 	private String mobile;
 
+	@NotNull
 	private Long customer;
 
 	public String getTitle() {

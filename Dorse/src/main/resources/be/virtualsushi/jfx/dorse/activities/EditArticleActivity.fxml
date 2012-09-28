@@ -16,13 +16,15 @@
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 <?import be.virtualsushi.jfx.dorse.control.FloatNumberField?>
 <?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
-	<padding>
-		<Insets bottom="10" left="10" right="10" top="10" />
-	</padding>
+<HBox xmlns:fx="http://javafx.com/fxml" spacing="20">
 
-	<children>
+	<VBox spacing="20">
+		<padding>
+			<Insets bottom="10" left="10" right="10" top="10" />
+		</padding>
+
 		<Label fx:id="title">
 			<styleClass>
 				<String fx:value="activity-title" />
@@ -62,26 +64,27 @@
 				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="6"
 				fieldWidth="400" prefHeight="100" />
 
-			<FieldLabel value="%type" GridPane.columnIndex="0"
+			<FieldLabel value="%articleType" GridPane.columnIndex="0"
 				GridPane.rowIndex="4" />
 			<EditableList fx:id="typeField" GridPane.columnIndex="1"
 				GridPane.rowIndex="4" fieldWidth="360" GridPane.columnSpan="6" />
 
 			<FieldLabel value="%price" GridPane.columnIndex="0"
 				GridPane.rowIndex="5" />
-			<FloatNumberField fx:id="priceField" GridPane.columnIndex="1"
-				GridPane.rowIndex="5" fieldWidth="400" GridPane.columnSpan="6" />
+			<FloatNumberField fx:id="priceField"
+				GridPane.columnIndex="1" GridPane.rowIndex="5" fieldWidth="400"
+				GridPane.columnSpan="6" />
 
 			<FieldLabel value="%weight" GridPane.columnIndex="0"
 				GridPane.rowIndex="6" />
-			<IntegerNumberField fx:id="weightField" GridPane.columnIndex="1"
-				GridPane.rowIndex="6" fieldWidth="100" />
+			<IntegerNumberField fx:id="weightField"
+				GridPane.columnIndex="1" GridPane.rowIndex="6" fieldWidth="100" />
 			<Label text="%g" GridPane.columnIndex="2" GridPane.rowIndex="6"
 				GridPane.halignment="LEFT" />
 			<FieldLabel value="%unit" GridPane.columnIndex="3"
 				GridPane.rowIndex="6" />
 			<EditableList fx:id="unitField" GridPane.columnIndex="4"
-				GridPane.rowIndex="6" GridPane.columnSpan="3" fieldWidth="140" />
+				GridPane.rowIndex="6" GridPane.columnSpan="3" fieldWidth="146" />
 
 			<FieldLabel value="%supplier" GridPane.columnIndex="0"
 				GridPane.rowIndex="7" />
@@ -89,12 +92,15 @@
 				GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="6"
 				fieldWidth="360" />
 
-			<ControlsButtonsBar GridPane.columnIndex="1" GridPane.columnSpan="6"
-				GridPane.rowIndex="9" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
-				onCancelAction="#handleCancel" saveButtonTitle="%save"
-				cancelButtonTitle="%cancel" />
+			<ControlsButtonsBar GridPane.columnIndex="1"
+				GridPane.columnSpan="6" GridPane.rowIndex="9" alignment="BOTTOM_RIGHT"
+				onSaveAction="#handleSave" onCancelAction="#handleCancel"
+				saveButtonTitle="%save" cancelButtonTitle="%cancel" />
 
 		</GridPane>
-	</children>
-</VBox>
+	</VBox>
+
+	<ValidationErrorPanel fx:id="validationPanel"
+		visible="false" />
+</HBox>
 

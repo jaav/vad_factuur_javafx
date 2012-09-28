@@ -1,5 +1,7 @@
 package be.virtualsushi.jfx.dorse.model;
 
+import javax.validation.constraints.NotNull;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import be.virtualsushi.jfx.dorse.restapi.ItemResourcePath;
@@ -9,16 +11,21 @@ import be.virtualsushi.jfx.dorse.restapi.ListResourcePath;
 @ListResourcePath("invoiceLinesByInvoice/{id}")
 public class OrderLine extends BaseEntity {
 
+	@NotNull
 	private Long article;
 
+	@NotNull
 	private Float discount;
 
+	@NotNull
 	private Integer quantity;
 
 	@JsonProperty("unit_discount")
+	@NotNull
 	private Float unitDiscount;
 
 	@JsonProperty("unit_price")
+	@NotNull
 	private Float unitPrice;
 
 	public Long getArticle() {

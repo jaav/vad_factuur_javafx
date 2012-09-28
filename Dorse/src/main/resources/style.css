@@ -49,21 +49,29 @@ MenuBar, Menu, MenuItem {
 
 .validation-panel {
 	-fx-text-fill: #B94A48;
-	-fx-background-color:#F2DEDE;
-	-fx-border-color:#EED3D7;
-	-fx-border-radius:3px;
-	-fx-border-style:solid;
-	-fx-font-size:14;
-	-fx-padding:10px;
+	-fx-background-color: #F2DEDE;
+	-fx-background-radius: 7px;
+	-fx-border-color: #EED3D7;
+	-fx-border-radius: 7px;
+	-fx-border-style: solid;
+	-fx-font-size: 14;
+	-fx-padding: 20px;
 }
 
 .validation-title {
-	-fx-font-size:20;
-	-fx-padding:0px 0px 5px 0px;
+	-fx-text-fill: #B94A48;
+	-fx-font-size: 20;
+	-fx-padding: 0px 0px 5px 0px;
 }
 
 .validation-message {
+	-fx-text-fill: #B94A48;
 	-fx-padding:0px 0px 2px 5px;
+}
+
+.invalid {
+	-fx-border-color: red;
+	-fx-border-radius: 3px;
 }
 
 .image-button {

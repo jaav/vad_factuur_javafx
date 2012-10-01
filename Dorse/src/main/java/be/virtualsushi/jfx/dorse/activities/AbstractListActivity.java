@@ -2,6 +2,7 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import javafx.beans.property.SimpleObjectProperty;
@@ -35,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUiActivity<BorderPane> {
 
 	public static final String FORCE_RELOAD_PARAMETER = "force_reload";
+  public static String ORDER_ON = "id";
 
   @Autowired
  	protected ActivityNavigator activityNavigator;
@@ -43,15 +45,17 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 		private final Integer from;
 		private final Integer quantity;
+    private final String orderOn;
 
-		public LoadPageDataTaskCreator(Integer from, Integer quantity) {
+		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn) {
 			this.from = from;
 			this.quantity = quantity;
+      this.orderOn = orderOn;
 		}
 
 		@Override
 		public DorseBackgroundTask<List<E>> createTask() {
-			return new DorseBackgroundTask<List<E>>(this, from, quantity) {
+			return new DorseBackgroundTask<List<E>>(this, from, quantity, orderOn) {
 
 				@Override
 				protected void onPreExecute() {
@@ -62,7 +66,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				@Override
 				protected List<E> call() throws Exception {
 					doCustomBackgroundInitialization();
-					return getRestApiAccessor().getList((Integer) getParameters()[0], (Integer) getParameters()[1],
+					return getRestApiAccessor().getList((Integer) getParameters()[0], (Integer) getParameters()[1], (String) getParameters()[2],
 							(Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0], true);
 				}
 
@@ -96,7 +100,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				@Override
 				protected List<E> call() throws Exception {
 					getRestApiAccessor().delete((E) getParameters()[0]);
-					return getRestApiAccessor().getList(0, getItemsPerPageCount(),
+					return getRestApiAccessor().getList(0, getItemsPerPageCount(), ORDER_ON,
 							(Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0], true);
 				}
 
@@ -174,7 +178,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 			@Override
 			public Node call(Integer param) {
 				listContainer.getChildren().clear();
-				doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount()));
+				doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON));
 				return listContainer;
 			}
 		});
@@ -186,7 +190,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 		if (getParameter(FORCE_RELOAD_PARAMETER, Boolean.class, false)) {
 			listPage.setCurrentPageIndex(0);
-			doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount()));
+			doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON));
 		}
 	}
 
@@ -244,9 +248,13 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		};
 	}
 
-	protected <T> EntityPropertyTableColumn<E, T> createTableColumn(String propertyName) {
-		return new EntityPropertyTableColumn<E, T>(getResources(), propertyName);
+	protected <T> EntityPropertyTableColumn<E, T> createNoHeaderTableColumn(String propertyName) {
+		return new EntityPropertyTableColumn<E, T>("", propertyName);
 	}
+
+  protected <T> EntityPropertyTableColumn<E, T> createTableColumn(String propertyName) {
+ 		return new EntityPropertyTableColumn<E, T>(getResources(), propertyName);
+ 	}
 
 	protected <T> EntityPropertyTableColumn<E, T> createTableColumn(String titleKey, String propertyName) {
 		return new EntityPropertyTableColumn<E, T>(getResources().getString(titleKey), propertyName);
@@ -255,6 +263,11 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 	protected <T> EntityPropertyTableColumn<E, T> createTableColumn(String titleKey, Callback<CellDataFeatures<E, T>, ObservableValue<T>> valueFactory) {
 		return new EntityPropertyTableColumn<E, T>(getResources().getString(titleKey), valueFactory);
 	}
+
+  protected String getName(String key){
+    ResourceBundle bundle = getResources();
+    return bundle.getString(key);
+  }
 
 	protected abstract String getTitle();
 

@@ -9,11 +9,20 @@ public abstract class ImageButton extends Button {
 
 	public ImageButton() {
 		super();
-		setGraphic(new ImageView(getImage()));
-		setGraphicTextGap(3);
-		setContentDisplay(ContentDisplay.LEFT);
-		getStyleClass().add("image-button");
+    init();
 	}
+
+  public ImageButton(String text){
+    super(text);
+    init();
+  }
+
+  public void init(){
+    setGraphic(new ImageView(getImage()));
+    setGraphicTextGap(3);
+    setContentDisplay(ContentDisplay.LEFT);
+    getStyleClass().add("image-button");
+  }
 
 	protected abstract Image getImage();
 

@@ -2,6 +2,7 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.control.SortButton;
 import be.virtualsushi.jfx.dorse.resources.Images;
 import javafx.beans.property.ObjectProperty;
 import javafx.event.EventHandler;
@@ -41,22 +42,13 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void fillTableColumns(TableView<Customer> table) {
-		TableColumn<Customer, Long> idColumn = createTableColumn("id");
-    idColumn.setText("");
+		TableColumn<Customer, Long> idColumn = createNoHeaderTableColumn("id");
     idColumn.setSortable(false);
-    Button sorter = new Button("id", new ImageView(Images.IMG_DOWN));
-    sorter.getStyleClass().add("borderless");
-    sorter.setOnMouseClicked(new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        log.debug("EVENT : " + event.toString());
-        activityNavigator.goTo(AppActivitiesNames.LIST_ARTICLES);
-      }
-    });
-    idColumn.setGraphic(sorter);
+    idColumn.setGraphic(new SortButton("id", getName("id"), activityNavigator));
 
-		TableColumn<Customer, String> nameColumn = createTableColumn("name");
+		TableColumn<Customer, String> nameColumn = createNoHeaderTableColumn("name");
 		nameColumn.setMinWidth(150);
+    nameColumn.setGraphic(new SortButton("name", getName("name"), activityNavigator));
 
 		TableColumn<Customer, String> sectorColumn = createTableColumn("sector", new EntityStringPropertyValueFactory<Customer>() {
 

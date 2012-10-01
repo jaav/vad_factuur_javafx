@@ -54,12 +54,12 @@ public class RestApiAccessor extends RestTemplate {
 	}
 
 	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, boolean needFullInfo, Object... parameters) {
-		return getList(null, null, entityClass, needFullInfo, parameters);
+		return getList(null, null, "id", entityClass, needFullInfo, parameters);
 	}
 
-	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, Class<E> entityClass, boolean needFullInfo, Object... parameters) {
+	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, String orderOn, Class<E> entityClass, boolean needFullInfo, Object... parameters) {
 		ArrayList<E> result = new ArrayList<E>();
-		String url = BASE_SERVICE_URI + getEntityListSubPath(entityClass, offset, count);
+		String url = BASE_SERVICE_URI + getEntityListSubPath(entityClass, offset, count, orderOn);
 		log.debug("Getting list of " + entityClass + " URL: " + url);
 		E[] ids = getForObject(url, getEntityArrayClass(entityClass), parameters);
 		if (needFullInfo) {
@@ -126,7 +126,7 @@ public class RestApiAccessor extends RestTemplate {
 		return StringUtils.uncapitalize(entityClass.getSimpleName());
 	}
 
-	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass, Integer offset, Integer count) {
+	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass, Integer offset, Integer count, String orderOn) {
 		StringBuilder result = new StringBuilder();
 		if (entityClass.getAnnotation(ListResourcePath.class) != null) {
 			result.append(entityClass.getAnnotation(ListResourcePath.class).value());
@@ -138,8 +138,11 @@ public class RestApiAccessor extends RestTemplate {
 			result.append("from=").append(offset).append("&");
 		}
 		if (count != null) {
-			result.append("quantity=").append(count);
+			result.append("quantity=").append(count).append("&");
 		}
+    if (orderOn != null) {
+  			result.append("orderOn=").append(orderOn);
+  		}
 		return result.toString();
 	}
 

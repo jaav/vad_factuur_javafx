@@ -1,5 +1,7 @@
 package be.virtualsushi.jfx.dorse.dialogs;
 
+import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
+import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveStockEvent;
 import be.virtualsushi.jfx.dorse.model.Stock;
 import javafx.event.ActionEvent;
@@ -30,7 +32,7 @@ public class ModifyStockDialog extends AbstractDialog {
 	@FXML
 	protected void handleSave(ActionEvent event) {
     Stock stock = new Stock();
-    stock.setQuantity(Integer.parseInt(newValueField.getValue()));
+    stock.setQuantity(newValueField.getValue());
     if(StringUtils.isNotBlank(idField.getText())) stock.setId(Long.parseLong(idField.getText()));
 		getEventBus().post(new SaveStockEvent(stock));
 	}

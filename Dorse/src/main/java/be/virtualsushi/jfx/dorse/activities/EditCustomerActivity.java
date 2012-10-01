@@ -2,6 +2,7 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_CUSTOMERS;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javafx.event.ActionEvent;
@@ -14,8 +15,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.EditableList;
+import be.virtualsushi.jfx.dorse.control.HasValidation;
 import be.virtualsushi.jfx.dorse.control.TextAreaField;
 import be.virtualsushi.jfx.dorse.control.TextField;
+import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.dialogs.NewSectorDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveSectorEvent;
 import be.virtualsushi.jfx.dorse.model.Customer;
@@ -75,6 +78,9 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	@FXML
 	protected EditableList<Sector> sectorField;
 
+	@FXML
+	private ValidationErrorPanel validationPanel;
+
 	private List<Sector> acceptableSectors;
 
 	@Override
@@ -132,8 +138,10 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 		editedCustomer.setVat(vatField.getValue());
 		editedCustomer.setRemark(remarkField.getValue());
 		Sector sector = sectorField.getValue();
-		editedCustomer.setSubsector(sector.getId());
-		editedCustomer.setSector(sector.getParent());
+		if (sector != null) {
+			editedCustomer.setSubsector(sector.getId());
+			editedCustomer.setSector(sector.getParent());
+		}
 		return editedCustomer;
 	}
 
@@ -150,6 +158,20 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	@Override
 	protected AppActivitiesNames getListActivityName() {
 		return LIST_CUSTOMERS;
+	}
+
+	@Override
+	protected ValidationErrorPanel getValidationPanel() {
+		return validationPanel;
+	}
+
+	@Override
+	protected void fillFieldsMap(HashMap<String, HasValidation> fieldsMap) {
+		fieldsMap.put("name", nameField);
+		fieldsMap.put("vat", vatField);
+		fieldsMap.put("iban", ibanField);
+		fieldsMap.put("reamrk", remarkField);
+		fieldsMap.put("sector", sectorField);
 	}
 
 }

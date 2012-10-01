@@ -4,16 +4,20 @@
 <?import javafx.scene.layout.GridPane?>
 <?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
 <?import javafx.scene.control.Label?>
-<?import be.virtualsushi.jfx.dorse.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import javafx.scene.layout.VBox?>
+<?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10">
+<VBox fx:id="container" xmlns:fx="http://javafx.com/fxml" spacing="10" >
 	<padding>
 		<Insets top="15" right="15" bottom="15" left="15" />
 	</padding>
+	
+	<GridPane vgap="10" hgap="10">
 
 	<FieldLabel value="%old.value" GridPane.columnIndex="0"
 		GridPane.rowIndex="0" />
@@ -22,15 +26,16 @@
     <Label fx:id="idField" visible="false"
         GridPane.columnIndex="0" GridPane.rowIndex="0" />
 
-	<FieldLabel value="%new.value" GridPane.columnIndex="0"
-		GridPane.rowIndex="1" />
-	<TextField fx:id="newValueField" GridPane.columnIndex="1"
-		GridPane.rowIndex="1" fieldWidth="200" />
+		<FieldLabel value="%new.value" GridPane.columnIndex="0"
+			GridPane.rowIndex="1" />
+		<IntegerNumberField fx:id="newValueField" GridPane.columnIndex="1"
+			GridPane.rowIndex="1" fieldWidth="200" />
 
-	<ControlsButtonsBar GridPane.columnIndex="1"
-		GridPane.rowIndex="2" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
-		onCancelAction="#handleCancel" saveButtonTitle="%save"
-		cancelButtonTitle="%cancel" />
+		<ControlsButtonsBar GridPane.columnIndex="1"
+			GridPane.rowIndex="2" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+			onCancelAction="#handleCancel" saveButtonTitle="%save"
+			cancelButtonTitle="%cancel" />
 
-</GridPane>
+	</GridPane>
+</VBox>
 

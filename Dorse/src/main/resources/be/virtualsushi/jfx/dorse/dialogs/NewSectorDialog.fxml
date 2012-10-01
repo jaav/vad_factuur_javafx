@@ -8,25 +8,32 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import be.virtualsushi.jfx.dorse.control.DorseComboBox?>
+<?import be.virtualsushi.jfx.dorse.control.ComboBoxField?>
+<?import javafx.scene.layout.VBox?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10">
+<VBox fx:id="container" xmlns:fx="http://javafx.com/fxml" spacing="10" >
 	<padding>
 		<Insets top="15" right="15" bottom="15" left="15" />
 	</padding>
 
-	<FieldLabel value="%name" GridPane.columnIndex="0"
-		GridPane.rowIndex="0" />
-	<TextField fx:id="nameField" GridPane.columnIndex="1"
-		GridPane.rowIndex="0" fieldWidth="200" />
+	<GridPane vgap="10" hgap="10">
 
-	<FieldLabel value="%parent.sector" GridPane.columnIndex="0"
-		GridPane.rowIndex="1" />
-	<ComboBox fx:id="parentSectorField" GridPane.columnIndex="1"
-		GridPane.rowIndex="1" prefWidth="200" />
+		<FieldLabel value="%name" GridPane.columnIndex="0"
+			GridPane.rowIndex="0" />
+		<TextField fx:id="nameField" GridPane.columnIndex="1"
+			GridPane.rowIndex="0" fieldWidth="200" />
 
-	<ControlsButtonsBar GridPane.columnIndex="1"
-		GridPane.rowIndex="2" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
-		onCancelAction="#handleCancel" saveButtonTitle="%save"
-		cancelButtonTitle="%cancel" />
+		<FieldLabel value="%parent.sector" GridPane.columnIndex="0"
+			GridPane.rowIndex="1" />
+		<ComboBoxField fx:id="parentSectorField"
+			GridPane.columnIndex="1" GridPane.rowIndex="1" fieldWidth="200" />
 
-</GridPane>
+		<ControlsButtonsBar GridPane.columnIndex="1"
+			GridPane.rowIndex="2" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+			onCancelAction="#handleCancel" saveButtonTitle="%save"
+			cancelButtonTitle="%cancel" />
+
+	</GridPane>
+</VBox>

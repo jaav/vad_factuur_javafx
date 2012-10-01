@@ -1,26 +1,37 @@
 package be.virtualsushi.jfx.dorse.control;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 public abstract class FieldWithValidation<F extends Control, V> extends HBox implements HasValidation, HasValue<V> {
 
-	private Label validationMessage;
 	private F field;
 
-	private boolean valid;
+	private BooleanProperty valid;
 
 	public FieldWithValidation() {
-		validationMessage = new Label();
-		validationMessage.getStyleClass().add("validation-message");
 		field = initializeDisplayField();
 		field.getStyleClass().add("field");
-		clearInvalid();
 		getChildren().add(field);
-		getChildren().add(validationMessage);
+		valid = new SimpleBooleanProperty();
+		valid.addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue != null && !newValue) {
+					field.getStyleClass().add("invalid");
+				} else {
+					field.getStyleClass().remove("invalid");
+				}
+			}
+		});
+		clearInvalid();
 	}
 
 	@Override
@@ -34,21 +45,18 @@ public abstract class FieldWithValidation<F extends Control, V> extends HBox imp
 	}
 
 	@Override
-	public void setInvalid(String message) {
-		valid = false;
-		validationMessage.setVisible(true);
-		validationMessage.setText(message);
+	public void setInvalid() {
+		valid.set(false);
 	}
 
 	@Override
 	public void clearInvalid() {
-		valid = true;
-		validationMessage.setVisible(false);
+		valid.set(true);
 	}
 
 	@Override
 	public boolean isValid() {
-		return valid;
+		return valid.get();
 	}
 
 	public DoubleProperty fieldWidthProperty() {

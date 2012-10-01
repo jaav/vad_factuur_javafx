@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
@@ -17,18 +16,15 @@ public class EditableList<V extends Listable> extends HBox implements HasValue<V
 
 	private DorseComboBox<V> comboBox;
 	private AddButton addButton;
-	private Label validationMessage;
 	private boolean valid;
 
 	public EditableList() {
 		setSpacing(3d);
 		comboBox = new DorseComboBox<V>();
+		comboBox.getStyleClass().add("field");
 		addButton = new AddButton();
-		validationMessage = new Label();
-		validationMessage.getStyleClass().add("validation-message");
 		getChildren().add(comboBox);
 		getChildren().add(addButton);
-		getChildren().add(validationMessage);
 	}
 
 	@Override
@@ -71,16 +67,15 @@ public class EditableList<V extends Listable> extends HBox implements HasValue<V
 	}
 
 	@Override
-	public void setInvalid(String message) {
+	public void setInvalid() {
 		valid = false;
-		validationMessage.setVisible(true);
-		validationMessage.setText(message);
+		comboBox.getStyleClass().add("invalid");
 	}
 
 	@Override
 	public void clearInvalid() {
 		valid = true;
-		validationMessage.setVisible(false);
+		comboBox.getStyleClass().remove("invalid");
 	}
 
 	@Override

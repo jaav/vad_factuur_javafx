@@ -51,7 +51,7 @@
 
 				</GridPane>
 			</Tab>
-			<Tab text="%invoice.address" >
+			<Tab text="%invoiceAddress" >
 
 				<ViewAddressControl fx:id="invoiceAddressField" >
 					<padding>
@@ -60,7 +60,7 @@
 				</ViewAddressControl>
 
 			</Tab>
-			<Tab text="%delivery.address" >
+			<Tab text="%deliveryAddress" >
 		
 				<ViewAddressControl fx:id="deliveryAddressField" >
 					<padding>

@@ -1,30 +1,43 @@
 package be.virtualsushi.jfx.dorse.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import be.virtualsushi.jfx.dorse.restapi.ListResourcePath;
 
 @ListResourcePath("addresses")
 public class Address extends BaseEntity {
 
+	@NotNull
 	private Long customer;
 
 	@JsonProperty("address_type")
 	private Integer addressType;
 
+	@NotBlank
 	private String address;
 
+	@NotNull
 	private Long location;
 
 	@JsonProperty("tel")
+	@NotBlank
 	private String phone;
 
+	@NotBlank
 	private String fax;
 
+	@NotBlank
+	@Pattern(regexp = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}", message = "{valid.email}")
 	private String email;
 
+	@NotBlank
 	private String city;
 
+	@NotBlank
 	private String zipcode;
 
 	public Long getCustomer() {

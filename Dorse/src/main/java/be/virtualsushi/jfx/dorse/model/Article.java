@@ -2,9 +2,13 @@ package be.virtualsushi.jfx.dorse.model;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.hibernate.validator.constraints.NotBlank;
 
 import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateDeserializer;
 import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
@@ -12,15 +16,19 @@ import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
 public class Article extends BaseEntity implements Listable {
 
 	@JsonProperty("article_type")
+	@NotNull
 	private Long articleType;
 
+	@NotBlank
 	private String code;
 
+	@NotBlank
 	private String name;
 
 	private String description;
 
 	@JsonProperty("listPrice")
+	@NotNull
 	private Float price;
 
   @JsonProperty("stock")
@@ -28,17 +36,22 @@ public class Article extends BaseEntity implements Listable {
 
 	private Long unit;
 
+	@NotNull
 	private Integer weight;
 
 	@JsonProperty("create_date")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@JsonDeserialize(using = CustomDateDeserializer.class)
+	@NotNull
 	private Date creationDate;
 
+	@NotNull
 	private Long supplier;
 
+	@NotNull
 	private Long creator;
 
+	@NotNull
 	private Float vat;
 
 	public Long getArticleType() {
@@ -139,7 +152,7 @@ public class Article extends BaseEntity implements Listable {
 
   @Override
 	public String getPrintName() {
-		return getCode();
+		return getCode() + (StringUtils.isNotBlank(getName()) ? " - " + getName() : "");
 	}
 
 	@Override

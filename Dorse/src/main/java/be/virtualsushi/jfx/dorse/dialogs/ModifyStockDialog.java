@@ -5,6 +5,7 @@ import be.virtualsushi.jfx.dorse.model.Stock;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +23,9 @@ public class ModifyStockDialog extends AbstractDialog {
  	private Label oldValueField;
 
 	@FXML
-	private TextField newValueField;
+	private IntegerNumberField newValueField;
+
+	private ValidationErrorPanel validationPanel;
 
 	@FXML
 	protected void handleSave(ActionEvent event) {
@@ -30,6 +33,13 @@ public class ModifyStockDialog extends AbstractDialog {
     stock.setQuantity(Integer.parseInt(newValueField.getValue()));
     if(StringUtils.isNotBlank(idField.getText())) stock.setId(Long.parseLong(idField.getText()));
 		getEventBus().post(new SaveStockEvent(stock));
+	}
+
+	@Override
+	protected void onUiBinded() {
+		super.onUiBinded();
+		validationPanel = new ValidationErrorPanel(false);
+		validationPanel.addMessage(getResources().getString("not.null.value"));
 	}
 
 	@Override

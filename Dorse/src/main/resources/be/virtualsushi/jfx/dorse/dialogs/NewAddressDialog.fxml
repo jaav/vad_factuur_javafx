@@ -7,43 +7,52 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import javafx.geometry.Insets?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import javafx.scene.layout.VBox?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10">
+<VBox fx:id="container" xmlns:fx="http://javafx.com/fxml" spacing="10">
+	<padding>
+		<Insets top="15" right="15" bottom="15" left="15" />
+	</padding>
 
-	<FieldLabel value="%address" GridPane.columnIndex="0"
-		GridPane.rowIndex="0" />
-	<TextField fx:id="addressField" GridPane.columnIndex="1"
-		GridPane.rowIndex="0" fieldWidth="300" />
+	<GridPane vgap="10" hgap="10">
 
-	<FieldLabel value="%city" GridPane.columnIndex="0"
-		GridPane.rowIndex="1" />
-	<TextField fx:id="cityField" GridPane.columnIndex="1"
-		GridPane.rowIndex="1" fieldWidth="300" />
+		<FieldLabel value="%address" GridPane.columnIndex="0"
+			GridPane.rowIndex="0" />
+		<TextField fx:id="addressField" GridPane.columnIndex="1"
+			GridPane.rowIndex="0" fieldWidth="300" />
 
-	<FieldLabel value="%zipcode" GridPane.columnIndex="0"
-		GridPane.rowIndex="2" />
-	<TextField fx:id="zipcodeField" GridPane.columnIndex="1"
-		GridPane.rowIndex="2" fieldWidth="300" />
+		<FieldLabel value="%city" GridPane.columnIndex="0"
+			GridPane.rowIndex="1" />
+		<TextField fx:id="cityField" GridPane.columnIndex="1"
+			GridPane.rowIndex="1" fieldWidth="300" />
 
-	<FieldLabel value="%phone" GridPane.columnIndex="0"
-		GridPane.rowIndex="3" />
-	<TextField fx:id="phoneField" GridPane.columnIndex="1"
-		GridPane.rowIndex="3" fieldWidth="300" />
+		<FieldLabel value="%zipcode" GridPane.columnIndex="0"
+			GridPane.rowIndex="2" />
+		<TextField fx:id="zipcodeField" GridPane.columnIndex="1"
+			GridPane.rowIndex="2" fieldWidth="300" />
 
-	<FieldLabel value="%fax" GridPane.columnIndex="0"
-		GridPane.rowIndex="4" />
-	<TextField fx:id="faxField" GridPane.columnIndex="1"
-		GridPane.rowIndex="4" fieldWidth="300" />
+		<FieldLabel value="%phone" GridPane.columnIndex="0"
+			GridPane.rowIndex="3" />
+		<TextField fx:id="phoneField" GridPane.columnIndex="1"
+			GridPane.rowIndex="3" fieldWidth="300" />
 
-	<FieldLabel value="%email" GridPane.columnIndex="0"
-		GridPane.rowIndex="5" />
-	<TextField fx:id="emailField" GridPane.columnIndex="1"
-		GridPane.rowIndex="5" fieldWidth="300" />
+		<FieldLabel value="%fax" GridPane.columnIndex="0"
+			GridPane.rowIndex="4" />
+		<TextField fx:id="faxField" GridPane.columnIndex="1"
+			GridPane.rowIndex="4" fieldWidth="300" />
 
-	<ControlsButtonsBar GridPane.columnIndex="1"
-		GridPane.rowIndex="6" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
-		onCancelAction="#handleCancel" saveButtonTitle="%save"
-		cancelButtonTitle="%cancel" />
+		<FieldLabel value="%email" GridPane.columnIndex="0"
+			GridPane.rowIndex="5" />
+		<TextField fx:id="emailField" GridPane.columnIndex="1"
+			GridPane.rowIndex="5" fieldWidth="300" />
 
-</GridPane>
+		<ControlsButtonsBar GridPane.columnIndex="1"
+			GridPane.rowIndex="6" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+			onCancelAction="#handleCancel" saveButtonTitle="%save"
+			cancelButtonTitle="%cancel" />
+
+	</GridPane>
+</VBox>
 

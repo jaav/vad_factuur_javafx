@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse.activities;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_INVOICE;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -18,8 +19,10 @@ import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.AddressesListToggle;
 import be.virtualsushi.jfx.dorse.control.ComboBoxField;
+import be.virtualsushi.jfx.dorse.control.HasValidation;
 import be.virtualsushi.jfx.dorse.control.TextAreaField;
 import be.virtualsushi.jfx.dorse.control.TextField;
+import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.dialogs.NewAddressDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveAddressEvent;
 import be.virtualsushi.jfx.dorse.model.Address;
@@ -115,6 +118,9 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	@FXML
 	private VBox deliveryAddressBox, invoiceAddressBox;
 
+	@FXML
+	private ValidationErrorPanel validationPanel;
+
 	private List<Customer> acceptableCustomers;
 
 	private ToggleGroup deliveryAddressToggleGroup;
@@ -136,12 +142,18 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 
 	@FXML
 	protected void handleNewDeliveryAddress(ActionEvent event) {
-		showDialog(getResources().getString("new.delivery.address.dialog.title"), NewAddressDialog.class, 0);
+		if (customerField.getValue() == null) {
+			return;
+		}
+		showDialog(getResources().getString("new.delivery.address.dialog.title"), NewAddressDialog.class, customerField.getValue().getId(), 0);
 	}
 
 	@FXML
 	protected void handleNewInvoiceAddress(ActionEvent event) {
-		showDialog(getResources().getString("new.invoice.address.dialog.title"), NewAddressDialog.class, 1);
+		if (customerField.getValue() == null) {
+			return;
+		}
+		showDialog(getResources().getString("new.invoice.address.dialog.title"), NewAddressDialog.class, customerField.getValue().getId(), 1);
 	}
 
 	private void updateAddressesPanel(Customer newValue) {
@@ -178,7 +190,9 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 
 	@Override
 	protected Invoice newEntityInstance() {
-		return new Invoice();
+		Invoice invoice = new Invoice();
+		invoice.setCreationDate(new Date());
+		return invoice;
 	}
 
 	@Override
@@ -207,8 +221,12 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		result.setCode(numberField.getValue());
 		result.setRemark(remarkField.getValue());
 		result.setCustomer(customerField.getValue());
-		result.setInvoiceAddress(((AddressesListToggle) invoiceAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
-		result.setDeliveryAddress(((AddressesListToggle) deliveryAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
+		if (invoiceAddressToggleGroup.getSelectedToggle() != null) {
+			result.setInvoiceAddress(((AddressesListToggle) invoiceAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
+		}
+		if (deliveryAddressToggleGroup.getSelectedToggle() != null) {
+			result.setDeliveryAddress(((AddressesListToggle) deliveryAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
+		}
 		if (result.isNew()) {
 			result.setCreationDate(new Date());
 		}
@@ -232,6 +250,18 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		Address addressToSave = event.getEntity();
 		addressToSave.setCustomer(customerField.getValue().getId());
 		doInBackground(new SaveAddressTaskCreator(addressToSave));
+	}
+
+	@Override
+	protected ValidationErrorPanel getValidationPanel() {
+		return validationPanel;
+	}
+
+	@Override
+	protected void fillFieldsMap(HashMap<String, HasValidation> fieldsMap) {
+		fieldsMap.put("code", numberField);
+		fieldsMap.put("remark", remarkField);
+		fieldsMap.put("customer", customerField);
 	}
 
 }

@@ -5,9 +5,11 @@ import java.util.ResourceBundle;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import be.virtualsushi.jfx.dorse.fxml.PackageBasedUiBinder;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
@@ -47,4 +49,10 @@ public class DorseApplicationFactory {
 		return Validation.buildDefaultValidatorFactory().getValidator();
 	}
 
+	@Bean(name = "propertyConfigurer")
+	public PropertyPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
+		PropertyPlaceholderConfigurer propertyConfigurer = new PropertyPlaceholderConfigurer();
+		propertyConfigurer.setLocation(new ClassPathResource("application.properties"));
+		return propertyConfigurer;
+	}
 }

@@ -10,11 +10,33 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!--fx.home>C:/Program Files/Oracle/JavaFX 2.2 SDK</fx.home-->
-        <fx.home>/Library/Java/JavaVirtualMachines/jdk1.7.0_06.jdk/Contents/Home/jre/lib</fx.home>
-		<fx.version>2.2</fx.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>pavel</id>
+			<properties>
+				<fx.home>C:/Program Files/Oracle/JavaFX 2.2 SDK</fx.home>
+				<fx.version>2.2</fx.version>
+				<fx.rtlib.path>${fx.home}/rt/lib</fx.rtlib.path>
+				<fx.antlib.path>${fx.home}/lib</fx.antlib.path>
+				<java.compiler.version>1.6</java.compiler.version>
+				<service.uri>http://www.dorse.me/</service.uri>
+			</properties>
+		</profile>
+		<profile>
+			<id>jef</id>
+			<properties>
+				<fx.home>/Library/Java/JavaVirtualMachines/jdk1.7.0_06.jdk/Contents/Home/jre/lib</fx.home>
+				<fx.rtlib.path>${fx.home}</fx.rtlib.path>
+				<fx.antlib.path>${fx.home}</fx.antlib.path>
+				<fx.version>2.2</fx.version>
+				<java.compiler.version>1.7</java.compiler.version>
+				<service.uri>http://localhost:8070/</service.uri>
+			</properties>
+		</profile>
+	</profiles>
 
 	<repositories>
 		<repository>
@@ -34,7 +56,7 @@
 			<artifactId>javafx</artifactId>
 			<version>${fx.version}</version>
 			<scope>system</scope>
-			<systemPath>${fx.home}/jfxrt.jar</systemPath>
+			<systemPath>${fx.rtlib.path}/jfxrt.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -111,11 +133,23 @@
 			<scope>test</scope>
 		</dependency>
 
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-          <version>1.7.1</version>
-        </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>4.7.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-fonts</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 
 	</dependencies>
 
@@ -176,7 +210,7 @@
 									outdir="${project.build.directory}/deploy" outfile="${build.finalName}">
 									<info title="${project.name}" />
 									<application name="${project.name}"
-										mainClass="be.virtualsushi.jfx.drose.DorseApplication" />
+										mainClass="be.virtualsushi.jfx.dorse.DorseApplication" />
 									<resources>
 										<fileset dir="${project.build.directory}" includes="*.jar" />
 										<fileset dir="${project.build.directory}/dependency"
@@ -205,10 +239,10 @@
 					<dependency>
 						<groupId>com.sun.javafx</groupId>
 						<artifactId>javafx-ant</artifactId>
-						<version>2.0.beta</version>
+						<version>${fx.version}</version>
 						<scope>system</scope>
 						<!-- change this to point to wherever you have installed JFX -->
-						<systemPath>${fx.home}/tools/ant-javafx.jar</systemPath>
+						<systemPath>${fx.antlib.path}/ant-javafx.jar</systemPath>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -216,35 +250,67 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>${java.compiler.version}</source>
+					<target>${java.compiler.version}</target>
 					<debug>true</debug>
 					<optimize>true</optimize>
 				</configuration>
 			</plugin>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>nbm-maven-plugin</artifactId>
-                            <version>3.7</version>
-                            <extensions>true</extensions>
-                            <configuration>
-                                <useOSGiDependencies>true</useOSGiDependencies>
-                                <publicPackages>
-                                   <publicPackage>javafx.scene.layout</publicPackage>
-                                   <publicPackage>javafx.application</publicPackage>
-                                   <publicPackage>javafx.collections</publicPackage>
-                                   <publicPackage>javafx.scene.control</publicPackage>
-                                   <publicPackage>javafx.event</publicPackage>
-                                   <publicPackage>javafx.geometry</publicPackage>
-                                   <publicPackage>javafx.beans.property</publicPackage>
-                                   <publicPackage>javafx.beans.value</publicPackage>
-                                   <publicPackage>javafx.concurrent</publicPackage>
-                                   <publicPackage>javafx.scene.web</publicPackage>
-                                   <publicPackage>javafx.fxml</publicPackage>
-                                </publicPackages>
-                            </configuration>
-                         </plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>nbm-maven-plugin</artifactId>
+				<version>3.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<useOSGiDependencies>true</useOSGiDependencies>
+					<publicPackages>
+						<publicPackage>javafx.scene.layout</publicPackage>
+						<publicPackage>javafx.application</publicPackage>
+						<publicPackage>javafx.collections</publicPackage>
+						<publicPackage>javafx.scene.control</publicPackage>
+						<publicPackage>javafx.event</publicPackage>
+						<publicPackage>javafx.geometry</publicPackage>
+						<publicPackage>javafx.beans.property</publicPackage>
+						<publicPackage>javafx.beans.value</publicPackage>
+						<publicPackage>javafx.concurrent</publicPackage>
+						<publicPackage>javafx.scene.web</publicPackage>
+						<publicPackage>javafx.fxml</publicPackage>
+					</publicPackages>
+				</configuration>
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>
+											[2.0.0,)
+										</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>

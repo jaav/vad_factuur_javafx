@@ -5,11 +5,11 @@ import java.util.ResourceBundle;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import be.virtualsushi.jfx.dorse.fxml.PackageBasedUiBinder;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
@@ -20,6 +20,7 @@ import com.google.common.eventbus.EventBus;
 
 @Configuration
 @ComponentScan(basePackages = { "be.virtualsushi.jfx.dorse" })
+@PropertySource("classpath:application.properties")
 public class DorseApplicationFactory {
 
 	@Bean(name = "resources")
@@ -50,9 +51,7 @@ public class DorseApplicationFactory {
 	}
 
 	@Bean(name = "propertyConfigurer")
-	public PropertyPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
-		PropertyPlaceholderConfigurer propertyConfigurer = new PropertyPlaceholderConfigurer();
-		propertyConfigurer.setLocation(new ClassPathResource("application.properties"));
-		return propertyConfigurer;
+	public PropertySourcesPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
 	}
 }

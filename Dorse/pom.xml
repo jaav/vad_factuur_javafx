@@ -11,6 +11,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>3.1.1.RELEASE</spring.version>
+		<jasperreports.artifactid>jasperreports</jasperreports.artifactid>
+		<jasperreports.groupid>net.sf.jasperreports</jasperreports.groupid>
+		<jasperreports.version>4.7.1</jasperreports.version>
 	</properties>
 
 	<profiles>
@@ -140,9 +143,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<version>4.7.1</version>
+			<groupId>${jasperreports.groupid}</groupId>
+			<artifactId>${jasperreports.artifactid}</artifactId>
+			<version>${jasperreports.version}</version>
 		</dependency>
 
 		<dependency>
@@ -158,6 +161,9 @@
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>target/jasper</directory>
 			</resource>
 		</resources>
 		<testResources>
@@ -207,7 +213,7 @@
 
 
 								<jfxdeploy width="800" height="600"
-									outdir="${project.build.directory}/deploy" outfile="${build.finalName}">
+									outdir="${project.build.directory}/deploy" outfile="${project.build.finalName}">
 									<info title="${project.name}" />
 									<application name="${project.name}"
 										mainClass="be.virtualsushi.jfx.dorse.DorseApplication" />
@@ -258,6 +264,28 @@
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jasperreports-maven-plugin</artifactId>
+				<configuration>
+					<outputDirectory>${project.build.directory}/jasper</outputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile-reports</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>${jasperreports.groupid}</groupId>
+						<artifactId>${jasperreports.artifactid}</artifactId>
+						<version>${jasperreports.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>nbm-maven-plugin</artifactId>
 				<version>3.7</version>
 				<extensions>true</extensions>
@@ -299,6 +327,25 @@
 										</versionRange>
 										<goals>
 											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											jasperreports-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0-beta-2,)
+										</versionRange>
+										<goals>
+											<goal>compile-reports</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

@@ -1,15 +1,17 @@
 package be.virtualsushi.jfx.dorse.control;
 
-import be.virtualsushi.jfx.dorse.activities.AbstractListActivity;
-import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
-import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
-import be.virtualsushi.jfx.dorse.resources.Images;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import be.virtualsushi.jfx.dorse.activities.AbstractListActivity;
+import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
+import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
+import be.virtualsushi.jfx.dorse.resources.Images;
 
 public class SortButton extends ImageButton {
   private static final Logger log = LoggerFactory.getLogger(SortButton.class);
@@ -22,7 +24,7 @@ public class SortButton extends ImageButton {
 
   @Override
 	protected Image getImage() {
-		return Images.IMG_DOWN;
+		return Images.IMG_ADD;
 	}
 
   public void initSorting(final ActivityNavigator activityNavigator){

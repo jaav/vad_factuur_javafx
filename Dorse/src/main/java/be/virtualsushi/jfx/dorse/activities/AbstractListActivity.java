@@ -24,11 +24,15 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import be.virtualsushi.jfx.dorse.control.DeleteButton;
 import be.virtualsushi.jfx.dorse.control.DetailsButton;
 import be.virtualsushi.jfx.dorse.control.EditButton;
 import be.virtualsushi.jfx.dorse.control.table.EntityPropertyTableColumn;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
+import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,21 +40,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUiActivity<BorderPane> {
 
 	public static final String FORCE_RELOAD_PARAMETER = "force_reload";
-  public static String ORDER_ON = "id";
+	public static String ORDER_ON = "id";
 
-  @Autowired
- 	protected ActivityNavigator activityNavigator;
+	@Autowired
+	protected ActivityNavigator activityNavigator;
 
 	private class LoadPageDataTaskCreator implements TaskCreator<DorseBackgroundTask<List<E>>> {
 
 		private final Integer from;
 		private final Integer quantity;
-    private final String orderOn;
+		private final String orderOn;
 
 		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn) {
 			this.from = from;
 			this.quantity = quantity;
-      this.orderOn = orderOn;
+			this.orderOn = orderOn;
 		}
 
 		@Override
@@ -252,9 +256,9 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		return new EntityPropertyTableColumn<E, T>("", propertyName);
 	}
 
-  protected <T> EntityPropertyTableColumn<E, T> createTableColumn(String propertyName) {
- 		return new EntityPropertyTableColumn<E, T>(getResources(), propertyName);
- 	}
+	protected <T> EntityPropertyTableColumn<E, T> createTableColumn(String propertyName) {
+		return new EntityPropertyTableColumn<E, T>(getResources(), propertyName);
+	}
 
 	protected <T> EntityPropertyTableColumn<E, T> createTableColumn(String titleKey, String propertyName) {
 		return new EntityPropertyTableColumn<E, T>(getResources().getString(titleKey), propertyName);
@@ -264,10 +268,9 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		return new EntityPropertyTableColumn<E, T>(getResources().getString(titleKey), valueFactory);
 	}
 
-  protected String getName(String key){
-    ResourceBundle bundle = getResources();
-    return bundle.getString(key);
-  }
+	protected String getName(String key) {
+		return getResources().getString(key);
+	}
 
 	protected abstract String getTitle();
 

@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -31,11 +32,13 @@ import be.virtualsushi.jfx.dorse.control.table.EntityPropertyValueFactory;
 import be.virtualsushi.jfx.dorse.control.table.EntityStringPropertyValueFactory;
 import be.virtualsushi.jfx.dorse.dialogs.EditOrderLineDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveOrderLineEvent;
+import be.virtualsushi.jfx.dorse.events.report.ShowReportEvent;
 import be.virtualsushi.jfx.dorse.model.Address;
 import be.virtualsushi.jfx.dorse.model.Article;
 import be.virtualsushi.jfx.dorse.model.Invoice;
 import be.virtualsushi.jfx.dorse.model.OrderLine;
 import be.virtualsushi.jfx.dorse.model.Unit;
+import be.virtualsushi.jfx.dorse.report.ReportService;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
 import com.google.common.eventbus.Subscribe;
@@ -145,6 +148,51 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		}
 	}
 
+	private class GenerateReportTaskCreator implements TaskCreator<DorseBackgroundTask<String>> {
+
+		private final Invoice invoice;
+		private final Address invoiceAddress;
+		private final Address deliveryAddress;
+		private final List<Article> articles;
+		private final List<OrderLine> orderLines;
+
+		public GenerateReportTaskCreator(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLine> orderLines) {
+			this.invoice = invoice;
+			this.invoiceAddress = invoiceAddress;
+			this.deliveryAddress = deliveryAddress;
+			this.articles = articles;
+			this.orderLines = orderLines;
+		}
+
+		@Override
+		public DorseBackgroundTask<String> createTask() {
+			return new DorseBackgroundTask<String>(this, invoice, invoiceAddress, deliveryAddress, articles, orderLines) {
+
+				@Override
+				protected void onPreExecute() {
+					showLoadingMask();
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				protected String call() throws Exception {
+					return reportService.createInvoiceReport((Invoice) getParameters()[0], (Address) getParameters()[1], (Address) getParameters()[2],
+							(List<Article>) getParameters()[3], (List<OrderLine>) getParameters()[4]);
+				}
+
+				@Override
+				protected void onSuccess(String value) {
+					hideLoadingMask();
+					getEventBus().post(new ShowReportEvent(value));
+				}
+			};
+		}
+
+	}
+
+	@Autowired
+	private ReportService reportService;
+
 	@FXML
 	private Label idField, customerField, createdField;
 
@@ -181,7 +229,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	@FXML
 	protected void handlePrintInvoice(ActionEvent event) {
-
+		doInBackground(new GenerateReportTaskCreator(getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLines));
 	}
 
 	@Override

@@ -27,6 +27,7 @@ import be.virtualsushi.jfx.dorse.events.ShowDialogEvent;
 import be.virtualsushi.jfx.dorse.events.ShowLoadingMaskEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.LoginSuccessfulEvent;
+import be.virtualsushi.jfx.dorse.events.report.ShowReportEvent;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.navigation.AppRegexPlaceResolver;
@@ -139,6 +140,11 @@ public class DorseApplication extends Application {
 	@Subscribe
 	public void onHideDiloag(HideDialogEvent event) {
 		hideCurrentlyShowingDialog();
+	}
+
+	@Subscribe
+	public void onShowReport(ShowReportEvent event) {
+		getHostServices().showDocument("file://" + event.getReportUri());
 	}
 
 	private void showDialog(Dialog dialogToShow) {

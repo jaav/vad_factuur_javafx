@@ -8,6 +8,8 @@ import javax.validation.Validator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import be.virtualsushi.jfx.dorse.fxml.PackageBasedUiBinder;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
@@ -18,6 +20,7 @@ import com.google.common.eventbus.EventBus;
 
 @Configuration
 @ComponentScan(basePackages = { "be.virtualsushi.jfx.dorse" })
+@PropertySource("classpath:application.properties")
 public class DorseApplicationFactory {
 
 	@Bean(name = "resources")
@@ -47,4 +50,8 @@ public class DorseApplicationFactory {
 		return Validation.buildDefaultValidatorFactory().getValidator();
 	}
 
+	@Bean(name = "propertyConfigurer")
+	public PropertySourcesPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
 }

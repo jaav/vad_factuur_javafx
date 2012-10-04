@@ -20,77 +20,80 @@
 		<Insets bottom="10" left="10" right="10" top="10" />
 	</padding>
 
-	<children>
-		<Label fx:id="title">
+	<GridPane >
+		<Label fx:id="title" GridPane.columnIndex="0" GridPane.rowIndex="0" >
 			<styleClass>
 				<String fx:value="activity-title" />
 			</styleClass>
 		</Label>
+		<Button text="%back" onAction="#handleGoBack" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" />
+	</GridPane>
 
-		<TabPane tabClosingPolicy="UNAVAILABLE" minHeight="150">
-			<Tab text="%invoice.data">
-				<GridPane vgap="10" hgap="5">
-					<padding>
-						<Insets bottom="5" left="5" right="5" top="10" />
-					</padding>
+	<TabPane tabClosingPolicy="UNAVAILABLE" minHeight="150">
+		<Tab text="%invoice.data">
+			<GridPane vgap="10" hgap="5">
+				<padding>
+					<Insets bottom="5" left="5" right="5" top="10" />
+				</padding>
 
-					<FieldLabel value="%id" GridPane.columnIndex="0"
-						GridPane.rowIndex="0" />
-					<Label fx:id="idField" GridPane.columnIndex="1"
-						GridPane.rowIndex="0" />
+				<FieldLabel value="%id" GridPane.columnIndex="0"
+					GridPane.rowIndex="0" />
+				<Label fx:id="idField" GridPane.columnIndex="1"
+					GridPane.rowIndex="0" />
 
-					<FieldLabel value="%customer" GridPane.columnIndex="0"
-						GridPane.rowIndex="1" />
-					<Label fx:id="customerField" GridPane.columnIndex="1"
-						GridPane.rowIndex="1" />
+				<FieldLabel value="%customer" GridPane.columnIndex="0"
+					GridPane.rowIndex="1" />
+				<Label fx:id="customerField" GridPane.columnIndex="1"
+					GridPane.rowIndex="1" />
 
-					<FieldLabel value="%created" GridPane.columnIndex="0"
-						GridPane.rowIndex="2" />
-					<Label fx:id="createdField" GridPane.columnIndex="1"
-						GridPane.rowIndex="2" />
+				<FieldLabel value="%created" GridPane.columnIndex="0"
+					GridPane.rowIndex="2" />
+				<Label fx:id="createdField" GridPane.columnIndex="1"
+					GridPane.rowIndex="2" />
 
-				</GridPane>
-			</Tab>
-			<Tab text="%invoiceAddress" >
+			</GridPane>
+		</Tab>
+		<Tab text="%invoiceAddress">
 
-				<ViewAddressControl fx:id="invoiceAddressField" >
-					<padding>
-						<Insets bottom="5" left="5" right="5" top="10" />
-					</padding>
-				</ViewAddressControl>
+			<ViewAddressControl fx:id="invoiceAddressField">
+				<padding>
+					<Insets bottom="5" left="5" right="5" top="10" />
+				</padding>
+			</ViewAddressControl>
 
-			</Tab>
-			<Tab text="%deliveryAddress" >
-		
-				<ViewAddressControl fx:id="deliveryAddressField" >
-					<padding>
-						<Insets bottom="5" left="5" right="5" top="10" />
-					</padding>
-				</ViewAddressControl>
-		
-			</Tab>
-		</TabPane>
+		</Tab>
+		<Tab text="%deliveryAddress">
 
-		<TableView fx:id="orderLineTable" prefHeight="600" >
-			<columns>
-				<TableColumn fx:id="idColumn" minWidth="40" text="%id" />
-				<TableColumn fx:id="codeColumn" minWidth="80" text="%code" />
-				<TableColumn fx:id="articleNameColumn" minWidth="120" text="%article.name" />
-				<TableColumn fx:id="priceColumn" minWidth="80" text="%price" />
-				<TableColumn fx:id="discountColumn" minWidth="80" text="%discount" />
-				<TableColumn fx:id="quantityColumn" minWidth="80" text="%quantity" />
-				<TableColumn fx:id="lineTotalColumn" minWidth="80" text="%line.total" />
-				<TableColumn fx:id="actionsColumn" minWidth="80" text="%actions" />
-			</columns>
-		</TableView>
-		
-		<HBox spacing="10">
-			
-			<Button text="%add.order.line" onAction="#handleAddOrderLine" />
-			<Button text="%print.invoice" onAction="#handlePrintInvoice" />
-			
-		</HBox>
+			<ViewAddressControl fx:id="deliveryAddressField">
+				<padding>
+					<Insets bottom="5" left="5" right="5" top="10" />
+				</padding>
+			</ViewAddressControl>
 
-	</children>
+		</Tab>
+	</TabPane>
+
+	<TableView fx:id="orderLineTable" prefHeight="600">
+		<columns>
+			<TableColumn fx:id="idColumn" minWidth="40" text="%id" />
+			<TableColumn fx:id="codeColumn" minWidth="80" text="%code" />
+			<TableColumn fx:id="articleNameColumn" minWidth="120"
+				text="%article.name" />
+			<TableColumn fx:id="priceColumn" minWidth="80" text="%price" />
+			<TableColumn fx:id="discountColumn" minWidth="80" text="%discount" />
+			<TableColumn fx:id="quantityColumn" minWidth="80" text="%quantity" />
+			<TableColumn fx:id="lineTotalColumn" minWidth="80"
+				text="%line.total" />
+			<TableColumn fx:id="actionsColumn" minWidth="80" text="%actions" />
+		</columns>
+	</TableView>
+
+	<HBox spacing="10">
+
+		<Button text="%add.order.line" onAction="#handleAddOrderLine" />
+		<Button text="%print.invoice" onAction="#handlePrintInvoice" />
+
+	</HBox>
+
 </VBox>
 

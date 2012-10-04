@@ -22,6 +22,7 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,13 +30,13 @@ import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
 public class RestApiAccessor extends RestTemplate {
 
-	//public static final String BASE_SERVICE_URI = "http://www.dorse.me/";
-  public static final String BASE_SERVICE_URI = "http://localhost:8070/";
-
 	private static final Logger log = LoggerFactory.getLogger(RestApiAccessor.class);
 
 	private static final int DEFAULT_MAX_TOTAL_CONNECTIONS = 100;
 	private static final int DEFAULT_MAX_CONNECTIONS_PER_ROUTE = 30;
+
+	@Value("${base.service.uri}")
+	private String serviceUri;
 
 	private HttpClient httpClient;
 
@@ -60,7 +61,7 @@ public class RestApiAccessor extends RestTemplate {
 
 	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, String orderOn, Class<E> entityClass, boolean needFullInfo, Object... parameters) {
 		ArrayList<E> result = new ArrayList<E>();
-		String url = BASE_SERVICE_URI + getEntityListSubPath(entityClass, offset, count, orderOn);
+		String url = serviceUri + getEntityListSubPath(entityClass, offset, count, orderOn);
 		log.debug("Getting list of " + entityClass + " URL: " + url);
 		E[] ids = getForObject(url, getEntityArrayClass(entityClass), parameters);
 		if (needFullInfo) {
@@ -92,26 +93,25 @@ public class RestApiAccessor extends RestTemplate {
 	}
 
 	public <E extends BaseEntity> E get(Long id, Class<E> clazz) {
-		String url = BASE_SERVICE_URI + getEntitySubPath(clazz) + "/{id}";
+		String url = serviceUri + getEntitySubPath(clazz) + "/{id}";
 		logger.debug("Getting " + clazz + " URL: " + url);
 		return getForObject(url, clazz, id);
 	}
 
 	public <E extends BaseEntity> void save(E entity) {
-    String test = getEntitySubPath(entity.getClass());
 		if (entity.getId() == null) {
-			postForObject(BASE_SERVICE_URI + getEntitySubPath(entity.getClass()), entity, entity.getClass());
+			postForObject(serviceUri + getEntitySubPath(entity.getClass()), entity, entity.getClass());
 		} else {
-			postForObject(BASE_SERVICE_URI + getEntitySubPath(entity.getClass()) + "/{id}", entity, entity.getClass(), entity.getId());
+			postForObject(serviceUri + getEntitySubPath(entity.getClass()) + "/{id}", entity, entity.getClass(), entity.getId());
 		}
 	}
 
 	public <E extends BaseEntity> void delete(E entity) {
-		delete(BASE_SERVICE_URI + getEntitySubPath(entity.getClass()) + "/{id}", entity.getId());
+		delete(serviceUri + getEntitySubPath(entity.getClass()) + "/{id}", entity.getId());
 	}
 
 	public String login(String username, String password) {
-		HttpPost loginPost = new HttpPost(BASE_SERVICE_URI + "login");
+		HttpPost loginPost = new HttpPost(serviceUri + "login");
 		try {
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(Arrays.asList(new NameValuePair[] { new BasicNameValuePair("username", username),
 					new BasicNameValuePair("password", password) }));
@@ -147,9 +147,9 @@ public class RestApiAccessor extends RestTemplate {
 		if (count != null) {
 			result.append("quantity=").append(count).append("&");
 		}
-    if (orderOn != null) {
-  			result.append("orderOn=").append(orderOn);
-  		}
+		if (orderOn != null) {
+			result.append("orderOn=").append(orderOn);
+		}
 		return result.toString();
 	}
 

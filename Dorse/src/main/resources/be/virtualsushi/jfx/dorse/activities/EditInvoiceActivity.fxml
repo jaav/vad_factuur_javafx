@@ -1,105 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
-<?import java.lang.String?>
-<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
-<?import be.virtualsushi.jfx.dorse.control.TextField?>
-<?import be.virtualsushi.jfx.dorse.control.EditableList?>
-<?import javafx.scene.control.TabPane?>
-<?import be.virtualsushi.jfx.dorse.control.TextAreaField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Tab?>
+<?import be.virtualsushi.jfx.dorse.control.*?>
 <?import be.virtualsushi.jfx.dorse.control.ComboBoxField?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
-<?import javafx.scene.control.ScrollPane?>
+<?import be.virtualsushi.jfx.dorse.control.EditableList?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.TextAreaField?>
+<?import be.virtualsushi.jfx.dorse.control.TextField?>
 <?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import java.lang.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?scenebuilder-classpath-element ../../../../../../../../out/production/dorse?>
 
-<HBox xmlns:fx="http://javafx.com/fxml" spacing="20">
-	<VBox spacing="20">
-		<padding>
-			<Insets bottom="10" left="10" right="10" top="10" />
-		</padding>
-
-		<Label fx:id="title">
-			<styleClass>
-				<String fx:value="activity-title" />
-			</styleClass>
-		</Label>
-
-		<GridPane hgap="10" vgap="5">
-
-			<FieldLabel value="%id" GridPane.columnIndex="0"
-				GridPane.rowIndex="0" />
-			<Label fx:id="idField" GridPane.columnIndex="1"
-				GridPane.rowIndex="0" />
-
-			<FieldLabel value="%number" GridPane.columnIndex="0"
-				GridPane.rowIndex="1" />
-			<TextField fx:id="numberField" GridPane.columnIndex="1"
-				GridPane.rowIndex="1" fieldWidth="400" />
-
-			<FieldLabel value="%customer" GridPane.columnIndex="0"
-				GridPane.rowIndex="2" />
-			<ComboBoxField fx:id="customerField"
-				GridPane.columnIndex="1" GridPane.rowIndex="2" fieldWidth="400" />
-
-			<TabPane GridPane.columnIndex="0" GridPane.rowIndex="3"
-				GridPane.columnSpan="2" tabClosingPolicy="UNAVAILABLE">
-				<Tab text="%deliveryAddress">
-					<VBox spacing="10">
-						<padding>
-							<Insets bottom="5" left="5" right="5" top="5" />
-						</padding>
-
-						<ScrollPane minHeight="100">
-							<VBox fx:id="deliveryAddressBox" spacing="10" prefWidth="400">
-								<padding>
-									<Insets bottom="15" left="15" right="15" top="15" />
-								</padding>
-							</VBox>
-						</ScrollPane>
-						<Button text="%new.delivery.address" onAction="#handleNewDeliveryAddress"
-							alignment="BOTTOM_CENTER" />
-					</VBox>
-				</Tab>
-				<Tab text="%invoiceAddress">
-					<VBox spacing="10">
-						<padding>
-							<Insets bottom="5" left="5" right="5" top="5" />
-						</padding>
-
-						<ScrollPane minHeight="100">
-							<VBox fx:id="invoiceAddressBox" spacing="10" prefWidth="400">
-								<padding>
-									<Insets bottom="15" left="15" right="15" top="15" />
-								</padding>
-							</VBox>
-						</ScrollPane>
-						<Button text="%new.invoice.address" onAction="#handleNewInvoiceAddress"
-							alignment="BOTTOM_CENTER" />
-					</VBox>
-				</Tab>
-			</TabPane>
-
-			<FieldLabel value="%remark" GridPane.columnIndex="0"
-				GridPane.rowIndex="4" />
-			<TextAreaField fx:id="remarkField"
-				GridPane.columnIndex="1" GridPane.rowIndex="4" fieldWidth="400"
-				fieldHeight="100" />
-
-			<ControlsButtonsBar GridPane.columnIndex="1"
-				GridPane.rowIndex="6" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
-				onCancelAction="#handleCancel" saveButtonTitle="%save"
-				cancelButtonTitle="%cancel" />
-
-		</GridPane>
-	</VBox>
-
-	<ValidationErrorPanel fx:id="validationPanel" visible="false" />
+<HBox spacing="20.0" styleClass="editItem" xmlns:fx="http://javafx.com/fxml">
+  <VBox spacing="20.0">
+    <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" fx:id="x1" />
+    </padding>
+    <Label fx:id="title" styleClass="activity-title" />
+    <GridPane hgap="10.0" vgap="5.0">
+      <FieldLabel value="%id" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+      <Label fx:id="idField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+      <FieldLabel value="%number" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+      <TextField fx:id="numberField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <FieldLabel value="%customer" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+      <ComboBoxField fx:id="customerField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+        <Tab text="%deliveryAddress">
+          <VBox spacing="10.0">
+            <ScrollPane minHeight="100.0">
+              <VBox fx:id="deliveryAddressBox" prefWidth="400.0" spacing="10.0">
+                <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" fx:id="x1" />
+                </padding>
+              </VBox>
+            </ScrollPane>
+            <Button alignment="BOTTOM_CENTER" onAction="#handleNewDeliveryAddress" text="%new.delivery.address" />
+          </VBox>
+        </Tab>
+        <Tab text="%invoiceAddress">
+          <VBox spacing="10.0">
+            <ScrollPane minHeight="100.0">
+              <VBox fx:id="invoiceAddressBox" padding="$x1" prefWidth="400.0" spacing="10.0" />
+            </ScrollPane>
+            <Button alignment="BOTTOM_CENTER" onAction="#handleNewInvoiceAddress" text="%new.invoice.address" />
+          </VBox>
+        </Tab>
+      </TabPane>
+      <FieldLabel value="%remark" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+      <TextAreaField fx:id="remarkField" fieldHeight="100.0" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel" onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+    </GridPane>
+  </VBox>
+  <ValidationErrorPanel fx:id="validationPanel" visible="false" />
 </HBox>
-

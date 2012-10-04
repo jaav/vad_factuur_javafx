@@ -13,6 +13,7 @@ import be.virtualsushi.jfx.dorse.model.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
@@ -123,6 +124,9 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 	@FXML
 	private EditableList<Supplier> supplierField;
 
+  @FXML
+ 	private ComboBox vatField;
+
 	@FXML
 	private Label idField, stockField, stockIdField, createdField;
 
@@ -211,6 +215,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		if (editingArticle.getCreationDate() != null) {
 			createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(editingArticle.getCreationDate()));
 		}
+    if(editingArticle.getVat()!=null) vatField.setValue(editingArticle.getVat());
 		mapLists(editingArticle);
 	}
 
@@ -255,6 +260,9 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		if (supplierField.getValue() != null) {
 			result.setSupplier(supplierField.getValue().getId());
 		}
+    if (vatField.getValue() != null) {
+      result.setVat(Float.parseFloat(vatField.getValue().toString()));
+    }
 		if (result.isNew() || result.getCreationDate() == null) {
 			result.setCreationDate(new Date());
 		}
@@ -295,7 +303,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 
 	@Override
 	protected AppActivitiesNames getListActivityName() {
-		return VIEW_ARTICLE;
+		return LIST_ARTICLES;
 	}
 
 	@Override

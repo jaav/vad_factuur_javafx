@@ -1,5 +1,6 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_INVOICES;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_INVOICE;
 
 import java.util.Date;
@@ -242,7 +243,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 
 	@Override
 	protected AppActivitiesNames getListActivityName() {
-		return VIEW_INVOICE;
+		return LIST_INVOICES;
 	}
 
 	@Subscribe

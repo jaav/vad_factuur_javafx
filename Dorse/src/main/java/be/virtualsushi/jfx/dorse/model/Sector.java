@@ -3,8 +3,21 @@ package be.virtualsushi.jfx.dorse.model;
 import org.hibernate.validator.constraints.NotBlank;
 
 public class Sector extends BaseEntity implements Listable {
+  public Sector() {
+    super();
+  }
 
-	@NotBlank
+  public Sector(Long id, String name, Long parent) {
+    this.setId(id);
+    this.name = name;
+    this.parent = parent;
+  }
+
+  public Sector(String name) {
+    this.name = name;
+  }
+
+  @NotBlank
 	private String name;
 
 	private Long parent;

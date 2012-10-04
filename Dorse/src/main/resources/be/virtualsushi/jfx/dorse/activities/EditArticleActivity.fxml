@@ -1,106 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import java.lang.String?>
-<?import javafx.scene.layout.GridPane?>
-<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
-<?import be.virtualsushi.jfx.dorse.control.EditButton?>
-<?import be.virtualsushi.jfx.dorse.control.TextField?>
-<?import be.virtualsushi.jfx.dorse.control.TextAreaField?>
-<?import be.virtualsushi.jfx.dorse.control.EditableList?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Button?>
-<?import javafx.geometry.Insets?>
+<?import be.virtualsushi.jfx.dorse.control.*?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import be.virtualsushi.jfx.dorse.control.EditButton?>
+<?import be.virtualsushi.jfx.dorse.control.EditableList?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
 <?import be.virtualsushi.jfx.dorse.control.FloatNumberField?>
 <?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.TextAreaField?>
+<?import be.virtualsushi.jfx.dorse.control.TextField?>
 <?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import java.lang.*?>
+<?import java.lang.String?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?scenebuilder-classpath-element ../../../../../../../../out/production/dorse?>
 
-<HBox xmlns:fx="http://javafx.com/fxml" spacing="20">
-
-	<VBox spacing="20">
-		<padding>
-			<Insets bottom="10" left="10" right="10" top="10" />
-		</padding>
-
-		<Label fx:id="title">
-			<styleClass>
-				<String fx:value="activity-title" />
-			</styleClass>
-		</Label>
-
-		<GridPane vgap="5" hgap="10">
-
-			<FieldLabel value="%id" GridPane.columnIndex="0"
-				GridPane.rowIndex="0" />
-			<Label fx:id="idField" GridPane.columnIndex="1"
-				GridPane.rowIndex="0" GridPane.columnSpan="3" />
-			<FieldLabel value="%stock" GridPane.columnIndex="4"
-				GridPane.rowIndex="0" />
-			<Label fx:id="stockField" GridPane.columnIndex="5"
-				GridPane.rowIndex="0" />
-			<EditButton onAction="#handleEditStock"
-				GridPane.columnIndex="6" GridPane.rowIndex="0" />
-
-			<FieldLabel value="%code" GridPane.columnIndex="0"
-				GridPane.rowIndex="1" />
-			<TextField fx:id="codeField" GridPane.columnIndex="1"
-				GridPane.rowIndex="1" GridPane.columnSpan="2" fieldWidth="150" />
-			<FieldLabel value="%created" GridPane.columnIndex="3"
-				GridPane.rowIndex="1" />
-			<Label fx:id="createdField" GridPane.columnIndex="4"
-				GridPane.rowIndex="1" GridPane.columnSpan="3" />
-
-			<FieldLabel value="%name" GridPane.columnIndex="0"
-				GridPane.rowIndex="2" />
-			<TextField fx:id="nameField" GridPane.columnIndex="1"
-				GridPane.rowIndex="2" GridPane.columnSpan="6" fieldWidth="400" />
-
-			<FieldLabel value="%description" GridPane.columnIndex="0"
-				GridPane.rowIndex="3" />
-			<TextAreaField fx:id="descriptionField"
-				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="6"
-				fieldWidth="400" prefHeight="100" />
-
-			<FieldLabel value="%articleType" GridPane.columnIndex="0"
-				GridPane.rowIndex="4" />
-			<EditableList fx:id="typeField" GridPane.columnIndex="1"
-				GridPane.rowIndex="4" fieldWidth="360" GridPane.columnSpan="6" />
-
-			<FieldLabel value="%price" GridPane.columnIndex="0"
-				GridPane.rowIndex="5" />
-			<FloatNumberField fx:id="priceField"
-				GridPane.columnIndex="1" GridPane.rowIndex="5" fieldWidth="400"
-				GridPane.columnSpan="6" />
-
-			<FieldLabel value="%weight" GridPane.columnIndex="0"
-				GridPane.rowIndex="6" />
-			<IntegerNumberField fx:id="weightField"
-				GridPane.columnIndex="1" GridPane.rowIndex="6" fieldWidth="100" />
-			<Label text="%g" GridPane.columnIndex="2" GridPane.rowIndex="6"
-				GridPane.halignment="LEFT" />
-			<FieldLabel value="%unit" GridPane.columnIndex="3"
-				GridPane.rowIndex="6" />
-			<EditableList fx:id="unitField" GridPane.columnIndex="4"
-				GridPane.rowIndex="6" GridPane.columnSpan="3" fieldWidth="146" />
-
-			<FieldLabel value="%supplier" GridPane.columnIndex="0"
-				GridPane.rowIndex="7" />
-			<EditableList fx:id="supplierField"
-				GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="6"
-				fieldWidth="360" />
-
-			<ControlsButtonsBar GridPane.columnIndex="1"
-				GridPane.columnSpan="6" GridPane.rowIndex="9" alignment="BOTTOM_RIGHT"
-				onSaveAction="#handleSave" onCancelAction="#handleCancel"
-				saveButtonTitle="%save" cancelButtonTitle="%cancel" />
-
-		</GridPane>
-	</VBox>
-
-	<ValidationErrorPanel fx:id="validationPanel"
-		visible="false" />
+<HBox spacing="20.0" xmlns:fx="http://javafx.com/fxml">
+  <VBox spacing="20.0">
+    <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <Label fx:id="title" styleClass="activity-title" />
+    <GridPane hgap="10.0" vgap="5.0">
+      <FieldLabel value="%id" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+      <Label fx:id="idField" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="0" />
+      <FieldLabel value="%stock" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+      <Label fx:id="stockField" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+      <Label fx:id="stockIdField" visible="false" />
+      <EditButton onAction="#handleEditStock" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+      <FieldLabel value="%code" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+      <TextField fx:id="codeField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+      <FieldLabel value="%created" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <Label fx:id="createdField" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+      <FieldLabel value="%name" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+      <TextField fx:id="nameField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" />
+      <FieldLabel value="%description" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+      <TextAreaField fx:id="descriptionField" fieldWidth="400.0" prefHeight="100.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" />
+      <FieldLabel value="%articleType" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+      <EditableList fx:id="typeField" fieldWidth="260.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="4" />
+      <FieldLabel value="%supplier" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+      <EditableList fx:id="supplierField" fieldWidth="260.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="5" />
+      <FieldLabel value="%weight" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+      <IntegerNumberField fx:id="weightField" fieldWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <FieldLabel value="%unit" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+      <EditableList fx:id="unitField" fieldWidth="90.0" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.halignment="RIGHT"/>
+      <FieldLabel value="%price" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+      <FloatNumberField fx:id="priceField" fieldWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="7" />
+      <FieldLabel value="%vat" GridPane.columnIndex="5" GridPane.rowIndex="7" />
+      <ComboBox fx:id="vatField" GridPane.columnIndex="6" GridPane.columnSpan="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+        <items>
+          <FXCollections fx:factory="observableArrayList">
+            <String fx:value="  6  " />
+            <String fx:value="  19  " />
+            <String fx:value="  21  " />
+          </FXCollections>
+        </items>
+      </ComboBox>
+      <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel" onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="10" />
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+  </VBox>
+  <ValidationErrorPanel fx:id="validationPanel" visible="false" />
 </HBox>
-

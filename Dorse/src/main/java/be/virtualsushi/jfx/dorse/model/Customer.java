@@ -11,10 +11,8 @@ public class Customer extends BaseEntity implements Listable {
 	@NotBlank
 	private String name;
 
-	@NotBlank
 	private String vat;
 
-	@NotBlank
 	private String iban;
 
 	private String remark;
@@ -22,7 +20,6 @@ public class Customer extends BaseEntity implements Listable {
 	@NotNull
 	private Long sector;
 
-	@NotNull
 	private Long subsector;
 
 	private List<Address> address;

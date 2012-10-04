@@ -36,8 +36,7 @@ public class NewSectorDialog extends AbstractDialog implements HasValidationDial
 
 	@FXML
 	protected void handleSave(ActionEvent event) {
-		Sector sector = new Sector();
-		sector.setName(nameField.getValue());
+		Sector sector = new Sector(nameField.getValue());
 		if (parentSectorField.getValue() != null) {
 			sector.setParent(parentSectorField.getValue().getId());
 		}

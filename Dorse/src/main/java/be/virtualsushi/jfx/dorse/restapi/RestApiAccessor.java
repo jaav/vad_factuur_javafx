@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.model.Sector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -69,6 +70,12 @@ public class RestApiAccessor extends RestTemplate {
 		}
 		return result;
 	}
+
+  public List<Sector> getSubSectors(Long parent_id){
+    String url = BASE_SERVICE_URI + "subSectors/"+ parent_id;
+    List<Sector> sectorList = new ArrayList<Sector>();
+    return getForObject(url,sectorList.getClass());
+  }
 
 	private <E extends BaseEntity> List<E> detailList(Integer offset, Integer count, Class<E> entityClass, E[] ids) {
 		ArrayList<E> result = new ArrayList<E>();

@@ -56,7 +56,7 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 			protected void setPropertyValue(ObjectProperty<String> property, Customer value) {
 				if (sectors != null) {
 					for (Sector sector : sectors) {
-						if (sector.getId().equals(value.getSubsector())) {
+						if (sector.getId().equals(value.getSector())) {
 							property.set(sector.getName());
 							break;
 						}

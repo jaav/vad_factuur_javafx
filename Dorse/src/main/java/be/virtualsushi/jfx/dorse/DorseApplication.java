@@ -1,14 +1,10 @@
 package be.virtualsushi.jfx.dorse;
 
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_ARTICLE;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_CUSTOMER;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.EDIT_INVOICE;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_ARTICLES;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_CUSTOMERS;
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_INVOICES;
-
 import java.util.ResourceBundle;
 
+import be.virtualsushi.jfx.dorse.activities.*;
+import com.zenjava.jfxflow.navigation.DefaultNavigationManager;
+import com.zenjava.jfxflow.navigation.Place;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -19,17 +15,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import be.virtualsushi.jfx.dorse.activities.ArticleListActivity;
-import be.virtualsushi.jfx.dorse.activities.CustomerListActivity;
-import be.virtualsushi.jfx.dorse.activities.EditArticleActivity;
-import be.virtualsushi.jfx.dorse.activities.EditCustomerActivity;
-import be.virtualsushi.jfx.dorse.activities.EditInvoiceActivity;
-import be.virtualsushi.jfx.dorse.activities.InvoiceListActivity;
-import be.virtualsushi.jfx.dorse.activities.ViewArticleActivity;
-import be.virtualsushi.jfx.dorse.activities.ViewCustomerActivity;
-import be.virtualsushi.jfx.dorse.activities.ViewInvoiceActivity;
 import be.virtualsushi.jfx.dorse.control.DialogPopup;
 import be.virtualsushi.jfx.dorse.control.LoadingMask;
 import be.virtualsushi.jfx.dorse.dialogs.AbstractDialog;
@@ -49,6 +37,8 @@ import com.zenjava.jfxflow.control.Browser;
 import com.zenjava.jfxflow.dialog.Dialog;
 import com.zenjava.jfxflow.navigation.PlaceResolver;
 
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.*;
+
 public class DorseApplication extends Application {
 
 	public static final String LOGIN_DIALOG_TITLE_KEY = "login.dialog.title";
@@ -67,13 +57,13 @@ public class DorseApplication extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 
-		applicationContext = new AnnotationConfigApplicationContext(DorseApplicationFactory.class);
-		browser = new Browser(applicationContext.getBean(ActivityNavigator.class), "VAD Factuur");
+    applicationContext = new AnnotationConfigApplicationContext(DorseApplicationFactory.class);
+    ActivityNavigator activityNavigator = (ActivityNavigator)applicationContext.getBean(ActivityNavigator.class);
+		browser = new Browser(activityNavigator, "VAD Factuur");
 		browser.setHeader(createMenu(applicationContext.getBean(MenuFactory.class)));
 		mapActivities(browser.getPlaceResolvers());
-
 		BorderPane rootNode = new BorderPane();
-
+    activityNavigator.goTo(HOME);
 		initializeDialogs();
 
 		rootNode.setCenter(browser);
@@ -96,7 +86,7 @@ public class DorseApplication extends Application {
 	private Node createMenu(MenuFactory factory) {
 		MenuBar menuBar = new MenuBar();
 
-		Menu menuVadFactuur = factory.createMenu("vad.factuur", "about", null);
+		Menu menuVadFactuur = factory.createMenu("VADFactuur", "about", HOME);
 
 		Menu menuObject = factory.createMenu("object", factory.createMenu("new", "invoice", EDIT_INVOICE, "customer", EDIT_CUSTOMER, "article", EDIT_ARTICLE),
 				factory.createMenu("list", "invoice", LIST_INVOICES, "customer", LIST_CUSTOMERS, "article", LIST_ARTICLES));
@@ -107,7 +97,9 @@ public class DorseApplication extends Application {
 	}
 
 	private void mapActivities(ObservableList<PlaceResolver> placeResolvers) {
-		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_CUSTOMER, applicationContext.getBean(EditCustomerActivity.class)));
+		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.HOME, applicationContext.getBean(HomeActivity.class)));
+    placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.TEST, applicationContext.getBean(TestActivity.class)));
+    placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_CUSTOMER, applicationContext.getBean(EditCustomerActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_ARTICLE, applicationContext.getBean(EditArticleActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_ARTICLE, applicationContext.getBean(ViewArticleActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_INVOICE, applicationContext.getBean(EditInvoiceActivity.class)));

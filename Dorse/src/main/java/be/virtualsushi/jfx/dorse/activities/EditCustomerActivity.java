@@ -2,23 +2,22 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_CUSTOMERS;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
+import be.virtualsushi.jfx.dorse.control.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import be.virtualsushi.jfx.dorse.control.EditableList;
-import be.virtualsushi.jfx.dorse.control.HasValidation;
-import be.virtualsushi.jfx.dorse.control.TextAreaField;
-import be.virtualsushi.jfx.dorse.control.TextField;
-import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.dialogs.NewSectorDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveSectorEvent;
 import be.virtualsushi.jfx.dorse.model.Customer;
@@ -76,7 +75,10 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	protected Label idField, title;
 
 	@FXML
-	protected EditableList<Sector> sectorField;
+	private EditableList<Sector> sectorField;
+
+  @FXML
+ 	protected ComboBox subSectorField;
 
 	@FXML
 	private ValidationErrorPanel validationPanel;
@@ -88,11 +90,23 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 		super.initialize();
 		sectorField.setEditHandler(new EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(ActionEvent event) {
-				showDialog(getResources().getString("new.sector.dialog.title"), NewSectorDialog.class, acceptableSectors);
-			}
-		});
+      @Override
+      public void handle(ActionEvent event) {
+        showDialog(getResources().getString("new.sector.dialog.title"), NewSectorDialog.class, acceptableSectors);
+      }
+    });
+    sectorField.setChangeHandler(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent actionEvent) {
+        System.out.println("There was a change => " + actionEvent);
+        ComboBox sectorCombo = (ComboBox)actionEvent.getSource();
+        Sector selectedSector = (Sector)sectorCombo.getValue();
+        Long id = selectedSector.getId();
+        if(id!=null) showSubSectors(id);
+      }
+    });
+    if(subSectorField.getItems().size()==0)
+      subSectorField.getItems().add(getResources().getString("select_sector_first"));
 	}
 
 	@Override
@@ -137,11 +151,10 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 		editedCustomer.setIban(ibanField.getValue());
 		editedCustomer.setVat(vatField.getValue());
 		editedCustomer.setRemark(remarkField.getValue());
-		Sector sector = sectorField.getValue();
-		if (sector != null) {
-			editedCustomer.setSubsector(sector.getId());
-			editedCustomer.setSector(sector.getParent());
-		}
+    Sector sector = sectorField.getValue();
+    if (sector != null) editedCustomer.setSector(sector.getId());
+    Sector subSector = (Sector)subSectorField.getValue();
+    if(subSector != null) editedCustomer.setSubsector(subSector.getId());
 		return editedCustomer;
 	}
 
@@ -173,5 +186,18 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 		fieldsMap.put("reamrk", remarkField);
 		fieldsMap.put("sector", sectorField);
 	}
+
+  private void showSubSectors(Long sector_id){
+    //List<Sector> subsectors = getRestApiAccessor().getSubSectors(sector_id);
+
+    //convert linkedhashmap to List<Sector>
+    List subsectors = (List)getRestApiAccessor().getSubSectors(sector_id);
+    ObservableList<Sector> sectors = FXCollections.observableArrayList();
+    for (Object map : subsectors) {
+      Map lhm = (Map)map;
+      sectors.add(new Sector((long) (Integer) lhm.get("id"), (String) lhm.get("name"), (long) (Integer)lhm.get("parent")));
+    }
+    subSectorField.setItems(sectors);
+  }
 
 }

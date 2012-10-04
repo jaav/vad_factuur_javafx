@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomFloatDeserializer;
+import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomFloatSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -52,6 +54,8 @@ public class Article extends BaseEntity implements Listable {
 	private Long creator;
 
 	@NotNull
+  @JsonSerialize(using = CustomFloatSerializer.class)
+ 	@JsonDeserialize(using = CustomFloatDeserializer.class)
 	private Float vat;
 
 	public Long getArticleType() {

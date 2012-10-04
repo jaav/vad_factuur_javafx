@@ -25,6 +25,12 @@ public class EditableList<V extends Listable> extends HBox implements HasValue<V
 		addButton = new AddButton();
 		getChildren().add(comboBox);
 		getChildren().add(addButton);
+    /*comboBox.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent actionEvent) {
+        doComboAction(actionEvent);
+      }
+    });*/
 	}
 
 	@Override
@@ -54,6 +60,10 @@ public class EditableList<V extends Listable> extends HBox implements HasValue<V
 		addButton.setOnAction(value);
 	}
 
+  public void setChangeHandler(EventHandler<ActionEvent> value) {
+ 		comboBox.setOnAction(value);
+ 	}
+
 	public DoubleProperty fieldWidthProperty() {
 		return comboBox.prefWidthProperty();
 	}
@@ -65,6 +75,11 @@ public class EditableList<V extends Listable> extends HBox implements HasValue<V
 	public double getFieldWidth() {
 		return fieldWidthProperty().get();
 	}
+
+  /*protected void doComboAction(ActionEvent actionEvent){
+    //override me
+    System.out.println("actionEvent = " + actionEvent);
+  }*/
 
 	@Override
 	public void setInvalid() {

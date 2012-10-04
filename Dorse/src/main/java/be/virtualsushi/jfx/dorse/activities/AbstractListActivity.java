@@ -209,7 +209,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 	}
 
 	protected Integer getItemsPerPageCount() {
-		return 10;
+		return 20;
 	}
 
 	protected TableColumn<E, E> createActionsColumn() {

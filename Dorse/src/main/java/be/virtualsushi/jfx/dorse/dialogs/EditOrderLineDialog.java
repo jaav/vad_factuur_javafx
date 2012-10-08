@@ -38,6 +38,9 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 	@FXML
 	private FloatNumberField discountField;
 
+  @FXML
+ 	private FloatNumberField unitPriceField;
+
 	@FXML
 	private IntegerNumberField quantityField;
 
@@ -49,6 +52,8 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 	private OrderLine editingOrderLine;
 
 	private List<Unit> units;
+
+  private String order_id;
 
 	private Map<String, HasValidation> fieldsMap;
 
@@ -62,8 +67,10 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 			editingOrderLine = new OrderLine();
 		}
 		editingOrderLine.setArticle(articleField.getValue().getId());
-		editingOrderLine.setDiscount(discountField.getValue());
+		editingOrderLine.setUnitDiscount(discountField.getValue());
 		editingOrderLine.setQuantity(quantityField.getValue());
+    editingOrderLine.setUnitPrice(unitPriceField.getValue());
+    editingOrderLine.setOrderId(order_id);
 		return editingOrderLine;
 	}
 
@@ -75,7 +82,8 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 		if (ArrayUtils.isNotEmpty(parameters)) {
 			articleField.setAcceptableValues((List<Article>) parameters[0]);
 			units = (List<Unit>) parameters[1];
-			if (parameters.length > 2) {
+      order_id = (String) parameters[2];
+			if (parameters.length > 3) {
 				mapFields((OrderLine) parameters[2]);
 			}
 		}
@@ -89,7 +97,7 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 				break;
 			}
 		}
-		discountField.setValue(value.getDiscount());
+		discountField.setValue(value.getUnitDiscount());
 		quantityField.setValue(value.getQuantity());
 	}
 
@@ -102,6 +110,7 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 				if (newValue != null) {
 					updateArticleInfoField(newValue);
 					updateLineTotalField(quantityField.getValue(), discountField.getValue(), newValue.getPrice());
+          updateUnitPriceField(newValue);
 				}
 			}
 
@@ -129,6 +138,7 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 		fieldsMap.put("article", articleField);
 		fieldsMap.put("discount", discountField);
 		fieldsMap.put("quantity", quantityField);
+    fieldsMap.put("unitPrice", unitPriceField);
 
 	}
 
@@ -138,6 +148,11 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 		String articleUnit = value.getUnit() != null ? findUnit(value).getName() : "<n/a>";
 		articleInfoField.setText(String.format(ARTICLE_INFO_VALUE_PATTERN, articlePrice, articleCode, articleUnit));
 	}
+
+  private void updateUnitPriceField(Article value){
+    Float articlePrice = value.getPrice();
+    unitPriceField.setValue(articlePrice);
+  }
 
 	private void updateLineTotalField(Integer quantity, Float discount, Float price) {
 		if (price != null && discount != null && quantity != null) {

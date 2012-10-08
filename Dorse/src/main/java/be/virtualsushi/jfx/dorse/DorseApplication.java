@@ -68,7 +68,7 @@ public class DorseApplication extends Application {
 		initializeDialogs();
 
 		rootNode.setCenter(browser);
-		Scene scene = new Scene(rootNode, 800, 600);
+		Scene scene = new Scene(rootNode, 1200, 800);
 		stage.setScene(scene);
 		scene.getStylesheets().add("style.css");
 		stage.show();
@@ -89,10 +89,16 @@ public class DorseApplication extends Application {
 
 		Menu menuVadFactuur = factory.createMenu("VADFactuur", "about", HOME);
 
-		Menu menuObject = factory.createMenu("object", factory.createMenu("new", "invoice", EDIT_INVOICE, "customer", EDIT_CUSTOMER, "article", EDIT_ARTICLE),
-				factory.createMenu("list", "invoice", LIST_INVOICES, "customer", LIST_CUSTOMERS, "article", LIST_ARTICLES));
+		Menu invoiceObject = factory.createMenu("Invoices", "new", EDIT_INVOICE, "list", LIST_INVOICES);
 
-		menuBar.getMenus().addAll(menuVadFactuur, menuObject);
+    Menu customerObject = factory.createMenu("Customers", "new", EDIT_CUSTOMER, "list", LIST_CUSTOMERS);
+
+    Menu articleObject = factory.createMenu("Articles", "new", EDIT_ARTICLE, "list", LIST_ARTICLES);
+
+    /*Menu menuObject = factory.createMenu("object", factory.createMenu("new", "invoice", EDIT_INVOICE, "customer", EDIT_CUSTOMER, "article", EDIT_ARTICLE),
+  				factory.createMenu("list", "invoice", LIST_INVOICES, "customer", LIST_CUSTOMERS, "article", LIST_ARTICLES));*/
+
+		menuBar.getMenus().addAll(menuVadFactuur, invoiceObject, customerObject, articleObject);
 
 		return menuBar;
 	}

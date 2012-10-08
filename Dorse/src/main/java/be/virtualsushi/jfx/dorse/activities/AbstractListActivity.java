@@ -50,16 +50,18 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		private final Integer from;
 		private final Integer quantity;
 		private final String orderOn;
+    private final Boolean getDetails;
 
-		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn) {
+		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean getDetails) {
 			this.from = from;
 			this.quantity = quantity;
 			this.orderOn = orderOn;
+      this.getDetails = getDetails;
 		}
 
 		@Override
 		public DorseBackgroundTask<List<E>> createTask() {
-			return new DorseBackgroundTask<List<E>>(this, from, quantity, orderOn) {
+			return new DorseBackgroundTask<List<E>>(this, from, quantity, orderOn, getDetails) {
 
 				@Override
 				protected void onPreExecute() {
@@ -71,7 +73,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				protected List<E> call() throws Exception {
 					doCustomBackgroundInitialization();
 					return getRestApiAccessor().getList((Integer) getParameters()[0], (Integer) getParameters()[1], (String) getParameters()[2],
-							(Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0], true);
+							(Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0], getDetails);
 				}
 
 				@Override
@@ -182,7 +184,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 			@Override
 			public Node call(Integer param) {
 				listContainer.getChildren().clear();
-				doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON));
+				doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getSeparateDetails()));
 				return listContainer;
 			}
 		});
@@ -194,7 +196,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 		if (getParameter(FORCE_RELOAD_PARAMETER, Boolean.class, false)) {
 			listPage.setCurrentPageIndex(0);
-			doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON));
+			doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getSeparateDetails()));
 		}
 	}
 
@@ -281,5 +283,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 	protected abstract AppActivitiesNames getViewActivityName();
 
 	protected abstract AppActivitiesNames getEditActivityName();
+
+  protected abstract Boolean getSeparateDetails();
 
 }

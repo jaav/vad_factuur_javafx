@@ -77,4 +77,8 @@ public class ArticleListActivity extends AbstractListActivity<Article> {
 		return AppActivitiesNames.EDIT_ARTICLE;
 	}
 
+  @Override
+  protected Boolean getSeparateDetails() {
+    return true;
+  }
 }

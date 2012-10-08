@@ -119,4 +119,9 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 	protected AppActivitiesNames getEditActivityName() {
 		return AppActivitiesNames.EDIT_CUSTOMER;
 	}
+
+  @Override
+  protected Boolean getSeparateDetails() {
+    return true;
+  }
 }

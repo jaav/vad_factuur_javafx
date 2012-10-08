@@ -76,4 +76,8 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 		return AppActivitiesNames.EDIT_INVOICE;
 	}
 
+  @Override
+  protected Boolean getSeparateDetails() {
+    return false;
+  }
 }

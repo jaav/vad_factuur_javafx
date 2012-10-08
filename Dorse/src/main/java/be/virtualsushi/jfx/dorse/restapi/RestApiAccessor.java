@@ -65,6 +65,7 @@ public class RestApiAccessor extends RestTemplate {
 		log.debug("Getting list of " + entityClass + " URL: " + url);
 		E[] ids = getForObject(url, getEntityArrayClass(entityClass), parameters);
 		if (needFullInfo) {
+      List<E> invs = detailList(offset, count, entityClass, ids);
 			result.addAll(detailList(offset, count, entityClass, ids));
 		} else {
 			result.addAll(Arrays.asList(ids));
@@ -73,7 +74,7 @@ public class RestApiAccessor extends RestTemplate {
 	}
 
   public List<Sector> getSubSectors(Long parent_id){
-    String url = BASE_SERVICE_URI + "subSectors/"+ parent_id;
+    String url = serviceUri + "subSectors/"+ parent_id;
     List<Sector> sectorList = new ArrayList<Sector>();
     return getForObject(url,sectorList.getClass());
   }

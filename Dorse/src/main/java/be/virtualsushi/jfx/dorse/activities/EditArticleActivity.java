@@ -1,6 +1,6 @@
 package be.virtualsushi.jfx.dorse.activities;
 
-import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_ARTICLE;
+import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_ARTICLES;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

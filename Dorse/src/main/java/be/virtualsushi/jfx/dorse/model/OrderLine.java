@@ -14,19 +14,22 @@ public class OrderLine extends BaseEntity {
 	@NotNull
 	private Long article;
 
-	@NotNull
-	private Float discount;
+	/*@NotNull
+	private Float discount;*/
 
 	@NotNull
 	private Integer quantity;
 
 	@JsonProperty("unit_discount")
-	@NotNull
 	private Float unitDiscount;
 
 	@JsonProperty("unit_price")
 	@NotNull
 	private Float unitPrice;
+
+  @JsonProperty("order_id")
+ 	@NotNull
+ 	private String orderId;
 
 	public Long getArticle() {
 		return article;
@@ -36,13 +39,13 @@ public class OrderLine extends BaseEntity {
 		this.article = article;
 	}
 
-	public Float getDiscount() {
+	/*public Float getDiscount() {
 		return discount;
 	}
 
 	public void setDiscount(Float discount) {
 		this.discount = discount;
-	}
+	}*/
 
 	public Integer getQuantity() {
 		return quantity;
@@ -68,4 +71,11 @@ public class OrderLine extends BaseEntity {
 		this.unitPrice = unitPrice;
 	}
 
+  public String getOrderId() {
+    return orderId;
+  }
+
+  public void setOrderId(String orderId) {
+    this.orderId = orderId;
+  }
 }

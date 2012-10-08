@@ -54,7 +54,19 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 					hideLoadingMask();
 					goTo(getListActivityName(), AbstractListActivity.FORCE_RELOAD_PARAMETER, true);
 				}
-			};
+
+        @Override
+        protected void onError(Throwable exception) {
+          exception.printStackTrace();
+          ValidationErrorPanel validationPanel = getValidationPanel();
+       			if (validationPanel != null) {
+       				validationPanel.clearMessages();
+              validationPanel.addMessage(getResources().getString("save_error")+"\n\n"+exception.getMessage());
+       				validationPanel.setVisible(true);
+             }
+          hideLoadingMask();
+        }
+      };
 		}
 
 	}

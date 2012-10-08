@@ -246,7 +246,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="340" y="0" width="70" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{orderLine}.getDiscount()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{orderLine}.getUnitDiscount()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="410" y="1" width="70" height="30"/>
@@ -256,7 +256,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="480" y="0" width="75" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($F{price} - ($F{orderLine}.getDiscount()!=null?$F{orderLine}.getDiscount():0)) * $F{orderLine}.getQuantity()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{price} - ($F{orderLine}.getUnitDiscount()!=null?$F{orderLine}.getUnitDiscount():0)) * $F{orderLine}.getQuantity()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement uuid="71329195-cc28-4601-a89d-4774551ef3f0" x="0" y="30" width="555" height="1" forecolor="#CCCCCC"/>

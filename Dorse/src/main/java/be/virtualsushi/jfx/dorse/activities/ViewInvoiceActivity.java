@@ -224,7 +224,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	@FXML
 	protected void handleAddOrderLine(ActionEvent event) {
-		showDialog(getResources().getString("new.order.line.dialog.title"), EditOrderLineDialog.class, articles, units);
+		showDialog(getResources().getString("new.order.line.dialog.title"), EditOrderLineDialog.class, articles, units, idField.getText());
 	}
 
 	@FXML
@@ -263,7 +263,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 			@Override
 			protected void setPropertyValue(ObjectProperty<Float> property, OrderLine value) {
-				property.set(value.getDiscount());
+				property.set(value.getUnitDiscount());
 			}
 		});
 
@@ -273,7 +273,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 			protected void setPropertyValue(ObjectProperty<Float> property, OrderLine value) {
 				Article article = findArticleById(value.getArticle());
 				if (article.getPrice() != null && value.getQuantity() != null) {
-					property.set((article.getPrice() - (value.getDiscount() != null ? value.getDiscount() : 0)) * value.getQuantity());
+					property.set((article.getPrice() - (value.getUnitDiscount() != null ? value.getUnitDiscount() : 0)) * value.getQuantity());
 				}
 			}
 		});

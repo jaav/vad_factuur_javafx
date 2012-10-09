@@ -50,18 +50,18 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		private final Integer from;
 		private final Integer quantity;
 		private final String orderOn;
-    private final Boolean getDetails;
+    private final Boolean fullInfo;
 
-		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean getDetails) {
+		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo) {
 			this.from = from;
 			this.quantity = quantity;
 			this.orderOn = orderOn;
-      this.getDetails = getDetails;
+      this.fullInfo = fullInfo;
 		}
 
 		@Override
 		public DorseBackgroundTask<List<E>> createTask() {
-			return new DorseBackgroundTask<List<E>>(this, from, quantity, orderOn, getDetails) {
+			return new DorseBackgroundTask<List<E>>(this, from, quantity, orderOn, fullInfo) {
 
 				@Override
 				protected void onPreExecute() {
@@ -73,7 +73,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				protected List<E> call() throws Exception {
 					doCustomBackgroundInitialization();
 					return getRestApiAccessor().getList((Integer) getParameters()[0], (Integer) getParameters()[1], (String) getParameters()[2],
-							(Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0], getDetails);
+              (Boolean) getParameters()[3], (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
 				}
 
 				@Override
@@ -107,7 +107,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				protected List<E> call() throws Exception {
 					getRestApiAccessor().delete((E) getParameters()[0]);
 					return getRestApiAccessor().getList(0, getItemsPerPageCount(), ORDER_ON,
-							(Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0], true);
+							true, (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
 				}
 
 				@Override
@@ -184,7 +184,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 			@Override
 			public Node call(Integer param) {
 				listContainer.getChildren().clear();
-				doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getSeparateDetails()));
+				doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo()));
 				return listContainer;
 			}
 		});
@@ -196,7 +196,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 		if (getParameter(FORCE_RELOAD_PARAMETER, Boolean.class, false)) {
 			listPage.setCurrentPageIndex(0);
-			doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getSeparateDetails()));
+			doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo()));
 		}
 	}
 
@@ -284,6 +284,6 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 	protected abstract AppActivitiesNames getEditActivityName();
 
-  protected abstract Boolean getSeparateDetails();
+  protected abstract Boolean getFullInfo();
 
 }

@@ -121,7 +121,7 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 	}
 
   @Override
-  protected Boolean getSeparateDetails() {
+  protected Boolean getFullInfo() {
     return true;
   }
 }

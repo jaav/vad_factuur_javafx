@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml">
+  <children>
+    <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0">
+      <children>
+        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../resources/logo.jpg" preserveRatio="false" smooth="false" />
+          </image>
+          <VBox.margin>
+            <Insets />
+          </VBox.margin>
+        </ImageView>
+        <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="576.0" text="VAD Facturatie Programma">
+          <font>
+            <Font name="AppleGothic Regular" size="32.0" />
+          </font>
+          <textFill>
+            <Color blue="0.525" green="0.365" red="0.000" fx:id="x1" />
+          </textFill>
+          <VBox.margin>
+            <Insets top="40.0" />
+          </VBox.margin>
+        </Label>
+        <GridPane prefHeight="177.0" prefWidth="580.0" VBox.margin="$x5">
+          <children>
+            <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" prefWidth="183.0" text="Gebruikersnaam:" textFill="$x1" GridPane.columnIndex="0" GridPane.rowIndex="0">
+              <font>
+                <Font name="AppleGothic Regular" size="16.0" fx:id="x2" />
+              </font>
+            </Label>
+            <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" font="$x2" prefWidth="183.0" text="Paswoord:" textFill="$x1" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField minHeight="40.0" prefHeight="40.0" prefWidth="255.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+              <GridPane.margin>
+                <Insets right="40.0" fx:id="x3" />
+              </GridPane.margin>
+            </TextField>
+            <TextField minHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x3" GridPane.rowIndex="1" />
+            <Button fx:id="login" maxHeight="40.0" maxWidth="140.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" text="Login" textFill="$x1" GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <font>
+                <Font name="AppleGothic Regular" size="13.0" fx:id="x4" />
+              </font>
+              <GridPane.margin>
+                <Insets top="20.0" fx:id="x5" />
+              </GridPane.margin>
+            </Button>
+            <Button fx:id="test" font="$x4" maxHeight="40.0" maxWidth="140.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#startTest" prefHeight="40.0" prefWidth="140.0" text="Test" textFill="$x1" GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <GridPane.margin>
+                <Insets left="150.0" top="20.0" />
+              </GridPane.margin>
+            </Button>
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="196.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="384.0" minWidth="10.0" prefWidth="384.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="9.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      </padding>
+    </VBox>
+  </children>
+</AnchorPane>

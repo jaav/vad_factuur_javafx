@@ -78,7 +78,7 @@ public class ArticleListActivity extends AbstractListActivity<Article> {
 	}
 
   @Override
-  protected Boolean getSeparateDetails() {
+  protected Boolean getFullInfo() {
     return true;
   }
 }

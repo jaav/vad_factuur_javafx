@@ -55,21 +55,16 @@ public class RestApiAccessor extends RestTemplate {
 		setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
 	}
 
-	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, boolean needFullInfo, Object... parameters) {
-		return getList(null, null, "id", entityClass, needFullInfo, parameters);
+	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, boolean fullInfo, Object... parameters) {
+		return getList(null, null, "id", fullInfo, entityClass, parameters);
 	}
 
-	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, String orderOn, Class<E> entityClass, boolean needFullInfo, Object... parameters) {
+	public <E extends BaseEntity> List<E> getList(Integer offset, Integer count, String orderOn, boolean fullInfo, Class<E> entityClass, Object... parameters) {
 		ArrayList<E> result = new ArrayList<E>();
-		String url = serviceUri + getEntityListSubPath(entityClass, offset, count, orderOn);
+		String url = serviceUri + getEntityListSubPath(entityClass, offset, count, orderOn, fullInfo);
 		log.debug("Getting list of " + entityClass + " URL: " + url);
 		E[] ids = getForObject(url, getEntityArrayClass(entityClass), parameters);
-		if (needFullInfo) {
-      List<E> invs = detailList(offset, count, entityClass, ids);
-			result.addAll(detailList(offset, count, entityClass, ids));
-		} else {
-			result.addAll(Arrays.asList(ids));
-		}
+    result.addAll(Arrays.asList(ids));
 		return result;
 	}
 
@@ -134,7 +129,7 @@ public class RestApiAccessor extends RestTemplate {
 		return StringUtils.uncapitalize(entityClass.getSimpleName());
 	}
 
-	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass, Integer offset, Integer count, String orderOn) {
+	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass, Integer offset, Integer count, String orderOn, boolean fullInfo) {
 		StringBuilder result = new StringBuilder();
 		if (entityClass.getAnnotation(ListResourcePath.class) != null) {
 			result.append(entityClass.getAnnotation(ListResourcePath.class).value());
@@ -149,8 +144,11 @@ public class RestApiAccessor extends RestTemplate {
 			result.append("quantity=").append(count).append("&");
 		}
 		if (orderOn != null) {
-			result.append("orderOn=").append(orderOn);
+			result.append("orderOn=").append(orderOn).append("&");
 		}
+    if (fullInfo) {
+      result.append("fullInfo=true").append(orderOn);
+    }
 		return result.toString();
 	}
 

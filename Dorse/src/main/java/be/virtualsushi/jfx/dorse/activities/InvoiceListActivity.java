@@ -77,7 +77,7 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 	}
 
   @Override
-  protected Boolean getSeparateDetails() {
-    return false;
+  protected Boolean getFullInfo() {
+    return true;
   }
 }

@@ -282,7 +282,11 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 			@Override
 			protected void setPropertyValue(ObjectProperty<String> property, OrderLine value) {
-				property.set(findArticleById(value.getArticle()).getName());
+				Article currentArticle = findArticleById(value.getArticle());
+        if(currentArticle.getName() == null)
+          property.set(currentArticle.getDescription());
+        else
+          property.set(currentArticle.getName());
 			}
 		});
 
@@ -339,7 +343,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 			deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
 		}
 		if (CollectionUtils.isEmpty(articles)) {
-			articles = getRestApiAccessor().getList(Article.class, false);
+			articles = getRestApiAccessor().getList(Article.class, true);
 		}
 		orderLines = getRestApiAccessor().getList(OrderLine.class, false, entity.getId());
 		if (CollectionUtils.isEmpty(units)) {

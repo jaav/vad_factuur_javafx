@@ -62,7 +62,9 @@
           </FXCollections>
         </items>
       </ComboBox>
-      <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel" onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="10" />
+      <FieldLabel value="%free_quantity" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+      <IntegerNumberField fx:id="freeQuantityField" fieldWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="8" />
+      <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel" onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="11" />
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />

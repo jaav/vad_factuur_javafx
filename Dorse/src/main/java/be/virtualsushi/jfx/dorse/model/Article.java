@@ -33,6 +33,10 @@ public class Article extends BaseEntity implements Listable {
 	@NotNull
 	private Float price;
 
+  @JsonProperty("freeQuantity")
+ 	@NotNull
+ 	private Integer freeQuantity;
+
   @JsonProperty("stock")
  	private Stock stock;
 
@@ -98,7 +102,15 @@ public class Article extends BaseEntity implements Listable {
 		this.price = price;
 	}
 
-	public Long getUnit() {
+  public Integer getFreeQuantity() {
+    return freeQuantity;
+  }
+
+  public void setFreeQuantity(Integer freeQuantity) {
+    this.freeQuantity = freeQuantity;
+  }
+
+  public Long getUnit() {
 		return unit;
 	}
 

@@ -77,7 +77,7 @@
 		<columns>
 			<TableColumn fx:id="idColumn" minWidth="40" text="%id" />
 			<TableColumn fx:id="codeColumn" minWidth="80" text="%code" />
-			<TableColumn fx:id="articleNameColumn" minWidth="120"
+			<TableColumn fx:id="articleNameColumn" minWidth="300"
 				text="%article.name" />
 			<TableColumn fx:id="priceColumn" minWidth="80" text="%price" />
 			<TableColumn fx:id="discountColumn" minWidth="80" text="%discount" />

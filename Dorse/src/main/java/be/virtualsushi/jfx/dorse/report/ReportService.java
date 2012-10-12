@@ -3,11 +3,9 @@ package be.virtualsushi.jfx.dorse.report;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import be.virtualsushi.jfx.dorse.model.*;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -24,10 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import be.virtualsushi.jfx.dorse.model.Address;
-import be.virtualsushi.jfx.dorse.model.Article;
-import be.virtualsushi.jfx.dorse.model.Invoice;
-import be.virtualsushi.jfx.dorse.model.OrderLine;
 import be.virtualsushi.jfx.dorse.model.report.OrderLineReport;
 import be.virtualsushi.jfx.dorse.utils.EntityCollectionUtils;
 
@@ -49,7 +43,10 @@ public class ReportService {
 			OrderLineReport reportItem = new OrderLineReport();
 			reportItem.setOrderLine(orderLine);
 			Article article = EntityCollectionUtils.findById(articles, orderLine.getArticle());
-			reportItem.setArticleName(article.getName());
+      if(article.getName()==null)
+			  reportItem.setArticleName(article.getDescription());
+      else
+        reportItem.setArticleName(article.getName());
 			reportItem.setCode(article.getCode());
 			reportItem.setPrice(article.getPrice());
 			reportCollection.add(reportItem);
@@ -59,10 +56,26 @@ public class ReportService {
 		parameters.put("invoiceCode", invoice.getCode());
 		parameters.put("invoiceId", invoice.getId());
 		parameters.put("created", invoice.getCreationDate());
+    parameters.put("now", new Date());
+    parameters.put("goods", invoice.getShipping());
+    parameters.put("tpt", invoice.getTotal()-invoice.getShipping());
+    parameters.put("total", invoice.getTotal());
 		parameters.put(JRParameter.REPORT_FORMAT_FACTORY, new DorseFormatFactory(resources));
-		if (StringUtils.isNotBlank(invoice.getCustomer().getName())) {
-			parameters.put("customer", invoice.getCustomer().getName());
-		}
+    if(invoice.getCustomer()!=null){
+      Customer customer = invoice.getCustomer();
+      if(StringUtils.isNotBlank(customer.getName())){
+        parameters.put("customer", customer.getName());
+      }
+      if(customer.getPerson()!=null){
+        List<Person> persons = customer.getPerson();
+        if(persons.size()>0){
+          Person first = persons.get(0);
+          if(StringUtils.isNotBlank(first.getName())){
+            parameters.put("person", first.getName());
+          }
+        }
+      }
+    }
 		if (invoiceAddress != null) {
 			parameters.put("invoiceAddress", invoiceAddress);
 		}

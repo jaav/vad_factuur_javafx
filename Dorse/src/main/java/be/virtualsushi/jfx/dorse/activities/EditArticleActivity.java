@@ -142,7 +142,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 	private FloatNumberField priceField;
 
 	@FXML
-	private IntegerNumberField weightField;
+	private IntegerNumberField weightField, freeQuantityField;
 
 	@FXML
 	private TextAreaField descriptionField;
@@ -216,6 +216,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		nameField.setValue(editingArticle.getName());
 		descriptionField.setValue(editingArticle.getDescription());
 		priceField.setValue(editingArticle.getPrice());
+    freeQuantityField.setValue(editingArticle.getFreeQuantity());
 		weightField.setValue(editingArticle.getWeight());
 		if (editingArticle.getCreationDate() != null) {
 			createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(editingArticle.getCreationDate()));
@@ -258,6 +259,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 			result.setArticleType(typeField.getValue().getId());
 		}
 		result.setPrice(priceField.getValue());
+    result.setFreeQuantity(freeQuantityField.getValue());
 		result.setWeight(weightField.getValue());
 		if (unitField.getValue() != null) {
 			result.setUnit(unitField.getValue().getId());
@@ -324,6 +326,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		fieldsMap.put("code", codeField);
 		fieldsMap.put("name", nameField);
 		fieldsMap.put("price", priceField);
+    fieldsMap.put("freeQuantity", freeQuantityField);
 		fieldsMap.put("weight", weightField);
 		fieldsMap.put("description", descriptionField);
 	}

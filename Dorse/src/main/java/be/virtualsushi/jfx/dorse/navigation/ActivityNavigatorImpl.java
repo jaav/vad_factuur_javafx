@@ -16,7 +16,7 @@ public class ActivityNavigatorImpl extends DefaultNavigationManager implements A
 	 */
 	@Override
 	public void goTo(AppActivitiesNames name) {
-		goTo(new Place(name.name()));
+		  goTo(new Place(name.name()));
 	}
 
 	/**

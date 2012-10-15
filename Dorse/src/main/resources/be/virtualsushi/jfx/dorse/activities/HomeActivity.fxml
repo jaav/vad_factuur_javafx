@@ -40,13 +40,13 @@
               </font>
             </Label>
             <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" font="$x2" prefWidth="183.0" text="Paswoord:" textFill="$x1" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <TextField minHeight="40.0" prefHeight="40.0" prefWidth="255.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <TextField fx:id="usernameField" minHeight="40.0" prefHeight="40.0" prefWidth="255.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
               <GridPane.margin>
                 <Insets right="40.0" fx:id="x3" />
               </GridPane.margin>
             </TextField>
-            <TextField minHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x3" GridPane.rowIndex="1" />
-            <Button fx:id="login" maxHeight="40.0" maxWidth="140.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" text="Login" textFill="$x1" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="passwordField" minHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x3" GridPane.rowIndex="1" />
+            <Button fx:id="login" onAction="#handleLoginAction" maxHeight="40.0" maxWidth="140.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" text="Login" textFill="$x1" GridPane.columnIndex="1" GridPane.rowIndex="2">
               <font>
                 <Font name="AppleGothic Regular" size="13.0" fx:id="x4" />
               </font>

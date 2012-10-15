@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse.model;
 public abstract class BaseEntity {
 
 	private Long id;
+  private Boolean active;
 
 	public Long getId() {
 		return id;
@@ -12,7 +13,15 @@ public abstract class BaseEntity {
 		this.id = id;
 	}
 
-	public boolean isNew() {
+  public Boolean getActive() {
+    return active;
+  }
+
+  public void setActive(Boolean active) {
+    this.active = active;
+  }
+
+  public boolean isNew() {
 		return id != null && id > 0;
 	}
 

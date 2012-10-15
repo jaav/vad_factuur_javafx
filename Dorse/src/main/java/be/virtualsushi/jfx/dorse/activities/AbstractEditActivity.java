@@ -1,8 +1,15 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
+import be.virtualsushi.jfx.dorse.control.TextField;
+import be.virtualsushi.jfx.dorse.model.Person;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -10,6 +17,10 @@ import javafx.scene.Node;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ComboBoxBase;
+import javafx.scene.control.TextInputControl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import be.virtualsushi.jfx.dorse.control.HasValidation;
@@ -108,11 +119,57 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 		}
 	}
 
+  private void clearFields(){
+    Parent root = title.getScene().getRoot();
+    Set<Node> inputfields = new HashSet<Node>();
+    inputfields.addAll(root.lookupAll("TextField"));
+    inputfields.addAll(root.lookupAll("TextArea"));
+    inputfields.addAll(root.lookupAll("IntegerNumberField"));
+    inputfields.addAll(root.lookupAll("DatePicker"));
+    inputfields.addAll(root.lookupAll("FloatNumberField"));
+    inputfields.addAll(root.lookupAll("ComboBox"));
+    inputfields.addAll(root.lookupAll("EditableList"));
+    Object nil = null;
+    for (Node inputfield : inputfields) {
+      try {
+        PropertyDescriptor valueDescriptor = new PropertyDescriptor("value", inputfield.getClass());
+        Method valueSetter = valueDescriptor!=null ? valueDescriptor.getWriteMethod() : null;
+        if(valueSetter!=null) valueSetter.invoke(inputfield, nil);
+      } catch (IllegalAccessException e) {
+      } catch (InvocationTargetException e) {
+      } catch (IntrospectionException e) {
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      try {
+        PropertyDescriptor textDescriptor = new PropertyDescriptor("text", inputfield.getClass());
+        Method textSetter = textDescriptor!=null ? textDescriptor.getWriteMethod() : null;
+        if(textSetter!=null) textSetter.invoke(inputfield, "");
+      } catch (IllegalAccessException e) {
+      } catch (InvocationTargetException e) {
+      } catch (IntrospectionException e) {
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      try {
+        PropertyDescriptor dateDescriptor = new PropertyDescriptor("selectedDate", inputfield.getClass());
+        Method dateSetter = dateDescriptor!=null ? dateDescriptor.getWriteMethod() : null;
+        if(dateSetter!=null) dateSetter.invoke(inputfield, nil);
+      } catch (IllegalAccessException e) {
+      } catch (InvocationTargetException e) {
+      } catch (IntrospectionException e) {
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
 	@Override
 	protected void started() {
 		super.started();
 
 		clearInvalid();
+    clearFields();
 		if (getParameter(ENTITY_ID_PARAMETER, Long.class, null) != null) {
 			title.setText(getResources().getString(getEditTitleKey()));
 		} else {

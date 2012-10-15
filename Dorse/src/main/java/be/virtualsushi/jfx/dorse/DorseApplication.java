@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse;
 import java.util.ResourceBundle;
 
 import be.virtualsushi.jfx.dorse.activities.*;
+import be.virtualsushi.jfx.dorse.utils.AppVariables;
 import com.zenjava.jfxflow.navigation.DefaultNavigationManager;
 import com.zenjava.jfxflow.navigation.Place;
 import javafx.application.Application;
@@ -87,16 +88,13 @@ public class DorseApplication extends Application {
 	private Node createMenu(MenuFactory factory) {
 		MenuBar menuBar = new MenuBar();
 
-		Menu menuVadFactuur = factory.createMenu("VADFactuur", "about", HOME);
+		Menu menuVadFactuur = factory.createMenu("VADFactuur", "about", HOME, "logout", LOGOUT);
 
 		Menu invoiceObject = factory.createMenu("Invoices", "new", EDIT_INVOICE, "list", LIST_INVOICES);
 
     Menu customerObject = factory.createMenu("Customers", "new", EDIT_CUSTOMER, "list", LIST_CUSTOMERS);
 
     Menu articleObject = factory.createMenu("Articles", "new", EDIT_ARTICLE, "list", LIST_ARTICLES);
-
-    /*Menu menuObject = factory.createMenu("object", factory.createMenu("new", "invoice", EDIT_INVOICE, "customer", EDIT_CUSTOMER, "article", EDIT_ARTICLE),
-  				factory.createMenu("list", "invoice", LIST_INVOICES, "customer", LIST_CUSTOMERS, "article", LIST_ARTICLES));*/
 
 		menuBar.getMenus().addAll(menuVadFactuur, invoiceObject, customerObject, articleObject);
 
@@ -106,6 +104,7 @@ public class DorseApplication extends Application {
 	private void mapActivities(ObservableList<PlaceResolver> placeResolvers) {
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.HOME, applicationContext.getBean(HomeActivity.class)));
     placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.TEST, applicationContext.getBean(TestActivity.class)));
+    placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.LOGOUT, applicationContext.getBean(LogoutActivity.class)));
     placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_CUSTOMER, applicationContext.getBean(EditCustomerActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_ARTICLE, applicationContext.getBean(EditArticleActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_ARTICLE, applicationContext.getBean(ViewArticleActivity.class)));

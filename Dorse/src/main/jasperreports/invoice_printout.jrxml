@@ -130,7 +130,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Factuurdatum: "+new SimpleDateFormat($R{report.date.format}).format($P{now})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Factuurdatum: "+new SimpleDateFormat($R{input.date.format}).format($P{now})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="32a907d6-c234-4ad4-91c0-733aab3606ce" x="60" y="163" width="698" height="20"/>

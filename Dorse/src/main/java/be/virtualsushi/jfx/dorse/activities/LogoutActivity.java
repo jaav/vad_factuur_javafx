@@ -1,10 +1,7 @@
 package be.virtualsushi.jfx.dorse.activities;
 
-import be.virtualsushi.jfx.dorse.events.authentication.LoginSuccessfulEvent;
 import be.virtualsushi.jfx.dorse.fxml.FxmlFile;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
-import com.zenjava.jfxflow.navigation.NavigationManager;
-import com.zenjava.jfxflow.navigation.Place;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -22,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 @FxmlFile("HomeActivity.fxml")
-public class HomeActivity extends AbstractBrowserActivity {
+public class LogoutActivity extends AbstractBrowserActivity {
 
 
   @FXML
@@ -50,4 +47,10 @@ public class HomeActivity extends AbstractBrowserActivity {
  			// TODO display error message
  		}
  	}
+
+  @Override
+  public void initialize() {
+    super.initialize();    //To change body of overridden methods use File | Settings | File Templates.
+    getAppVariables().clear();
+  }
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import be.virtualsushi.jfx.dorse.model.Sector;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -95,6 +96,7 @@ public class RestApiAccessor extends RestTemplate {
 	}
 
 	public <E extends BaseEntity> void save(E entity) {
+    entity.setActive(true);
 		if (entity.getId() == null) {
 			postForObject(serviceUri + getEntitySubPath(entity.getClass()), entity, entity.getClass());
 		} else {
@@ -114,7 +116,8 @@ public class RestApiAccessor extends RestTemplate {
 			loginPost.setEntity(entity);
 			HttpResponse response = httpClient.execute(loginPost);
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				return "successful";
+        String auth = IOUtils.toString(response.getEntity().getContent());
+				return auth;
 			}
 		} catch (Exception e) {
 			return null;

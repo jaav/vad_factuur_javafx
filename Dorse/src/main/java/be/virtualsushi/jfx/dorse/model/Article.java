@@ -51,11 +51,17 @@ public class Article extends BaseEntity implements Listable {
 	@NotNull
 	private Date creationDate;
 
+  @JsonProperty("copyDate")
+ 	@JsonSerialize(using = CustomDateSerializer.class)
+ 	@JsonDeserialize(using = CustomDateDeserializer.class)
+ 	@NotNull
+ 	private Date copyDate;
+
 	@NotNull
 	private Long supplier;
 
 	@NotNull
-	private Long creator;
+	private String creator;
 
 	@NotNull
   @JsonSerialize(using = CustomFloatSerializer.class)
@@ -134,7 +140,15 @@ public class Article extends BaseEntity implements Listable {
 		this.creationDate = creationDate;
 	}
 
-	public Long getSupplier() {
+  public Date getCopyDate() {
+    return copyDate;
+  }
+
+  public void setCopyDate(Date copyDate) {
+    this.copyDate = copyDate;
+  }
+
+  public Long getSupplier() {
 		return supplier;
 	}
 
@@ -142,11 +156,11 @@ public class Article extends BaseEntity implements Listable {
 		this.supplier = supplier;
 	}
 
-	public Long getCreator() {
+	public String getCreator() {
 		return creator;
 	}
 
-	public void setCreator(Long creator) {
+	public void setCreator(String creator) {
 		this.creator = creator;
 	}
 

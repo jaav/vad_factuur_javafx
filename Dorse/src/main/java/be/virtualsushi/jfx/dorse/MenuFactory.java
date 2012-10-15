@@ -2,6 +2,8 @@ package be.virtualsushi.jfx.dorse;
 
 import java.util.ResourceBundle;
 
+import be.virtualsushi.jfx.dorse.activities.DorseUiActivity;
+import be.virtualsushi.jfx.dorse.utils.AppVariables;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -19,6 +21,9 @@ public class MenuFactory {
 
 	@Autowired
 	private ActivityNavigator activityNavigator;
+
+	@Autowired
+  private AppVariables appVariables;
 
 	@Autowired
 	private ResourceBundle resources;
@@ -42,7 +47,10 @@ public class MenuFactory {
 
 				@Override
 				public void handle(ActionEvent event) {
-					activityNavigator.goTo(activityName);
+          if(appVariables.get(DorseUiActivity.AUTHTOKEN_KEY)==null || appVariables.get(DorseUiActivity.USERNAME_KEY)==null)
+            activityNavigator.goTo(AppActivitiesNames.HOME);
+          else
+          activityNavigator.goTo(activityName);
 				}
 			});
 		}

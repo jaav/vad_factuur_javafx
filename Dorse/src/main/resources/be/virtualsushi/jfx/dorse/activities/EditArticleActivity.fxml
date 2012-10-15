@@ -10,6 +10,7 @@
 <?import be.virtualsushi.jfx.dorse.control.TextAreaField?>
 <?import be.virtualsushi.jfx.dorse.control.TextField?>
 <?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import be.virtualsushi.jfx.dorse.control.calendar.DatePicker?>
 <?import java.lang.*?>
 <?import java.lang.String?>
 <?import javafx.collections.*?>
@@ -38,22 +39,25 @@
       <TextField fx:id="codeField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <FieldLabel value="%created" GridPane.columnIndex="3" GridPane.rowIndex="1" />
       <Label fx:id="createdField" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="1" />
-      <FieldLabel value="%name" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-      <TextField fx:id="nameField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" />
-      <FieldLabel value="%description" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-      <TextAreaField fx:id="descriptionField" fieldWidth="400.0" prefHeight="100.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" />
-      <FieldLabel value="%articleType" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-      <EditableList fx:id="typeField" fieldWidth="260.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="4" />
-      <FieldLabel value="%supplier" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-      <EditableList fx:id="supplierField" fieldWidth="260.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="5" />
-      <FieldLabel value="%weight" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-      <IntegerNumberField fx:id="weightField" fieldWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <FieldLabel value="%unit" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-      <EditableList fx:id="unitField" fieldWidth="90.0" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.halignment="RIGHT"/>
-      <FieldLabel value="%price" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-      <FloatNumberField fx:id="priceField" fieldWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="7" />
-      <FieldLabel value="%vat" GridPane.columnIndex="5" GridPane.rowIndex="7" />
-      <ComboBox fx:id="vatField" GridPane.columnIndex="6" GridPane.columnSpan="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+      <FieldLabel value="%copyright" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+      <DatePicker fx:id="copyrightField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+      <!--DateSelectButton onAction="#handleEditDate" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="2" /-->
+      <FieldLabel value="%name" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+      <TextField fx:id="nameField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" />
+      <FieldLabel value="%description" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+      <TextAreaField fx:id="descriptionField" fieldWidth="400.0" prefHeight="100.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="4" />
+      <FieldLabel value="%articleType" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+      <EditableList fx:id="typeField" fieldWidth="260.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="5" />
+      <FieldLabel value="%supplier" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+      <EditableList fx:id="supplierField" fieldWidth="260.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="6" />
+      <FieldLabel value="%weight" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+      <IntegerNumberField fx:id="weightField" fieldWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <FieldLabel value="%unit" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+      <EditableList fx:id="unitField" fieldWidth="90.0" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="7" GridPane.halignment="RIGHT"/>
+      <FieldLabel value="%price" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+      <FloatNumberField fx:id="priceField" fieldWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="8" />
+      <FieldLabel value="%vat" GridPane.columnIndex="5" GridPane.rowIndex="8" />
+      <ComboBox fx:id="vatField" GridPane.columnIndex="6" GridPane.columnSpan="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
         <items>
           <FXCollections fx:factory="observableArrayList">
             <String fx:value="  6  " />
@@ -62,9 +66,9 @@
           </FXCollections>
         </items>
       </ComboBox>
-      <FieldLabel value="%free_quantity" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-      <IntegerNumberField fx:id="freeQuantityField" fieldWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="8" />
-      <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel" onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="11" />
+      <FieldLabel value="%free_quantity" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+      <IntegerNumberField fx:id="freeQuantityField" fieldWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="9" />
+      <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel" onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="12" />
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />

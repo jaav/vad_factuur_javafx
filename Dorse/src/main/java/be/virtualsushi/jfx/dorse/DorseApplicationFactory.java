@@ -1,10 +1,13 @@
 package be.virtualsushi.jfx.dorse;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import be.virtualsushi.jfx.dorse.utils.AppVariables;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +31,17 @@ public class DorseApplicationFactory {
 		return ResourceBundle.getBundle("messages");
 	}
 
-	@Bean(name = "restApiAccessor")
-	public RestApiAccessor getRestApiAccessor() {
-		RestApiAccessor accessor = new RestApiAccessor();
-		accessor.getMessageConverters().add(new DorseMappingJacksonHttpMessageConverter());
-		return accessor;
-	}
+  @Bean(name = "restApiAccessor")
+ 	public RestApiAccessor getRestApiAccessor() {
+ 		RestApiAccessor accessor = new RestApiAccessor();
+ 		accessor.getMessageConverters().add(new DorseMappingJacksonHttpMessageConverter());
+ 		return accessor;
+ 	}
+
+  @Bean(name = "appVariables")
+ 	public Map getAppVariables() {
+ 		return new AppVariables();
+ 	}
 
 	@Bean(name = "eventBus")
 	public EventBus getEventBus() {

@@ -6,7 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
+import be.virtualsushi.jfx.dorse.control.calendar.CalendarView;
+import be.virtualsushi.jfx.dorse.control.calendar.DatePicker;
+import be.virtualsushi.jfx.dorse.dialogs.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -24,10 +28,6 @@ import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
 import be.virtualsushi.jfx.dorse.control.TextAreaField;
 import be.virtualsushi.jfx.dorse.control.TextField;
 import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
-import be.virtualsushi.jfx.dorse.dialogs.ArticleTypeEditDialog;
-import be.virtualsushi.jfx.dorse.dialogs.ModifyStockDialog;
-import be.virtualsushi.jfx.dorse.dialogs.SupplierEditDialog;
-import be.virtualsushi.jfx.dorse.dialogs.UnitEditDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveArticleTypeEvent;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveStockEvent;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveSupplierEvent;
@@ -150,9 +150,20 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 	@FXML
 	private ValidationErrorPanel validationPanel;
 
+  @FXML
+ 	private DatePicker copyrightField;
+
 	private List<ArticleType> acceptableArticleTypes;
 	private List<Unit> acceptableUnits;
 	private List<Supplier> acceptableSuppliers;
+
+  @Override
+ 	public void started() {
+ 		super.started();
+    title.getScene().getStylesheets().add("calendarstyle.css");
+    copyrightField.setLocale(Locale.GERMAN);
+
+  }
 
 	@Override
 	public void initialize() {
@@ -160,11 +171,11 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 
 		typeField.setEditHandler(new EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(ActionEvent event) {
-				showDialog(getResources().getString("article.type.edit.dialog.title"), ArticleTypeEditDialog.class);
-			}
-		});
+      @Override
+      public void handle(ActionEvent event) {
+        showDialog(getResources().getString("article.type.edit.dialog.title"), ArticleTypeEditDialog.class);
+      }
+    });
 
 		unitField.setEditHandler(new EventHandler<ActionEvent>() {
 
@@ -221,6 +232,9 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		if (editingArticle.getCreationDate() != null) {
 			createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(editingArticle.getCreationDate()));
 		}
+    if (editingArticle.getCopyDate() != null) {
+  			copyrightField.setSelectedDate(editingArticle.getCopyDate());
+  		}
     if(editingArticle.getVat()!=null) vatField.setValue(editingArticle.getVat());
 		mapLists(editingArticle);
 	}
@@ -273,9 +287,10 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		if (result.isNew() || result.getCreationDate() == null) {
 			result.setCreationDate(new Date());
 		}
-		if (result.getCreator() == null) {
-			result.setCreator(0l);
-		}
+    result.setCopyDate(copyrightField.getSelectedDate());
+    HashMap test = getAppVariables();
+    if(getAppVariables().get(AUTHTOKEN_KEY)!=null && getAppVariables().get(USERNAME_KEY)!=null)
+      result.setCreator((String)getAppVariables().get(USERNAME_KEY));
 		return result;
 	}
 
@@ -306,6 +321,8 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, false);
 		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, false);
 		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);
+    copyrightField.setDateFormat(new SimpleDateFormat(getResources().getString("input.date.format")));
+    copyrightField.getCalendarView().setShowTodayButton(true);
 	}
 
 	@Override

@@ -25,4 +25,11 @@ public class TestActivity extends AbstractBrowserActivity {
   protected void doCustomBackgroundInitialization() {
     //To change body of implemented methods use File | Settings | File Templates.
   }
+
+  @Override
+  protected void started() {
+    super.started();    //To change body of overridden methods use File | Settings | File Templates.
+    String authToken = (String)getAppVariables().get("authToken");
+    System.out.println("authToken = " + authToken);
+  }
 }

@@ -1,8 +1,10 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import be.virtualsushi.jfx.dorse.utils.AppVariables;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
@@ -66,6 +68,12 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
 
 	private TaskCreator<?> pendingTaskCreator;
 
+  private AppVariables appVariables;
+
+  public static final String AUTHTOKEN_KEY = "authToken";
+
+  public static final String USERNAME_KEY = "username";
+
 	/**
 	 * Called any time activity get active.
 	 */
@@ -80,6 +88,8 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
 
 		getEventBus().register(this);
 	}
+
+
 
 	@Override
 	protected void deactivated() {
@@ -227,6 +237,15 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
 	public void setRestApiAccessor(RestApiAccessor restApiAccessor) {
 		this.restApiAccessor = restApiAccessor;
 	}
+
+  public AppVariables getAppVariables() {
+ 		return appVariables;
+ 	}
+
+ 	@Autowired
+ 	public void setAppVariables(AppVariables appVariables) {
+ 		this.appVariables = appVariables;
+ 	}
 
 	@SuppressWarnings("unchecked")
 	@Override

@@ -1,5 +1,19 @@
 @charset "utf-8";
 
+/*
+  OVERRIDING CASPIAN
+*/
+
+.tab-pane {
+    -fx-background: white;
+    -fx-border-width:0;
+    -fx-border-color:darkgray;
+}
+.tab-content-area{
+  -fx-border-width:0 1 1 1;
+  -fx-border-color:darkgray;
+}
+
 DateField, TextField, TextArea, NumberTextField, PasswordField, ComboBox, DorseComboBox {
 	-fx-font-size: 20px;
 }
@@ -82,3 +96,21 @@ MenuBar, Menu, MenuItem {
 	-fx-padding: 3px 6px 4px 6px;
 	-fx-font-size: 20px;
 }
+
+.red_debug{
+  -fx-background-color:crimson;
+  -fx-border-width:2px;
+  -fx-border-color:darkorange;
+}
+.orange_debug{
+  /*-fx-background-color:darkorange;*/
+  -fx-border-width:0 1 1 1;
+  -fx-border-color:crimson;
+}
+.no_border{
+  -fx-border-width:0px;
+}
+
+/*#dorse .tab, #dorse .tab-pane{
+  -fx-background: white;
+}*/

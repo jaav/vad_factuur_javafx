@@ -1,6 +1,7 @@
 package be.virtualsushi.jfx.dorse.activities;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -51,17 +52,30 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		private final Integer quantity;
 		private final String orderOn;
     private final Boolean fullInfo;
+    private final Boolean includesNonActive;
+    private final String additionalCondition;
 
-		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo) {
+		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, boolean includesNonActive, String additionalCondition) {
 			this.from = from;
 			this.quantity = quantity;
 			this.orderOn = orderOn;
       this.fullInfo = fullInfo;
+      this.additionalCondition = additionalCondition;
+      this.includesNonActive = includesNonActive;
 		}
+
+    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo) {
+  			this.from = from;
+  			this.quantity = quantity;
+  			this.orderOn = orderOn;
+        this.fullInfo = fullInfo;
+        this.additionalCondition = null;
+        this.includesNonActive = null;
+  		}
 
 		@Override
 		public DorseBackgroundTask<List<E>> createTask() {
-			return new DorseBackgroundTask<List<E>>(this, from, quantity, orderOn, fullInfo) {
+			return new DorseBackgroundTask<List<E>>(this, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive) {
 
 				@Override
 				protected void onPreExecute() {
@@ -71,9 +85,49 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				@SuppressWarnings("unchecked")
 				@Override
 				protected List<E> call() throws Exception {
+          try{
 					doCustomBackgroundInitialization();
-					return getRestApiAccessor().getList((Integer) getParameters()[0], (Integer) getParameters()[1], (String) getParameters()[2],
-              (Boolean) getParameters()[3], (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+          //if(getParameters()[0]!=null && getParameters()[1]!=null && getParameters()[2]!=null && getParameters()[3]!=null && getParameters()[4]!=null && getParameters()[5]!=null)
+            Object test = (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            test = getInteger(0);
+            test = getInteger(1);
+            test = getString(2);
+            test = getString(3);
+            return getRestApiAccessor().getList(
+                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+                getInteger(0), getInteger(1), getString(2), getString(3),
+                getBoolean(4, true), getBoolean(5, false));
+          /*else if((getParameters()[0]==null || getParameters()[1]==null) && getParameters()[2]!=null && getParameters()[3]!=null && getParameters()[4]!=null && getParameters()[5]!=null)
+            return getRestApiAccessor().getList(
+                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+                (Boolean) getParameters()[3], (Boolean) getParameters()[4], (String) getParameters()[5], null);
+          else if(getParameters()[0]!=null && getParameters()[1]!=null && getParameters()[2]!=null && getParameters()[3]!=null && getParameters()[4]!=null)
+            return getRestApiAccessor().getList(
+                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+                (Integer) getParameters()[0], (Integer) getParameters()[1], (String) getParameters()[2],
+                (Boolean) getParameters()[3], (Boolean) getParameters()[4], null, null);
+          else if((getParameters()[0]==null || getParameters()[1]==null) && getParameters()[2]!=null && getParameters()[3]!=null && getParameters()[4]!=null)
+            return getRestApiAccessor().getList(
+                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+                (Boolean) getParameters()[3], (Boolean) getParameters()[4], null, null);
+          else if((getParameters()[0]==null || getParameters()[1]==null) && getParameters()[2]==null && getParameters()[3]!=null && getParameters()[4]!=null)
+            return getRestApiAccessor().getList(
+                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+                (Boolean) getParameters()[3], (Boolean) getParameters()[4]);
+          else if(getParameters()[0]!=null && getParameters()[1]!=null && getParameters()[2]!=null && getParameters()[3]!=null)
+            return getRestApiAccessor().getList(
+                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+                (Integer) getParameters()[0], (Integer) getParameters()[1], (String) getParameters()[2],
+                (Boolean) getParameters()[3], false, null, null);
+          else
+            return getRestApiAccessor().getList(
+                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+                (Boolean) getParameters()[3]);*/
+          }
+          catch (Exception e){
+            e.printStackTrace();
+            return new ArrayList<E>();
+          }
 				}
 
 				@Override
@@ -106,8 +160,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				@Override
 				protected List<E> call() throws Exception {
 					getRestApiAccessor().delete((E) getParameters()[0]);
-					return getRestApiAccessor().getList(0, getItemsPerPageCount(), ORDER_ON,
-							true, (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+					return getRestApiAccessor().getList((Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+              0, getItemsPerPageCount(), ORDER_ON, null, true, false);
 				}
 
 				@Override

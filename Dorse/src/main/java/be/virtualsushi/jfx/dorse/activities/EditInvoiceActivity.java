@@ -161,7 +161,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		invoiceAddressBox.getChildren().clear();
 		deliveryAddressBox.getChildren().clear();
 		for (Address address : newValue.getAddress()) {
-			AddressesListToggle deliveryToggle = new AddressesListToggle();
+			AddressesListToggle deliveryToggle = new AddressesListToggle(newValue.getName());
 			deliveryToggle.setToggleGroup(deliveryAddressToggleGroup);
 			deliveryToggle.setValue(address);
 			deliveryAddressBox.getChildren().add(deliveryToggle);
@@ -169,7 +169,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 				deliveryToggle.setSelected(true);
 			}
 
-			AddressesListToggle invoiceToggle = new AddressesListToggle();
+			AddressesListToggle invoiceToggle = new AddressesListToggle(newValue.getName());
 			invoiceToggle.setToggleGroup(invoiceAddressToggleGroup);
 			invoiceToggle.setValue(address);
 			invoiceAddressBox.getChildren().add(invoiceToggle);

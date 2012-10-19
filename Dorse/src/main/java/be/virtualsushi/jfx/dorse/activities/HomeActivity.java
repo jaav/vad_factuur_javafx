@@ -36,7 +36,14 @@ public class HomeActivity extends AbstractBrowserActivity {
 
   @FXML
  	protected void startTest(ActionEvent event) {
- 		goTo(AppActivitiesNames.TEST);
+    String authToken = getRestApiAccessor().login("admin", "admin");
+  		if (StringUtils.isNotBlank(authToken)) {
+        getAppVariables().put(AUTHTOKEN_KEY, authToken);
+        getAppVariables().put(USERNAME_KEY, usernameField.getText());
+        goTo(AppActivitiesNames.TEST);
+  		} else {
+  			// TODO display error message
+  		}
  	}
 
   @FXML

@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import java.lang.String?>
 <?import javafx.scene.layout.GridPane?>
 <?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
@@ -11,16 +12,14 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
+<VBox id="dorse" xmlns:fx="http://javafx.com/fxml" spacing="20">
 	<padding>
 		<Insets bottom="10" left="10" right="10" top="10" />
 	</padding>
 
 	<GridPane>
 		<Label fx:id="title" GridPane.columnIndex="0" GridPane.rowIndex="0">
-			<styleClass>
 				<String fx:value="activity-title" />
-			</styleClass>
 		</Label>
 		<Button text="%back" onAction="#handleGoBack"
 			GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.halignment="RIGHT"
@@ -49,11 +48,17 @@
 		<Label fx:id="remarkField" GridPane.columnIndex="1"
 			GridPane.rowIndex="3" prefWidth="400" />
 
-		<AddButton text="%add.address" onAction="#handleAddAddress"
-			GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.halignment="RIGHT" />
+        <ListView fx:id="personsList" GridPane.columnIndex="0"
+        			GridPane.rowIndex="4" GridPane.columnSpan="2"  prefHeight="80" minHeight="-1" />
+
+        <AddButton text="%add.person" onAction="#handleAddPerson"
+      			GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.halignment="RIGHT"/>
 
 		<TabPane fx:id="addressesList" tabClosingPolicy="UNAVAILABLE"
-			GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2" />
+			GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="2" prefHeight="190"/>
+
+        <AddButton text="%add.address" onAction="#handleAddAddress"
+      			GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.halignment="RIGHT" />
 
 	</GridPane>
 

@@ -38,7 +38,7 @@
       <TextField fx:id="numberField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <FieldLabel value="%customer" GridPane.columnIndex="0" GridPane.rowIndex="2" />
       <ComboBoxField fx:id="customerField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" prefHeight="200">
         <Tab text="%deliveryAddress">
           <VBox spacing="10.0">
             <ScrollPane minHeight="100.0">
@@ -48,7 +48,7 @@
                 </padding>
               </VBox>
             </ScrollPane>
-            <Button alignment="BOTTOM_CENTER" onAction="#handleNewDeliveryAddress" text="%new.delivery.address" />
+            <!--Button alignment="BOTTOM_CENTER" onAction="#handleNewDeliveryAddress" text="%new.delivery.address" /-->
           </VBox>
         </Tab>
         <Tab text="%invoiceAddress">

@@ -98,7 +98,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@Override
 				protected List<OrderLine> call() throws Exception {
 					getRestApiAccessor().save((OrderLine) getParameters()[0]);
-					return getRestApiAccessor().getList(OrderLine.class, false, getEntity().getId());
+					return getRestApiAccessor().getList(OrderLine.class, null, null, "id", "order="+getEntity().getId(), true, false);
 				}
 
 				@Override
@@ -134,7 +134,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@Override
 				protected List<OrderLine> call() throws Exception {
 					getRestApiAccessor().delete((OrderLine) getParameters()[0]);
-					return getRestApiAccessor().getList(OrderLine.class, false, getEntity().getId());
+          return getRestApiAccessor().getList(OrderLine.class, null, null, "id", "order="+getEntity().getId(), true, false);
 				}
 
 				@Override
@@ -343,9 +343,9 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 			deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
 		}
 		if (CollectionUtils.isEmpty(articles)) {
-			articles = getRestApiAccessor().getList(Article.class, true);
+			articles = getRestApiAccessor().getList(Article.class, null, null, "name", null, true, true);
 		}
-		orderLines = getRestApiAccessor().getList(OrderLine.class, false, entity.getId());
+		orderLines = getRestApiAccessor().getList(OrderLine.class, null, null, "id", null, true, false, entity.getId());
 		if (CollectionUtils.isEmpty(units)) {
 			units = getRestApiAccessor().getList(Unit.class, false);
 		}

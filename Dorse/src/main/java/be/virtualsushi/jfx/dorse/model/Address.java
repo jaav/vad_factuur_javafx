@@ -17,27 +17,18 @@ public class Address extends BaseEntity {
 	@JsonProperty("address_type")
 	private Integer addressType;
 
-	@NotBlank
 	private String address;
 
-	@NotNull
-	private Long location;
-
 	@JsonProperty("tel")
-	@NotBlank
 	private String phone;
 
-	@NotBlank
 	private String fax;
 
-	@NotBlank
 	@Pattern(regexp = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}", message = "{valid.email}")
 	private String email;
 
-	@NotBlank
 	private String city;
 
-	@NotBlank
 	private String zipcode;
 
 	public Long getCustomer() {
@@ -62,14 +53,6 @@ public class Address extends BaseEntity {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public Long getLocation() {
-		return location;
-	}
-
-	public void setLocation(Long location) {
-		this.location = location;
 	}
 
 	public String getPhone() {

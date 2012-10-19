@@ -151,7 +151,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 	private ValidationErrorPanel validationPanel;
 
   @FXML
- 	private DatePicker copyrightField;
+ 	private DatePicker copyDateField;
 
 	private List<ArticleType> acceptableArticleTypes;
 	private List<Unit> acceptableUnits;
@@ -161,7 +161,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
  	public void started() {
  		super.started();
     title.getScene().getStylesheets().add("calendarstyle.css");
-    copyrightField.setLocale(Locale.GERMAN);
+    copyDateField.setLocale(Locale.GERMAN);
 
   }
 
@@ -233,7 +233,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 			createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(editingArticle.getCreationDate()));
 		}
     if (editingArticle.getCopyDate() != null) {
-  			copyrightField.setSelectedDate(editingArticle.getCopyDate());
+      copyDateField.setSelectedDate(editingArticle.getCopyDate());
   		}
     if(editingArticle.getVat()!=null) vatField.setValue(editingArticle.getVat());
 		mapLists(editingArticle);
@@ -287,7 +287,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		if (result.isNew() || result.getCreationDate() == null) {
 			result.setCreationDate(new Date());
 		}
-    result.setCopyDate(copyrightField.getSelectedDate());
+    result.setCopyDate(copyDateField.getSelectedDate());
     HashMap test = getAppVariables();
     if(getAppVariables().get(AUTHTOKEN_KEY)!=null && getAppVariables().get(USERNAME_KEY)!=null)
       result.setCreator((String)getAppVariables().get(USERNAME_KEY));
@@ -321,8 +321,8 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, false);
 		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, false);
 		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);
-    copyrightField.setDateFormat(new SimpleDateFormat(getResources().getString("input.date.format")));
-    copyrightField.getCalendarView().setShowTodayButton(true);
+    copyDateField.setDateFormat(new SimpleDateFormat(getResources().getString("input.date.format")));
+    copyDateField.getCalendarView().setShowTodayButton(true);
 	}
 
 	@Override

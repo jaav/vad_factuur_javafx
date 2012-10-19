@@ -18,12 +18,8 @@
 	
 	<top>
 		<HBox spacing="7" alignment="BASELINE_CENTER">
-			<Label fx:id="listTitle" > 
-				<styleClass>
-					<String fx:value="activity-title" />
-				</styleClass>
-			</Label>
-			
+			<Label fx:id="listTitle" styleClass="activity-title" />
+
 			<AddButton onAction="#handleAddAction" />
 		</HBox>
 	</top>

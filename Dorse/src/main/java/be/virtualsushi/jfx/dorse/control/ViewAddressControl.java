@@ -17,20 +17,22 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 	private ObjectProperty<ResourceBundle> resourcesProperty;
 	private ObjectProperty<Address> valueProperty;
 
-	private FieldLabel addressLabel = new FieldLabel();
+	/*private FieldLabel addressLabel = new FieldLabel();
 	private FieldLabel cityLabel = new FieldLabel();
 	private FieldLabel phoneLabel = new FieldLabel();
-	private FieldLabel emailLabel = new FieldLabel();
+	private FieldLabel emailLabel = new FieldLabel();*/
 
-	private Label addressField = new Label();
+	private Label nameField = new Label();
+  private Label addressField = new Label();
 	private Label cityField = new Label();
 	private Label phoneField = new Label();
 	private Label emailField = new Label();
 
 	public ViewAddressControl() {
 		super();
+    //this.setStyle("-fx-background-color:red;");
 		resourcesProperty = new SimpleObjectProperty<ResourceBundle>();
-		resourcesProperty.addListener(new ChangeListener<ResourceBundle>() {
+		/*resourcesProperty.addListener(new ChangeListener<ResourceBundle>() {
 
 			@Override
 			public void changed(ObservableValue<? extends ResourceBundle> observable, ResourceBundle oldValue, ResourceBundle newValue) {
@@ -39,14 +41,14 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 				}
 			}
 
-		});
+		});*/
 		valueProperty = new SimpleObjectProperty<Address>();
 		valueProperty.addListener(new ChangeListener<Address>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Address> observable, Address oldValue, Address newValue) {
 				if (newValue != null) {
-					addressField.setText(newValue.getAddress());
+          addressField.setText(newValue.getAddress());
 					cityField.setText(newValue.getZipcode() + " " + newValue.getCity());
 					phoneField.setText(newValue.getPhone());
 					emailField.setText(newValue.getEmail());
@@ -56,11 +58,15 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 		bindUi();
 	}
 
+  public void setTitle(String title){
+    nameField.setText(title);
+  }
+
 	private void bindLabels(ResourceBundle resrouces) {
-		addressLabel.setValue(resrouces.getString("address"));
+		/*addressLabel.setValue(resrouces.getString("address"));
 		cityLabel.setValue(resrouces.getString("city"));
 		phoneLabel.setValue(resrouces.getString("phone"));
-		emailLabel.setValue(resrouces.getString("email"));
+		emailLabel.setValue(resrouces.getString("email"));*/
 	}
 
 	public ObjectProperty<ResourceBundle> resourcesProperty() {
@@ -79,14 +85,15 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 	public void bindUi() {
 		setHgap(10d);
 		setVgap(5d);
-		add(addressLabel, 0, 0);
-		add(addressField, 1, 0);
-		add(cityLabel, 0, 1);
-		add(cityField, 1, 1);
-		add(phoneLabel, 0, 2);
-		add(phoneField, 1, 2);
-		add(emailLabel, 0, 3);
-		add(emailField, 1, 3);
+		//add(addressLabel, 0, 0);
+		add(nameField, 0, 0);
+    add(addressField, 0, 1);
+		//add(cityLabel, 0, 1);
+		add(cityField, 0, 2);
+		//add(phoneLabel, 0, 2);
+		add(phoneField, 0, 3);
+		//add(emailLabel, 0, 3);
+		add(emailField, 0, 4);
 	}
 
 	@Override

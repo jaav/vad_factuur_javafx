@@ -20,9 +20,10 @@ public class AddressesListToggle extends HBox implements Toggle, HasValue<Addres
 	private ObjectProperty<ToggleGroup> toggleGroup;
 	private BooleanProperty selected;
 
-	public AddressesListToggle() {
+	public AddressesListToggle(String title) {
 		button = new RadioButton();
 		addressView = new ViewAddressControl();
+    addressView.setTitle(title);
 		toggleGroup = new SimpleObjectProperty<ToggleGroup>();
 		toggleGroup.bindBidirectional(button.toggleGroupProperty());
 		selected = new SimpleBooleanProperty();

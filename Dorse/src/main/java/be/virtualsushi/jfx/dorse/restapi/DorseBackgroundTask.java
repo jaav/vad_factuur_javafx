@@ -63,6 +63,48 @@ public abstract class DorseBackgroundTask<E> extends BackgroundTask<E> {
 		return parameters;
 	}
 
+
+
+  @SuppressWarnings("unchecked")
+ 	protected Integer getInteger(int place) {
+ 		try {
+      if(getParameters()[place]!=null)
+ 			  return (Integer) getParameters()[place];
+      else return null;
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+      return null;
+ 		}
+ 	}
+
+  @SuppressWarnings("unchecked")
+  protected String getString(int place) {
+ 		try {
+      if(getParameters()[place]!=null)
+ 			  return (String) getParameters()[place];
+      else return null;
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+      return null;
+ 		}
+ 	}
+
+  @SuppressWarnings("unchecked")
+  protected boolean getBoolean(int place, boolean defaultBool) {
+ 		try {
+      if(getParameters()[place]!=null)
+ 			  return (Boolean) getParameters()[place];
+      else return defaultBool;
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+      return defaultBool;
+ 		}
+ 	}
+
+ /* private Object getParameter(int place, Class<E> clazz){
+    return getParameters()[place]!=null ? getParameters()[place] : null;
+  }*/
+
 	public TaskCreator<DorseBackgroundTask<E>> getCreator() {
 		return creator;
 	}

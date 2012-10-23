@@ -2,6 +2,8 @@ package be.virtualsushi.jfx.dorse.dialogs;
 
 import java.util.Set;
 
+import be.virtualsushi.jfx.dorse.control.LongNumberField;
+import be.virtualsushi.jfx.dorse.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -28,6 +30,10 @@ public abstract class AbstractDialog extends UiComponentBean {
 	public EventBus getEventBus() {
 		return eventBus;
 	}
+
+
+  @FXML
+ 	protected LongNumberField idField;
 
 	@Autowired
 	public void setEventBus(EventBus eventBus) {

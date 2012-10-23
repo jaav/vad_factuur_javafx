@@ -8,6 +8,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableView?>
 <?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
 <?import javafx.scene.control.Label?>
 <?import be.virtualsushi.jfx.dorse.control.ViewAddressControl?>
 <?import java.lang.String?>
@@ -15,7 +16,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" spacing="20">
+<HBox spacing="20.0" xmlns:fx="http://javafx.com/fxml">
+<VBox spacing="20">
 	<padding>
 		<Insets bottom="10" left="10" right="10" top="10" />
 	</padding>
@@ -94,6 +96,7 @@
 		<Button text="%print.invoice" onAction="#handlePrintInvoice" />
 
 	</HBox>
-
 </VBox>
+<ValidationErrorPanel fx:id="validationPanel" visible="false" />
+</HBox>
 

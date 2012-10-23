@@ -74,6 +74,8 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
 
   public static final String USERNAME_KEY = "username";
 
+  public static final String USERNAME_ID = "user_id";
+
 	/**
 	 * Called any time activity get active.
 	 */

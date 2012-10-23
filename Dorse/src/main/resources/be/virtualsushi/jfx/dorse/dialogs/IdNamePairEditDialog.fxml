@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
 <?import be.virtualsushi.jfx.dorse.control.TextField?>
+<?import be.virtualsushi.jfx.dorse.control.LongNumberField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 <?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
@@ -12,7 +13,7 @@
 	<padding>
 		<Insets top="15" right="15" bottom="15" left="15" />
 	</padding>
-	
+    <LongNumberField fx:id="idField" visible="false" />
 	<GridPane xmlns:fx="http://javafx.com/fxml" vgap="10" hgap="10">
 
 		<FieldLabel value="%name" GridPane.columnIndex="0"

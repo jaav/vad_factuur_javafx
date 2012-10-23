@@ -14,7 +14,6 @@
 	<padding>
 		<Insets top="25" right="25" bottom="10" left="25" />
 	</padding>
-
 	<FieldLabel value="%username" GridPane.columnIndex="0"
 		GridPane.rowIndex="0" />
 

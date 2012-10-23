@@ -111,6 +111,10 @@ MenuBar, Menu, MenuItem {
   -fx-border-width:0px;
 }
 
+.rightAligner{
+
+}
+
 /*#dorse .tab, #dorse .tab-pane{
   -fx-background: white;
 }*/

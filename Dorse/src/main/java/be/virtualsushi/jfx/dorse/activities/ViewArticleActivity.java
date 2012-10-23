@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse.activities;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -63,7 +64,7 @@ public class ViewArticleActivity extends AbstractViewEntityActivity<VBox, Articl
 		weightField.setText(String.valueOf(article.getWeight()));
 	}
 
-	@Override
+  @Override
 	protected void doCustomBackgroundInitialization(Article entity) {
 		acceptableTypes = getRestApiAccessor().getList(ArticleType.class, false);
 		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);

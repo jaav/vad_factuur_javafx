@@ -61,7 +61,7 @@ public class Article extends BaseEntity implements Listable {
 	private Long supplier;
 
 	@NotNull
-	private String creator;
+	private Long creator;
 
 	@NotNull
   @JsonSerialize(using = CustomFloatSerializer.class)
@@ -156,15 +156,15 @@ public class Article extends BaseEntity implements Listable {
 		this.supplier = supplier;
 	}
 
-	public String getCreator() {
-		return creator;
-	}
+  public Long getCreator() {
+    return creator;
+  }
 
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
+  public void setCreator(Long creator) {
+    this.creator = creator;
+  }
 
-	public Float getVat() {
+  public Float getVat() {
 		return vat;
 	}
 

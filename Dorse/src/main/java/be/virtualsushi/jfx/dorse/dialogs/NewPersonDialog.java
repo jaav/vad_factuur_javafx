@@ -28,15 +28,17 @@ public class NewPersonDialog extends AbstractDialog implements HasValidationDial
 	private Integer personType;
 
 	private Long customer;
+  private Person oldPerson;
 
 	private Map<String, HasValidation> fieldsMap;
 
 	@FXML
 	protected void handleSave(ActionEvent event) {
 		Person person = new Person();
+    person.setId(idField.getValue());
 		person.setTitle(titleField.getValue());
 		person.setName(nameField.getValue());
-		person.setMobile(phoneField.getValue());
+		person.setPhone(phoneField.getValue());
 		person.setEmail(emailField.getValue());
 		person.setCustomer(customer);
 		postSaveEvent(new SavePersonEvent(person));
@@ -60,11 +62,21 @@ public class NewPersonDialog extends AbstractDialog implements HasValidationDial
 
 		if (ArrayUtils.isNotEmpty(parameters)) {
 			customer = (Long) parameters[0];
-			if (parameters.length > 1) {
+      if(parameters.length>1){
+        oldPerson = (Person) parameters[1];
+        if(oldPerson!=null){
+          titleField.setValue(oldPerson.getTitle());
+          nameField.setValue(oldPerson.getName());
+          emailField.setValue(oldPerson.getEmail());
+          phoneField.setValue(oldPerson.getPhone());
+          idField.setValue(oldPerson.getId());
+        }
+      }
+			/*if (parameters.length > 1) {
 				personType = (Integer) parameters[1];
 			} else {
 				personType = 0;
-			}
+			}*/
 		}
 	}
 

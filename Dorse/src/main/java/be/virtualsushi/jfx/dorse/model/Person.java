@@ -16,7 +16,7 @@ public class Person extends BaseEntity {
 	private String email;
 
 	@NotBlank
-	private String mobile;
+	private String phone;
 
 	@NotNull
 	private Long customer;
@@ -45,12 +45,12 @@ public class Person extends BaseEntity {
 		this.email = email;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public Long getCustomer() {

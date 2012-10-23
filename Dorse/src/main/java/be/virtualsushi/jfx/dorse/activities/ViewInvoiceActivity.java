@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -345,7 +346,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		if (CollectionUtils.isEmpty(articles)) {
 			articles = getRestApiAccessor().getList(Article.class, null, null, "name", null, true, true);
 		}
-		orderLines = getRestApiAccessor().getList(OrderLine.class, null, null, "id", null, true, false, entity.getId());
+		orderLines = getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+entity.getId(), true, false);
 		if (CollectionUtils.isEmpty(units)) {
 			units = getRestApiAccessor().getList(Unit.class, false);
 		}

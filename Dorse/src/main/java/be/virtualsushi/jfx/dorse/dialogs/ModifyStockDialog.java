@@ -17,9 +17,6 @@ import be.virtualsushi.jfx.dorse.model.Stock;
 public class ModifyStockDialog extends AbstractDialog {
 
 	@FXML
-	private Label idField;
-
-	@FXML
 	private Label oldValueField;
 
 	@FXML
@@ -31,8 +28,7 @@ public class ModifyStockDialog extends AbstractDialog {
 	protected void handleSave(ActionEvent event) {
 		Stock stock = new Stock();
 		stock.setQuantity(newValueField.getValue());
-		if (StringUtils.isNotBlank(idField.getText()))
-			stock.setId(Long.parseLong(idField.getText()));
+    stock.setId(idField.getValue());
 		getEventBus().post(new SaveStockEvent(stock));
 	}
 
@@ -47,7 +43,7 @@ public class ModifyStockDialog extends AbstractDialog {
 	public void onShow(Object... parameters) {
 		if (ArrayUtils.isNotEmpty(parameters) && parameters[0] != null) {
 			oldValueField.setText(String.valueOf(((Stock) parameters[0]).getQuantity()));
-			idField.setText(String.valueOf(((Stock) parameters[0]).getId()));
+			idField.setValue(((Stock) parameters[0]).getId());
 		}
 	}
 

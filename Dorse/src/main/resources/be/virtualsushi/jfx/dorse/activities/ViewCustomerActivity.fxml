@@ -2,17 +2,20 @@
 
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import java.lang.String?>
 <?import javafx.scene.layout.GridPane?>
 <?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
 <?import javafx.scene.control.Button?>
 <?import be.virtualsushi.jfx.dorse.control.AddButton?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.geometry.Insets?>
 
-<VBox id="dorse" xmlns:fx="http://javafx.com/fxml" spacing="20">
+<HBox spacing="20.0" xmlns:fx="http://javafx.com/fxml">
+<VBox spacing="20">
 	<padding>
 		<Insets bottom="10" left="10" right="10" top="10" />
 	</padding>
@@ -48,19 +51,24 @@
 		<Label fx:id="remarkField" GridPane.columnIndex="1"
 			GridPane.rowIndex="3" prefWidth="400" />
 
+        <FieldLabel value="%persons" GridPane.columnIndex="0"
+        			GridPane.rowIndex="4" />
         <ListView fx:id="personsList" GridPane.columnIndex="0"
-        			GridPane.rowIndex="4" GridPane.columnSpan="2"  prefHeight="80" minHeight="-1" />
+        			GridPane.rowIndex="5" GridPane.columnSpan="2"  prefHeight="80" minHeight="-1" />
 
         <AddButton text="%add.person" onAction="#handleAddPerson"
-      			GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.halignment="RIGHT"/>
+      			GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.halignment="RIGHT"/>
 
+        <FieldLabel value="%addresses" GridPane.columnIndex="0"
+        			GridPane.rowIndex="7" />
 		<TabPane fx:id="addressesList" tabClosingPolicy="UNAVAILABLE"
-			GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="2" prefHeight="190"/>
+			GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2" prefHeight="190"/>
 
         <AddButton text="%add.address" onAction="#handleAddAddress"
-      			GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.halignment="RIGHT" />
+      			GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.halignment="RIGHT" />
 
 	</GridPane>
-
 </VBox>
+<ValidationErrorPanel fx:id="validationPanel" visible="false" />
+</HBox>
 

@@ -8,6 +8,7 @@
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 <?import be.virtualsushi.jfx.dorse.control.FloatNumberField?>
 <?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.LongNumberField?>
 <?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
@@ -16,7 +17,7 @@
 	<padding>
 		<Insets top="15" right="15" bottom="15" left="15" />
 	</padding>
-
+    <LongNumberField fx:id="idField" visible="false" />
 	<GridPane hgap="10" vgap="10">
 
 		<FieldLabel value="%article" GridPane.columnIndex="0"

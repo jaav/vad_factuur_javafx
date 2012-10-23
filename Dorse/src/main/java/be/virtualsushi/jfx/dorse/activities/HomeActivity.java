@@ -38,8 +38,17 @@ public class HomeActivity extends AbstractBrowserActivity {
  	protected void startTest(ActionEvent event) {
     String authToken = getRestApiAccessor().login("admin", "admin");
   		if (StringUtils.isNotBlank(authToken)) {
-        getAppVariables().put(AUTHTOKEN_KEY, authToken);
-        getAppVariables().put(USERNAME_KEY, usernameField.getText());
+        try{
+          getAppVariables().put(AUTHTOKEN_KEY, authToken.substring(authToken.indexOf("___")+3));
+          getAppVariables().put(USERNAME_ID, Long.parseLong(authToken.substring(0, authToken.indexOf("___"))));
+          getAppVariables().put(USERNAME_KEY, usernameField.getText());
+        }catch(Exception e){
+          e.printStackTrace();
+          getAppVariables().put(AUTHTOKEN_KEY, "UNKNOWN");
+          getAppVariables().put(USERNAME_ID, 0);
+          getAppVariables().put(USERNAME_KEY, "UNKNOWN");
+
+        }
         goTo(AppActivitiesNames.TEST);
   		} else {
   			// TODO display error message
@@ -50,7 +59,8 @@ public class HomeActivity extends AbstractBrowserActivity {
  	protected void handleLoginAction  (ActionEvent event) {
  		String authToken = getRestApiAccessor().login(usernameField.getText(), passwordField.getText());
  		if (StringUtils.isNotBlank(authToken)) {
-       getAppVariables().put(AUTHTOKEN_KEY, authToken);
+       getAppVariables().put(AUTHTOKEN_KEY, authToken.substring(authToken.indexOf("___")+3));
+       getAppVariables().put(USERNAME_ID, authToken.substring(0, authToken.indexOf("___")));
        getAppVariables().put(USERNAME_KEY, usernameField.getText());
        goTo(AppActivitiesNames.TEST);
  		} else {

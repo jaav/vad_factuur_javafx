@@ -290,7 +290,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
     result.setCopyDate(copyDateField.getSelectedDate());
     HashMap test = getAppVariables();
     if(getAppVariables().get(AUTHTOKEN_KEY)!=null && getAppVariables().get(USERNAME_KEY)!=null)
-      result.setCreator((String)getAppVariables().get(USERNAME_KEY));
+      result.setCreator((Long)getAppVariables().get(USERNAME_ID));
 		return result;
 	}
 

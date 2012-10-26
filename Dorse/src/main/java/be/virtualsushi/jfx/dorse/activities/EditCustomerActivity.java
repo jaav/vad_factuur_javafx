@@ -84,6 +84,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	private ValidationErrorPanel validationPanel;
 
 	private List<Sector> acceptableSectors;
+  private List<Sector> acceptableSubSectors;
 
 	@Override
 	public void initialize() {
@@ -103,6 +104,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
         Sector selectedSector = (Sector)sectorCombo.getValue();
         Long id = selectedSector.getId();
         if(id!=null) showSubSectors(id);
+        subSectorField.setValue(null);
       }
     });
     if(subSectorField.getItems().size()==0)
@@ -132,6 +134,8 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 		vatField.setValue(editingEntity.getVat());
 		remarkField.setValue(editingEntity.getRemark());
 		mapSector(editingEntity);
+    List l = subSectorField.getItems();
+    if(editingEntity.getSubsector()!=null) subSectorField.setValue(getSubSector(editingEntity.getSubsector()));
 	}
 
 	private void mapSector(Customer editingEntity) {
@@ -160,7 +164,13 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 
 	@Override
 	protected void doCustomBackgroundInitialization(Customer editingEntity) {
-		acceptableSectors = getRestApiAccessor().getList(Sector.class, false);
+    if(editingEntity.getId()!=null){
+      idField.setVisible(true);
+    }
+    else{
+      idField.setVisible(false);
+    }
+		acceptableSectors = getRestApiAccessor().getList(Sector.class, null, null, null, "parent is null", false, false);
 	}
 
 	@Subscribe
@@ -188,16 +198,15 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	}
 
   private void showSubSectors(Long sector_id){
-    //List<Sector> subsectors = getRestApiAccessor().getSubSectors(sector_id);
+    acceptableSubSectors = (List)getRestApiAccessor().getList(Sector.class, null, null, "name", "parent="+sector_id, true, false);
+    subSectorField.setItems(FXCollections.observableArrayList(acceptableSubSectors));
+  }
 
-    //convert linkedhashmap to List<Sector>
-    List subsectors = (List)getRestApiAccessor().getSubSectors(sector_id);
-    ObservableList<Sector> sectors = FXCollections.observableArrayList();
-    for (Object map : subsectors) {
-      Map lhm = (Map)map;
-      sectors.add(new Sector((long) (Integer) lhm.get("id"), (String) lhm.get("name"), (long) (Integer)lhm.get("parent")));
+  private Sector getSubSector(Long id){
+    for (Sector acceptableSubSector : acceptableSubSectors) {
+      if(acceptableSubSector.getId().equals(id)) return acceptableSubSector;
     }
-    subSectorField.setItems(sectors);
+    return null;
   }
 
 }

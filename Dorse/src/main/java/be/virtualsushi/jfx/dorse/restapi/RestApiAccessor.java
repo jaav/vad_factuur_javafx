@@ -1,8 +1,6 @@
 package be.virtualsushi.jfx.dorse.restapi;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import be.virtualsushi.jfx.dorse.model.Sector;
 import org.apache.commons.io.IOUtils;
@@ -76,21 +74,22 @@ public class RestApiAccessor extends RestTemplate {
  		return getList(entityClass, null, null, "id", null, fullInfo, false);
  	}
 
-	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, Integer offset, Integer count, String orderOn, String additionalCondition, boolean fullInfo, boolean includesNonActive, Object... parameters) {
+	public <E extends BaseEntity> List<E> getList(Class<E> entityClass, Integer offset, Integer count, String orderOn, String additionalCondition, boolean fullInfo, boolean includesNonActive) {
 		ArrayList<E> result = new ArrayList<E>();
-		String url = serviceUri + getEntityListSubPath(entityClass, offset, count, orderOn, fullInfo, includesNonActive, additionalCondition);
+		String url = serviceUri + getEntityListSubPath(entityClass);
+    Map<String,?> urlVariables = getUrlVariables(offset, count, orderOn, fullInfo, includesNonActive, additionalCondition);
     if(url.charAt(url.length()-1)=='&') url = url.substring(0, url.length()-1);
 		log.debug("Getting list of " + entityClass + " URL: " + url);
-		E[] ids = getForObject(url, getEntityArrayClass(entityClass), parameters);
+		E[] ids = getForObject(url, getEntityArrayClass(entityClass), urlVariables);
     result.addAll(Arrays.asList(ids));
 		return result;
 	}
 
-  public List<Sector> getSubSectors(Long parent_id){
+  /*public List<Sector> getSubSectors(Long parent_id){
     String url = serviceUri + "subSectors/"+ parent_id;
     List<Sector> sectorList = new ArrayList<Sector>();
     return getForObject(url,sectorList.getClass());
-  }
+  }*/
 
 	private <E extends BaseEntity> List<E> detailList(Integer offset, Integer count, Class<E> entityClass, E[] ids) {
 		ArrayList<E> result = new ArrayList<E>();
@@ -149,27 +148,49 @@ public class RestApiAccessor extends RestTemplate {
 		return StringUtils.uncapitalize(entityClass.getSimpleName());
 	}
 
-	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass, Integer offset, Integer count, String orderOn, boolean fullInfo, boolean includesNonActive, String additionalCondition) {
+  private Map getUrlVariables(Integer offset, Integer count, String orderOn, boolean fullInfo, boolean includesNonActive, String additionalCondition){
+    Map<String, String> urlVariables = new HashMap<String, String>();
+    if (offset != null)
+      urlVariables.put("from", ""+offset);
+    else
+      urlVariables.put("from", "");
+    if (count != null)
+      urlVariables.put("quantity", ""+count);
+    else
+      urlVariables.put("quantity", "");
+    if (orderOn != null)
+      urlVariables.put("orderOn", orderOn);
+    else
+      urlVariables.put("orderOn", "");
+    if (fullInfo)
+      urlVariables.put("fullInfo", "true");
+    else
+      urlVariables.put("fullInfo", "false");
+    if (includesNonActive)
+      urlVariables.put("includesNonActive", "true");
+    else
+      urlVariables.put("includesNonActive", "false");
+    if(StringUtils.isNotBlank(additionalCondition))
+      urlVariables.put("additionalCondition", additionalCondition);
+    else
+      urlVariables.put("additionalCondition", "");
+    return urlVariables;
+  }
+
+	private String getEntityListSubPath(Class<? extends BaseEntity> entityClass) {
 		StringBuilder result = new StringBuilder();
 		if (entityClass.getAnnotation(ListResourcePath.class) != null) {
 			result.append(entityClass.getAnnotation(ListResourcePath.class).value());
 		} else {
 			result.append(StringUtils.uncapitalize(entityClass.getSimpleName())).append("s");
 		}
-		result.append("?");
-		if (offset != null)
-			result.append("from=").append(offset).append("&");
-		if (count != null)
-			result.append("quantity=").append(count).append("&");
-		if (orderOn != null)
-			result.append("orderOn=").append(orderOn).append("&");
-    if (fullInfo)
-      result.append("fullInfo=true").append("&");
-    if (includesNonActive)
-      result.append("includesNonActive=true").append("&");
-    if(StringUtils.isNotBlank(additionalCondition))
-      result.append(additionalCondition);
-		return result.toString();
+		result.append("?").append("from={from}&")
+        .append("quantity={quantity}&")
+        .append("orderOn={orderOn}&")
+        .append("fullInfo={fullInfo}&")
+        .append("includesNonActive={includesNonActive}&")
+        .append("additionalCondition={additionalCondition}");
+    return result.toString();
 	}
 
 	@SuppressWarnings("unchecked")

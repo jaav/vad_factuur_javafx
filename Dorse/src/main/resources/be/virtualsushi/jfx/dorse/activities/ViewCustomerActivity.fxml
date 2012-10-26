@@ -15,10 +15,7 @@
 <?import javafx.geometry.Insets?>
 
 <HBox spacing="20.0" xmlns:fx="http://javafx.com/fxml">
-<VBox spacing="20">
-	<padding>
-		<Insets bottom="10" left="10" right="10" top="10" />
-	</padding>
+<VBox fx:id="mainContainer" spacing="20">
 
 	<GridPane>
 		<Label fx:id="title" GridPane.columnIndex="0" GridPane.rowIndex="0">
@@ -34,22 +31,22 @@
 		<FieldLabel value="%id" GridPane.columnIndex="0"
 			GridPane.rowIndex="0" />
 		<Label fx:id="idField" GridPane.columnIndex="1"
-			GridPane.rowIndex="0" prefWidth="400" />
+			GridPane.rowIndex="0" prefWidth="800" />
 
 		<FieldLabel value="%vat" GridPane.columnIndex="0"
 			GridPane.rowIndex="1" />
 		<Label fx:id="vatField" GridPane.columnIndex="1"
-			GridPane.rowIndex="1" prefWidth="400" />
+			GridPane.rowIndex="1" prefWidth="800" />
 
 		<FieldLabel value="%iban" GridPane.columnIndex="0"
 			GridPane.rowIndex="2" />
 		<Label fx:id="ibanField" GridPane.columnIndex="1"
-			GridPane.rowIndex="2" prefWidth="400" />
+			GridPane.rowIndex="2" prefWidth="800" />
 
 		<FieldLabel value="%remark" GridPane.columnIndex="0"
 			GridPane.rowIndex="3" />
 		<Label fx:id="remarkField" GridPane.columnIndex="1"
-			GridPane.rowIndex="3" prefWidth="400" />
+			GridPane.rowIndex="3" prefWidth="800" />
 
         <FieldLabel value="%persons" GridPane.columnIndex="0"
         			GridPane.rowIndex="4" />
@@ -62,13 +59,12 @@
         <FieldLabel value="%addresses" GridPane.columnIndex="0"
         			GridPane.rowIndex="7" />
 		<TabPane fx:id="addressesList" tabClosingPolicy="UNAVAILABLE"
-			GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2" prefHeight="190"/>
+			GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2" prefHeight="240"/>
 
         <AddButton text="%add.address" onAction="#handleAddAddress"
       			GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.halignment="RIGHT" />
 
 	</GridPane>
 </VBox>
-<ValidationErrorPanel fx:id="validationPanel" visible="false" />
 </HBox>
 

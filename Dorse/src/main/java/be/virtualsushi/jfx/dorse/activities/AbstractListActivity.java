@@ -87,42 +87,10 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				protected List<E> call() throws Exception {
           try{
 					doCustomBackgroundInitialization();
-          //if(getParameters()[0]!=null && getParameters()[1]!=null && getParameters()[2]!=null && getParameters()[3]!=null && getParameters()[4]!=null && getParameters()[5]!=null)
-            Object test = (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-            test = getInteger(0);
-            test = getInteger(1);
-            test = getString(2);
-            test = getString(3);
             return getRestApiAccessor().getList(
                 (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
                 getInteger(0), getInteger(1), getString(2), getString(3),
                 getBoolean(4, true), getBoolean(5, false));
-          /*else if((getParameters()[0]==null || getParameters()[1]==null) && getParameters()[2]!=null && getParameters()[3]!=null && getParameters()[4]!=null && getParameters()[5]!=null)
-            return getRestApiAccessor().getList(
-                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-                (Boolean) getParameters()[3], (Boolean) getParameters()[4], (String) getParameters()[5], null);
-          else if(getParameters()[0]!=null && getParameters()[1]!=null && getParameters()[2]!=null && getParameters()[3]!=null && getParameters()[4]!=null)
-            return getRestApiAccessor().getList(
-                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-                (Integer) getParameters()[0], (Integer) getParameters()[1], (String) getParameters()[2],
-                (Boolean) getParameters()[3], (Boolean) getParameters()[4], null, null);
-          else if((getParameters()[0]==null || getParameters()[1]==null) && getParameters()[2]!=null && getParameters()[3]!=null && getParameters()[4]!=null)
-            return getRestApiAccessor().getList(
-                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-                (Boolean) getParameters()[3], (Boolean) getParameters()[4], null, null);
-          else if((getParameters()[0]==null || getParameters()[1]==null) && getParameters()[2]==null && getParameters()[3]!=null && getParameters()[4]!=null)
-            return getRestApiAccessor().getList(
-                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-                (Boolean) getParameters()[3], (Boolean) getParameters()[4]);
-          else if(getParameters()[0]!=null && getParameters()[1]!=null && getParameters()[2]!=null && getParameters()[3]!=null)
-            return getRestApiAccessor().getList(
-                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-                (Integer) getParameters()[0], (Integer) getParameters()[1], (String) getParameters()[2],
-                (Boolean) getParameters()[3], false, null, null);
-          else
-            return getRestApiAccessor().getList(
-                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-                (Boolean) getParameters()[3]);*/
           }
           catch (Exception e){
             e.printStackTrace();

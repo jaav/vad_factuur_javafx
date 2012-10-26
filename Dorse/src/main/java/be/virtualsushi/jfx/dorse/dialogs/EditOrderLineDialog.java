@@ -53,8 +53,6 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 
 	private List<Unit> units;
 
-  private String order_id;
-
 	private Map<String, HasValidation> fieldsMap;
 
 	@FXML
@@ -70,7 +68,6 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 		editingOrderLine.setUnitDiscount(discountField.getValue());
 		editingOrderLine.setQuantity(quantityField.getValue());
     editingOrderLine.setUnitPrice(unitPriceField.getValue());
-    editingOrderLine.setOrderId(order_id);
 		return editingOrderLine;
 	}
 
@@ -82,10 +79,7 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 		if (ArrayUtils.isNotEmpty(parameters)) {
 			articleField.setAcceptableValues((List<Article>) parameters[0]);
 			units = (List<Unit>) parameters[1];
-      order_id = (String) parameters[2];
-			if (parameters.length > 3) {
-				mapFields((OrderLine) parameters[2]);
-			}
+      mapFields((OrderLine) parameters[2]);
 		}
 	}
 

@@ -13,6 +13,20 @@
   -fx-border-width:0 1 1 1;
   -fx-border-color:darkgray;
 }
+.border-fix {
+    -fx-background-color: white;
+}
+/*.text-area{
+  -fx-border-width:1;
+  -fx-border-color:darkgray;
+  -fx-background-insets: 0;
+  -fx-background-radius: 0;
+}
+.text-area .scroll-pane {
+  -fx-border-width:1;
+  -fx-border-color:white;
+  -fx-background-color: white;
+}*/
 
 DateField, TextField, TextArea, NumberTextField, PasswordField, ComboBox, DorseComboBox {
 	-fx-font-size: 20px;
@@ -20,10 +34,6 @@ DateField, TextField, TextArea, NumberTextField, PasswordField, ComboBox, DorseC
 
 Button {
 	-fx-font-size: 16px;
-}
-
-.borderless{
-  -fx-opacity: 1;
 }
 
 MenuBar, Menu, MenuItem {
@@ -104,7 +114,7 @@ MenuBar, Menu, MenuItem {
 }
 .orange_debug{
   /*-fx-background-color:darkorange;*/
-  -fx-border-width:0 1 1 1;
+  -fx-border-width:1 1 1 1;
   -fx-border-color:crimson;
 }
 .no_border{

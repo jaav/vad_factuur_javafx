@@ -204,6 +204,7 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
           @Override
           protected void onSuccess(List<Person> value) {
             showPersonList(value);
+            setCurrentPerson(null);
             hideLoadingMask();
           }
 
@@ -245,6 +246,7 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
   }
 
   private void fillAddressTabs(List<Address> addresses, String title) {
+    this.addresses = addresses;
     addressesList.getTabs().clear();
     int addressIndex = 1;
     for (Address address : addresses) {
@@ -275,8 +277,6 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
       });
       
       DeleteButton deleteButton = new DeleteButton();
-      deleteButton.setScaleX(0.5);
-      deleteButton.setScaleY(0.5);
       deleteButton.setId("delete_" + address.getId());
       deleteButton.setOnAction(new EventHandler<ActionEvent>() {
         @Override
@@ -288,12 +288,12 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
           } catch (Exception e) {
             e.printStackTrace();
           }
-          Dialog.buildConfirmation("Delete this address?", "Do you really want to permanently delete " + getEntity().getAddress() + " from the database?")
+          Dialog.buildConfirmation("Delete this address?", "Do you really want to permanently delete " + getCurrentAddress().getAddress() + " from the database?")
               .addYesButton(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                   if (getCurrentAddress() != null) {
-
+                    deleteAddress(getCurrentAddress());
                   }
                 }
               })
@@ -349,30 +349,30 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
         @Override
         public void handle(ActionEvent event) {
           Button btn = (Button)event.getSource();
-          Person person = null;
           try{
             setCurrentPerson(findPerson(Long.parseLong(btn.getId().substring(btn.getId().indexOf("_") + 1))));
+            if(getCurrentPerson()!=null)
+              Dialog.buildConfirmation("Delete this person?", "Do you really want to permanently delete " + getCurrentPerson().getName() + " from the database?")
+                .addYesButton(new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent actionEvent) {
+                    if(getCurrentPerson()!=null){
+                      deletePerson(getCurrentPerson());
+                    }
+                  }
+                })
+                .addCancelButton(new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent actionEvent) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                  }
+                })
+                .build()
+                .show();
           }
           catch(Exception e){
             e.printStackTrace();
           }
-          Dialog.buildConfirmation("Delete this person?", "Do you really want to permanently delete " + getEntity().getName() + " from the database?")
-              .addYesButton(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                  if(getCurrentPerson()!=null){
-
-                  }
-                }
-              })
-              .addCancelButton(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                  //To change body of implemented methods use File | Settings | File Templates.
-                }
-              })
-              .build()
-              .show();
         }
       });
       Label title = new Label(person.getTitle() + " " + person.getName()+" ("+person.getEmail()+" - "+person.getPhone()+")");
@@ -430,9 +430,12 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
     doInBackground(new SavePersonTaskCreator(event.getEntity()));
   }
 
-  @Subscribe
   public void deletePerson(Person person) {
     doInBackground(new DeletePersonTaskCreator(person));
+  }
+
+  public void deleteAddress(Address address) {
+    doInBackground(new DeleteAddressTaskCreator(address));
   }
 
   private void clearDependencies() {

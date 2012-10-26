@@ -48,7 +48,12 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 					entity = value;
 					mapFields(value);
 					hideLoadingMask();
-				};
+				}
+
+        @Override
+        protected void onError(Throwable exception) {
+          hideLoadingMask();
+        }
 
 			};
 		}

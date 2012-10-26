@@ -8,7 +8,7 @@ import be.virtualsushi.jfx.dorse.restapi.ItemResourcePath;
 import be.virtualsushi.jfx.dorse.restapi.ListResourcePath;
 
 @ItemResourcePath("invoiceLine")
-//@ListResourcePath("invoiceLinesByInvoice/{id}")
+@ListResourcePath("invoiceLines")
 public class OrderLine extends BaseEntity {
 
 	@NotNull

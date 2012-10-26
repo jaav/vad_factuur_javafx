@@ -10,11 +10,15 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CustomDateDeserializer extends JsonDeserializer<Date> {
 
-	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyy");
+	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyy-MM-dd");
 	public static final SimpleDateFormat FULL_DATE_FORMAT = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+
+  private static final Logger log = LoggerFactory.getLogger(CustomDateDeserializer.class);
 
 	@Override
 	public Date deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {

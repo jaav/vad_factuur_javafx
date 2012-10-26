@@ -30,11 +30,11 @@
     <Label fx:id="title" styleClass="activity-title" />
     <GridPane hgap="10.0" vgap="5.0">
       <FieldLabel value="%id" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-      <Label fx:id="idField" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="0" />
-      <FieldLabel value="%stock" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+      <Label fx:id="idField" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="0" visible="false" />
+      <FieldLabel value="%stock" GridPane.columnIndex="4" GridPane.rowIndex="0"/>
       <Label fx:id="stockField" GridPane.columnIndex="5" GridPane.rowIndex="0" />
       <Label fx:id="stockIdField" visible="false" />
-      <EditButton onAction="#handleEditStock" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+      <EditButton fx:id="stockButton" onAction="#handleEditStock" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="0" visible="false"/>
       <FieldLabel value="%code" GridPane.columnIndex="0" GridPane.rowIndex="1" />
       <TextField fx:id="codeField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <FieldLabel value="%created" GridPane.columnIndex="3" GridPane.rowIndex="1" />

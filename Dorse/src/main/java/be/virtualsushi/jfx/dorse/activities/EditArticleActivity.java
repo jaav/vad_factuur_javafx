@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import be.virtualsushi.jfx.dorse.control.*;
 import be.virtualsushi.jfx.dorse.control.calendar.CalendarView;
 import be.virtualsushi.jfx.dorse.control.calendar.DatePicker;
 import be.virtualsushi.jfx.dorse.dialogs.*;
@@ -21,13 +22,6 @@ import javafx.scene.layout.HBox;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import be.virtualsushi.jfx.dorse.control.EditableList;
-import be.virtualsushi.jfx.dorse.control.FloatNumberField;
-import be.virtualsushi.jfx.dorse.control.HasValidation;
-import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
-import be.virtualsushi.jfx.dorse.control.TextAreaField;
-import be.virtualsushi.jfx.dorse.control.TextField;
-import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveArticleTypeEvent;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveStockEvent;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveSupplierEvent;
@@ -152,6 +146,9 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 
   @FXML
  	private DatePicker copyDateField;
+
+  @FXML
+ 	private EditButton stockButton;
 
 	private List<ArticleType> acceptableArticleTypes;
 	private List<Unit> acceptableUnits;
@@ -318,6 +315,14 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 
 	@Override
 	protected void doCustomBackgroundInitialization(Article editingEntity) {
+    if(editingEntity.getId()!=null){
+      stockButton.setVisible(true);
+      idField.setVisible(true);
+    }
+    else{
+      stockButton.setVisible(false);
+      idField.setVisible(false);
+    }
 		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, false);
 		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, false);
 		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);

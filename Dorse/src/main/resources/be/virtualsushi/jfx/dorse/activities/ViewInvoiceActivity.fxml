@@ -17,11 +17,7 @@
 <?import javafx.scene.control.Button?>
 
 <HBox spacing="20.0" xmlns:fx="http://javafx.com/fxml">
-<VBox spacing="20">
-	<padding>
-		<Insets bottom="10" left="10" right="10" top="10" />
-	</padding>
-
+<VBox fx:id="mainContainer" spacing="20" prefWidth="1140.0">
 	<GridPane >
 		<Label fx:id="title" GridPane.columnIndex="0" GridPane.rowIndex="0" >
 			<styleClass>
@@ -97,6 +93,5 @@
 
 	</HBox>
 </VBox>
-<ValidationErrorPanel fx:id="validationPanel" visible="false" />
 </HBox>
 

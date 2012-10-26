@@ -22,7 +22,7 @@ public abstract class BaseEntity {
   }
 
   public boolean isNew() {
-		return id != null && id > 0;
+		return id == null;
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -79,7 +80,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	}
 
-	private class SaveOrderLineTaskCreator implements TaskCreator<DorseBackgroundTask<List<OrderLine>>> {
+	private class SaveOrderLineTaskCreator implements TaskCreator<DorseBackgroundTask<OrderLine>> {
 
 		private final OrderLine orderLine;
 
@@ -88,8 +89,8 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		}
 
 		@Override
-		public DorseBackgroundTask<List<OrderLine>> createTask() {
-			return new DorseBackgroundTask<List<OrderLine>>(this, orderLine) {
+		public DorseBackgroundTask<OrderLine> createTask() {
+			return new DorseBackgroundTask<OrderLine>(this, orderLine) {
 
 				@Override
 				protected void onPreExecute() {
@@ -97,16 +98,28 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				}
 
 				@Override
-				protected List<OrderLine> call() throws Exception {
+				protected OrderLine call() throws Exception {
 					getRestApiAccessor().save((OrderLine) getParameters()[0]);
-					return getRestApiAccessor().getList(OrderLine.class, null, null, "id", "order="+getEntity().getId(), true, false);
+					//return getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+getEntity().getId(), true, false);
+          return (OrderLine) getParameters()[0];
 				}
 
 				@Override
-				protected void onSuccess(List<OrderLine> value) {
-					orderLines = value;
-					orderLineTable.setItems(FXCollections.observableArrayList(new ArrayList<OrderLine>()));
-					orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
+				protected void onSuccess(OrderLine value) {
+					//orderLines = value;
+					//orderLineTable.setItems(FXCollections.observableArrayList(new ArrayList<OrderLine>()));
+          //orderLineTable.getItems().clear();
+          //orderLineTable.getItems().addAll(orderLines);
+					//orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
+          for (OrderLine line : orderLineTable.getItems()) {
+            if(line.getId().equals(value.getId())){
+              /*line.setUnitPrice(value.getUnitPrice());
+              line.setUnitDiscount(value.getUnitDiscount());
+              line.setQuantity(value.getQuantity());*/
+              orderLineTable.getItems().remove(line);
+              orderLineTable.getItems().add(value);
+            }
+          }
 					hideLoadingMask();
 				}
 
@@ -115,7 +128,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	}
 
-	private class DeleteOrderLineTaskCreator implements TaskCreator<DorseBackgroundTask<List<OrderLine>>> {
+	private class DeleteOrderLineTaskCreator implements TaskCreator<DorseBackgroundTask<OrderLine>> {
 
 		private final OrderLine entity;
 
@@ -124,8 +137,8 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		}
 
 		@Override
-		public DorseBackgroundTask<List<OrderLine>> createTask() {
-			return new DorseBackgroundTask<List<OrderLine>>(this, entity) {
+		public DorseBackgroundTask<OrderLine> createTask() {
+			return new DorseBackgroundTask<OrderLine>(this, entity) {
 
 				@Override
 				protected void onPreExecute() {
@@ -133,15 +146,21 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				}
 
 				@Override
-				protected List<OrderLine> call() throws Exception {
+				protected OrderLine call() throws Exception {
 					getRestApiAccessor().delete((OrderLine) getParameters()[0]);
-          return getRestApiAccessor().getList(OrderLine.class, null, null, "id", "order="+getEntity().getId(), true, false);
+          //return getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+getEntity().getId(), true, false);
+          return (OrderLine) getParameters()[0];
 				}
 
 				@Override
-				protected void onSuccess(List<OrderLine> value) {
-					orderLines = value;
-					orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
+				protected void onSuccess(OrderLine value) {
+					//orderLines = value;
+					//orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
+          for (OrderLine orderLine : orderLineTable.getItems()) {
+            if(orderLine.getId().equals(value.getId())){
+              orderLineTable.getItems().remove(orderLine);
+            }
+          }
 					hideLoadingMask();
 				}
 
@@ -217,7 +236,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	private Address invoiceAddressValue, deliveryAddressValue;
 
-	private List<OrderLine> orderLines;
+	//private List<OrderLine> orderLines;
 
 	private List<Article> articles;
 
@@ -225,18 +244,19 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	@FXML
 	protected void handleAddOrderLine(ActionEvent event) {
-		showDialog(getResources().getString("new.order.line.dialog.title"), EditOrderLineDialog.class, articles, units, idField.getText());
+    OrderLine line  = new OrderLine();
+    line.setOrderId(idField.getText());
+		showDialog(getResources().getString("new.order.line.dialog.title"), EditOrderLineDialog.class, articles, units, line);
 	}
 
 	@FXML
 	protected void handlePrintInvoice(ActionEvent event) {
-		doInBackground(new GenerateReportTaskCreator(getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLines));
+		doInBackground(new GenerateReportTaskCreator(getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLineTable.getItems()));
 	}
 
 	@Override
 	public void initialize() {
 		super.initialize();
-
 		invoiceAddressField.setResources(getResources());
 		deliveryAddressField.setResources(getResources());
 
@@ -314,6 +334,14 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	}
 
+
+  protected void minifyValidation(){
+    validationPanel.setMaxWidth(0.0);
+    Region R = (Region)mainContainer.getParent();
+    double test = ((Region)mainContainer.getParent()).getWidth();
+    mainContainer.setPrefWidth(((Region)mainContainer.getParent()).getWidth());
+  }
+
 	private Article findArticleById(Long articleId) {
 		for (Article article : articles) {
 			if (articleId.equals(article.getId())) {
@@ -332,7 +360,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		idField.setText(String.valueOf(viewingEntity.getId()));
 		customerField.setText(viewingEntity.getCustomer().getName());
 		createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(viewingEntity.getCreationDate()));
-		orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
+		//orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
 	}
 
 	@Override
@@ -346,7 +374,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		if (CollectionUtils.isEmpty(articles)) {
 			articles = getRestApiAccessor().getList(Article.class, null, null, "name", null, true, true);
 		}
-		orderLines = getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+entity.getId(), true, false);
+		orderLineTable.getItems().addAll(getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+entity.getId(), true, false));
 		if (CollectionUtils.isEmpty(units)) {
 			units = getRestApiAccessor().getList(Unit.class, false);
 		}
@@ -358,7 +386,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 	}
 
 	private OrderLine findOrderLine(Long orderLineId) {
-		for (OrderLine orderLine : orderLines) {
+		for (OrderLine orderLine : orderLineTable.getItems()) {
 			if (orderLine.getId().equals(orderLineId)) {
 				return orderLine;
 			}

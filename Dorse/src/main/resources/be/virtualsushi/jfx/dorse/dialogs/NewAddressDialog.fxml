@@ -25,14 +25,14 @@
 			GridPane.rowIndex="0" fieldWidth="300" />
 
 		<FieldLabel value="%zipcode" GridPane.columnIndex="0"
-			GridPane.rowIndex="2" />
+			GridPane.rowIndex="1" />
 		<TextField fx:id="zipcodeField" GridPane.columnIndex="1"
-			GridPane.rowIndex="2" fieldWidth="300" />
+			GridPane.rowIndex="1" fieldWidth="300" />
 
         <FieldLabel value="%city" GridPane.columnIndex="0"
-      			GridPane.rowIndex="1" />
+      			GridPane.rowIndex="2" />
       		<TextField fx:id="cityField" GridPane.columnIndex="1"
-      			GridPane.rowIndex="1" fieldWidth="300" />
+      			GridPane.rowIndex="2" fieldWidth="300" />
 
 		<FieldLabel value="%phone" GridPane.columnIndex="0"
 			GridPane.rowIndex="3" />

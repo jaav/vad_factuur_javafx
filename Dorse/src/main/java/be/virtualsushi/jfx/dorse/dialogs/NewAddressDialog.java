@@ -3,6 +3,8 @@ package be.virtualsushi.jfx.dorse.dialogs;
 import java.util.HashMap;
 import java.util.Map;
 
+import be.virtualsushi.jfx.dorse.events.dialogs.SavePersonEvent;
+import be.virtualsushi.jfx.dorse.model.Person;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -30,6 +32,7 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
 	private Integer addressType;
 
 	private Long customer;
+  private Address oldAddress;
 
 	private Map<String, HasValidation> fieldsMap;
 
@@ -44,6 +47,7 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
 		address.setEmail(emailField.getValue());
 		address.setAddressType(addressType);
 		address.setCustomer(customer);
+    address.setId(idField.getValue());
 		postSaveEvent(new SaveAddressEvent(address));
 	}
 
@@ -63,16 +67,32 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
 
 	@Override
 	public void onShow(Object... parameters) {
-		super.onShow(parameters);
+		super.onShow(parameters);  
 
-		if (ArrayUtils.isNotEmpty(parameters)) {
+    if (ArrayUtils.isNotEmpty(parameters)) {
+      customer = (Long) parameters[0];
+      if(parameters.length>1){
+        oldAddress = (Address) parameters[1];
+        if(oldAddress!=null){
+          addressField.setValue(oldAddress.getAddress());
+          zipcodeField.setValue(oldAddress.getZipcode());
+          cityField.setValue(oldAddress.getCity());
+          phoneField.setValue(oldAddress.getPhone());
+          faxField.setValue(oldAddress.getFax());
+          emailField.setValue(oldAddress.getEmail());
+          idField.setValue(oldAddress.getId());
+        }
+      }
+    }
+
+		/*if (ArrayUtils.isNotEmpty(parameters)) {
 			customer = (Long) parameters[0];
 			if (parameters.length > 1) {
 				addressType = (Integer) parameters[1];
 			} else {
 				addressType = 0;
 			}
-		}
+		}*/
 	}
 
 	@Override

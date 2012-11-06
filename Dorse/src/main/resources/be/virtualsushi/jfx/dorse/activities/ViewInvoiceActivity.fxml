@@ -55,7 +55,7 @@
 
 			<ViewAddressControl fx:id="invoiceAddressField">
 				<padding>
-					<Insets bottom="5" left="5" right="5" top="10" />
+					<Insets bottom="5" left="20" right="5" top="10" />
 				</padding>
 			</ViewAddressControl>
 
@@ -64,7 +64,7 @@
 
 			<ViewAddressControl fx:id="deliveryAddressField">
 				<padding>
-					<Insets bottom="5" left="5" right="5" top="10" />
+					<Insets bottom="5" left="20" right="5" top="10" />
 				</padding>
 			</ViewAddressControl>
 

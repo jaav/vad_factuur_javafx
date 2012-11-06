@@ -2,7 +2,7 @@ package be.virtualsushi.jfx.dorse.events;
 
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
-public class SaveEntityEvent<E extends BaseEntity> {
+public class SaveEntityEvent<E extends Object> {
 
 	private final E entity;
 

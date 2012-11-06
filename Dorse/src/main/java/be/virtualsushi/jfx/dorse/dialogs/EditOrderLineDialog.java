@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import be.virtualsushi.jfx.dorse.model.OrderLineProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -21,7 +22,7 @@ import be.virtualsushi.jfx.dorse.control.IntegerNumberField;
 import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveOrderLineEvent;
 import be.virtualsushi.jfx.dorse.model.Article;
-import be.virtualsushi.jfx.dorse.model.OrderLine;
+import be.virtualsushi.jfx.dorse.model.OrderLineProperty;
 import be.virtualsushi.jfx.dorse.model.Unit;
 
 @Component
@@ -49,7 +50,7 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 
 	private ValidationErrorPanel validationPanel;
 
-	private OrderLine editingOrderLine;
+	private OrderLineProperty editingOrderLine;
 
 	private List<Unit> units;
 
@@ -60,14 +61,20 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 		postSaveEvent(new SaveOrderLineEvent(getEditedValue()));
 	}
 
-	private OrderLine getEditedValue() {
+	private OrderLineProperty getEditedValue() {
 		if (editingOrderLine == null) {
-			editingOrderLine = new OrderLine();
+			editingOrderLine = new OrderLineProperty();
 		}
-		editingOrderLine.setArticle(articleField.getValue().getId());
 		editingOrderLine.setUnitDiscount(discountField.getValue());
 		editingOrderLine.setQuantity(quantityField.getValue());
-    editingOrderLine.setUnitPrice(unitPriceField.getValue());
+    Article test = articleField.getValue();
+    editingOrderLine.setArticleId(articleField.getValue().getId());
+    editingOrderLine.setArticleCode(articleField.getValue().getCode());
+    editingOrderLine.setArticlePrice(articleField.getValue().getPrice());
+    editingOrderLine.setArticleName(articleField.getValue().getName());
+    float formatted = editingOrderLine.getQuantity()*(editingOrderLine.getArticlePrice()-editingOrderLine.getUnitDiscount());
+    formatted = ((float)((int)(formatted*100)))/100;
+    editingOrderLine.setLineTotal(formatted);
 		return editingOrderLine;
 	}
 
@@ -79,14 +86,14 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
 		if (ArrayUtils.isNotEmpty(parameters)) {
 			articleField.setAcceptableValues((List<Article>) parameters[0]);
 			units = (List<Unit>) parameters[1];
-      mapFields((OrderLine) parameters[2]);
+      mapFields((OrderLineProperty) parameters[2]);
 		}
 	}
 
-	private void mapFields(OrderLine value) {
+	private void mapFields(OrderLineProperty value) {
 		editingOrderLine = value;
 		for (Article article : articleField.getAcceptableValues()) {
-			if (article.getId().equals(value.getArticle())) {
+			if (article.getId().equals(value.getArticleId())) {
 				articleField.setValue(article);
 				break;
 			}

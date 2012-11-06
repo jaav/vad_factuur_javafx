@@ -1,10 +1,10 @@
 package be.virtualsushi.jfx.dorse.model.report;
 
-import be.virtualsushi.jfx.dorse.model.OrderLine;
+import be.virtualsushi.jfx.dorse.model.OrderLineProperty;
 
 public class OrderLineReport {
 
-	private OrderLine orderLine;
+	private OrderLineProperty orderLine;
 
 	private String articleName;
 
@@ -12,11 +12,11 @@ public class OrderLineReport {
 
 	private String code;
 
-	public OrderLine getOrderLine() {
+	public OrderLineProperty getOrderLine() {
 		return orderLine;
 	}
 
-	public void setOrderLine(OrderLine orderLine) {
+	public void setOrderLine(OrderLineProperty orderLine) {
 		this.orderLine = orderLine;
 	}
 

@@ -80,8 +80,12 @@ public class RestApiAccessor extends RestTemplate {
     Map<String,?> urlVariables = getUrlVariables(offset, count, orderOn, fullInfo, includesNonActive, additionalCondition);
     if(url.charAt(url.length()-1)=='&') url = url.substring(0, url.length()-1);
 		log.debug("Getting list of " + entityClass + " URL: " + url);
-		E[] ids = getForObject(url, getEntityArrayClass(entityClass), urlVariables);
-    result.addAll(Arrays.asList(ids));
+    try{
+		  E[] ids = getForObject(url, getEntityArrayClass(entityClass), urlVariables);
+      result.addAll(Arrays.asList(ids));
+    } catch (Exception e){
+      e.printStackTrace();
+    }
 		return result;
 	}
 

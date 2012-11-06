@@ -2,6 +2,10 @@ package be.virtualsushi.jfx.dorse.model;
 
 import javax.validation.constraints.NotNull;
 
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import be.virtualsushi.jfx.dorse.restapi.ItemResourcePath;
@@ -12,7 +16,7 @@ import be.virtualsushi.jfx.dorse.restapi.ListResourcePath;
 public class OrderLine extends BaseEntity {
 
 	@NotNull
-	private Long article;
+	private Article article;
 
 	/*@NotNull
 	private Float discount;*/
@@ -23,29 +27,34 @@ public class OrderLine extends BaseEntity {
 	@JsonProperty("unit_discount")
 	private Float unitDiscount;
 
-	@JsonProperty("unit_price")
-	@NotNull
-	private Float unitPrice;
-
   @JsonProperty("order_id")
  	@NotNull
- 	private String orderId;
+ 	private Long orderId;
 
-	public Long getArticle() {
+  private Float lineTotal;
+
+  public OrderLine(OrderLineProperty lineProperty) {
+    this.article = new Article();
+    this.article.setId(lineProperty.getArticleId());
+    this.article.setCode(lineProperty.getArticleCode());
+    this.article.setName(lineProperty.getArticleName());
+    this.article.setPrice(lineProperty.getArticlePrice());
+    this.orderId = lineProperty.getOrderId();
+    this.quantity = lineProperty.getQuantity();
+    this.unitDiscount = lineProperty.getUnitDiscount();
+    this.setId(lineProperty.getId());
+  }
+
+  public OrderLine() {
+  }
+
+  public Article getArticle() {
 		return article;
 	}
 
-	public void setArticle(Long article) {
+	public void setArticle(Article article) {
 		this.article = article;
 	}
-
-	/*public Float getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(Float discount) {
-		this.discount = discount;
-	}*/
 
 	public Integer getQuantity() {
 		return quantity;
@@ -63,19 +72,19 @@ public class OrderLine extends BaseEntity {
 		this.unitDiscount = unitDiscount;
 	}
 
-	public Float getUnitPrice() {
-		return unitPrice;
-	}
-
-	public void setUnitPrice(Float unitPrice) {
-		this.unitPrice = unitPrice;
-	}
-
-  public String getOrderId() {
+  public Long getOrderId() {
     return orderId;
   }
 
-  public void setOrderId(String orderId) {
+  public void setOrderId(Long orderId) {
     this.orderId = orderId;
+  }
+
+  public Float getLineTotal() {
+    return lineTotal;
+  }
+
+  public void setLineTotal(Float lineTotal) {
+    this.lineTotal = lineTotal;
   }
 }

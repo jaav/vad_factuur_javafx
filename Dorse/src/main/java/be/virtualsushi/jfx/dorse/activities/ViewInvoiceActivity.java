@@ -1,11 +1,16 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
+import be.virtualsushi.jfx.dorse.control.table.MyPropertyValueFactory;
+import be.virtualsushi.jfx.dorse.control.table.MyRelatedPropertyValueFactory;
+import be.virtualsushi.jfx.dorse.model.*;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,12 +21,12 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -35,11 +40,6 @@ import be.virtualsushi.jfx.dorse.control.table.EntityStringPropertyValueFactory;
 import be.virtualsushi.jfx.dorse.dialogs.EditOrderLineDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveOrderLineEvent;
 import be.virtualsushi.jfx.dorse.events.report.ShowReportEvent;
-import be.virtualsushi.jfx.dorse.model.Address;
-import be.virtualsushi.jfx.dorse.model.Article;
-import be.virtualsushi.jfx.dorse.model.Invoice;
-import be.virtualsushi.jfx.dorse.model.OrderLine;
-import be.virtualsushi.jfx.dorse.model.Unit;
 import be.virtualsushi.jfx.dorse.report.ReportService;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 
@@ -61,7 +61,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 				@Override
 				public void handle(ActionEvent event) {
-					showDialog(getResources().getString("edit.order.line.dialog.title"), EditOrderLineDialog.class, articles, units, findOrderLine(itemId));
+					showDialog(getResources().getString("edit.order.line.dialog.title"), EditOrderLineDialog.class, articles, units, orderLines.get(findOrderLineIndex(itemId)));
 				}
 			});
 
@@ -71,7 +71,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 				@Override
 				public void handle(ActionEvent event) {
-					doInBackground(new DeleteOrderLineTaskCreator(findOrderLine(itemId)));
+					doInBackground(new DeleteOrderLineTaskCreator(orderLines.get(findOrderLineIndex(itemId))));
 				}
 			});
 			getChildren().add(editButton);
@@ -80,17 +80,21 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	}
 
-	private class SaveOrderLineTaskCreator implements TaskCreator<DorseBackgroundTask<OrderLine>> {
+	private class SaveOrderLineTaskCreator implements TaskCreator<DorseBackgroundTask<OrderLineProperty>> {
 
-		private final OrderLine orderLine;
+		private final OrderLineProperty orderLine;
 
-		public SaveOrderLineTaskCreator(OrderLine orderLine) {
+		public SaveOrderLineTaskCreator(OrderLineProperty orderLine) {
 			this.orderLine = orderLine;
 		}
 
+    public SaveOrderLineTaskCreator(OrderLine orderLine) {
+  			this.orderLine = new OrderLineProperty((orderLine));
+  		}
+
 		@Override
-		public DorseBackgroundTask<OrderLine> createTask() {
-			return new DorseBackgroundTask<OrderLine>(this, orderLine) {
+		public DorseBackgroundTask<OrderLineProperty> createTask() {
+			return new DorseBackgroundTask<OrderLineProperty>(this, orderLine) {
 
 				@Override
 				protected void onPreExecute() {
@@ -98,47 +102,38 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				}
 
 				@Override
-				protected OrderLine call() throws Exception {
-					getRestApiAccessor().save((OrderLine) getParameters()[0]);
-					//return getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+getEntity().getId(), true, false);
-          return (OrderLine) getParameters()[0];
+				protected OrderLineProperty call() throws Exception {
+					getRestApiAccessor().save(new OrderLine((OrderLineProperty) getParameters()[0]));
+          return (OrderLineProperty) getParameters()[0];
 				}
 
 				@Override
-				protected void onSuccess(OrderLine value) {
-					//orderLines = value;
-					//orderLineTable.setItems(FXCollections.observableArrayList(new ArrayList<OrderLine>()));
-          //orderLineTable.getItems().clear();
-          //orderLineTable.getItems().addAll(orderLines);
-					//orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
-          for (OrderLine line : orderLineTable.getItems()) {
-            if(line.getId().equals(value.getId())){
-              /*line.setUnitPrice(value.getUnitPrice());
-              line.setUnitDiscount(value.getUnitDiscount());
-              line.setQuantity(value.getQuantity());*/
-              orderLineTable.getItems().remove(line);
-              orderLineTable.getItems().add(value);
-            }
-          }
-					hideLoadingMask();
+				protected void onSuccess(OrderLineProperty value) {
+          int index = findOrderLineIndex(value.getId());
+          hideLoadingMask();
 				}
 
-			};
+        @Override
+        protected void onError(Throwable exception) {
+          exception.printStackTrace();
+          hideLoadingMask();
+        }
+      };
 		}
 
 	}
 
-	private class DeleteOrderLineTaskCreator implements TaskCreator<DorseBackgroundTask<OrderLine>> {
+	private class DeleteOrderLineTaskCreator implements TaskCreator<DorseBackgroundTask<OrderLineProperty>> {
 
-		private final OrderLine entity;
+		private final OrderLineProperty entity;
 
-		public DeleteOrderLineTaskCreator(OrderLine orderLine) {
+		public DeleteOrderLineTaskCreator(OrderLineProperty orderLine) {
 			this.entity = orderLine;
 		}
 
 		@Override
-		public DorseBackgroundTask<OrderLine> createTask() {
-			return new DorseBackgroundTask<OrderLine>(this, entity) {
+		public DorseBackgroundTask<OrderLineProperty> createTask() {
+			return new DorseBackgroundTask<OrderLineProperty>(this, entity) {
 
 				@Override
 				protected void onPreExecute() {
@@ -146,25 +141,26 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				}
 
 				@Override
-				protected OrderLine call() throws Exception {
-					getRestApiAccessor().delete((OrderLine) getParameters()[0]);
-          //return getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+getEntity().getId(), true, false);
-          return (OrderLine) getParameters()[0];
+				protected OrderLineProperty call() throws Exception {
+          OrderLine l = new OrderLine((OrderLineProperty) getParameters()[0]);
+					getRestApiAccessor().delete(new OrderLine((OrderLineProperty) getParameters()[0]));
+          //return getRestApiAccessor().getList(OrderLineProperty.class, null, null, "id", "invoice="+getEntity().getId(), true, false);
+          return (OrderLineProperty) getParameters()[0];
 				}
 
 				@Override
-				protected void onSuccess(OrderLine value) {
-					//orderLines = value;
-					//orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
-          for (OrderLine orderLine : orderLineTable.getItems()) {
-            if(orderLine.getId().equals(value.getId())){
-              orderLineTable.getItems().remove(orderLine);
-            }
-          }
+				protected void onSuccess(OrderLineProperty value) {
+          orderLineTable.getItems().remove(value);
+          orderLines.remove(value);
 					hideLoadingMask();
 				}
 
-			};
+        @Override
+        protected void onError(Throwable exception) {
+          exception.printStackTrace();
+          hideLoadingMask();
+        }
+      };
 		}
 	}
 
@@ -174,9 +170,9 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		private final Address invoiceAddress;
 		private final Address deliveryAddress;
 		private final List<Article> articles;
-		private final List<OrderLine> orderLines;
+		private final List<OrderLineProperty> orderLines;
 
-		public GenerateReportTaskCreator(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLine> orderLines) {
+		public GenerateReportTaskCreator(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLineProperty> orderLines) {
 			this.invoice = invoice;
 			this.invoiceAddress = invoiceAddress;
 			this.deliveryAddress = deliveryAddress;
@@ -197,7 +193,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@Override
 				protected String call() throws Exception {
 					return reportService.createInvoiceReport((Invoice) getParameters()[0], (Address) getParameters()[1], (Address) getParameters()[2],
-							(List<Article>) getParameters()[3], (List<OrderLine>) getParameters()[4]);
+							(List<Article>) getParameters()[3], (List<OrderLineProperty>) getParameters()[4]);
 				}
 
 				@Override
@@ -220,23 +216,23 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 	private ViewAddressControl invoiceAddressField, deliveryAddressField;
 
 	@FXML
-	private TableView<OrderLine> orderLineTable;
+	private TableView<OrderLineProperty> orderLineTable;
 
 	@FXML
-	private TableColumn<OrderLine, Long> idColumn, actionsColumn;
+	private TableColumn<OrderLineProperty, Long> idColumn, actionsColumn;
 
 	@FXML
-	private TableColumn<OrderLine, String> codeColumn, articleNameColumn;
+	private TableColumn<OrderLineProperty, String> codeColumn, articleNameColumn;
 
 	@FXML
-	private TableColumn<OrderLine, Float> priceColumn, discountColumn, lineTotalColumn;
+	private TableColumn<OrderLineProperty, Float> priceColumn, discountColumn, lineTotalColumn;
 
 	@FXML
-	private TableColumn<OrderLine, Integer> quantityColumn;
+	private TableColumn<OrderLineProperty, Integer> quantityColumn;
 
 	private Address invoiceAddressValue, deliveryAddressValue;
 
-	//private List<OrderLine> orderLines;
+	private List<OrderLineProperty> orderLines;
 
 	private List<Article> articles;
 
@@ -244,8 +240,8 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	@FXML
 	protected void handleAddOrderLine(ActionEvent event) {
-    OrderLine line  = new OrderLine();
-    line.setOrderId(idField.getText());
+    OrderLineProperty line  = new OrderLineProperty();
+    line.setOrderId(Long.parseLong(idField.getText()));
 		showDialog(getResources().getString("new.order.line.dialog.title"), EditOrderLineDialog.class, articles, units, line);
 	}
 
@@ -260,63 +256,20 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		invoiceAddressField.setResources(getResources());
 		deliveryAddressField.setResources(getResources());
 
-		idColumn.setCellValueFactory(new PropertyValueFactory<OrderLine, Long>("id"));
-		discountColumn.setCellValueFactory(new PropertyValueFactory<OrderLine, Float>("discount"));
-		quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderLine, Integer>("quantity"));
+		idColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Long>("id"));
+		discountColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Float>("unitDiscount"));
+		quantityColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Integer>("quantity"));
+    priceColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Float>("articlePrice"));
+    articleNameColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, String>("articleName"));
+    codeColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, String>("articleCode"));
+    lineTotalColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Float>("lineTotal"));
 
-		priceColumn.setCellValueFactory(new EntityPropertyValueFactory<OrderLine, Float>() {
-
-			@Override
-			protected void setPropertyValue(ObjectProperty<Float> property, OrderLine value) {
-				property.set(findArticleById(value.getArticle()).getPrice());
-			}
-		});
-
-		codeColumn.setCellValueFactory(new EntityStringPropertyValueFactory<OrderLine>() {
+		actionsColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Long>("id"));
+		actionsColumn.setCellFactory(new Callback<TableColumn<OrderLineProperty, Long>, TableCell<OrderLineProperty, Long>>() {
 
 			@Override
-			protected void setPropertyValue(ObjectProperty<String> property, OrderLine value) {
-				property.set(findArticleById(value.getArticle()).getCode());
-			}
-		});
-
-		discountColumn.setCellValueFactory(new EntityPropertyValueFactory<OrderLine, Float>() {
-
-			@Override
-			protected void setPropertyValue(ObjectProperty<Float> property, OrderLine value) {
-				property.set(value.getUnitDiscount());
-			}
-		});
-
-		lineTotalColumn.setCellValueFactory(new EntityPropertyValueFactory<OrderLine, Float>() {
-
-			@Override
-			protected void setPropertyValue(ObjectProperty<Float> property, OrderLine value) {
-				Article article = findArticleById(value.getArticle());
-				if (article.getPrice() != null && value.getQuantity() != null) {
-					property.set((article.getPrice() - (value.getUnitDiscount() != null ? value.getUnitDiscount() : 0)) * value.getQuantity());
-				}
-			}
-		});
-
-		articleNameColumn.setCellValueFactory(new EntityStringPropertyValueFactory<OrderLine>() {
-
-			@Override
-			protected void setPropertyValue(ObjectProperty<String> property, OrderLine value) {
-				Article currentArticle = findArticleById(value.getArticle());
-        if(currentArticle.getName() == null)
-          property.set(currentArticle.getDescription());
-        else
-          property.set(currentArticle.getName());
-			}
-		});
-
-		actionsColumn.setCellValueFactory(new PropertyValueFactory<OrderLine, Long>("id"));
-		actionsColumn.setCellFactory(new Callback<TableColumn<OrderLine, Long>, TableCell<OrderLine, Long>>() {
-
-			@Override
-			public TableCell<OrderLine, Long> call(TableColumn<OrderLine, Long> param) {
-				return new TableCell<OrderLine, Long>() {
+			public TableCell<OrderLineProperty, Long> call(TableColumn<OrderLineProperty, Long> param) {
+				return new TableCell<OrderLineProperty, Long>() {
 					@Override
 					protected void updateItem(Long item, boolean empty) {
 						super.updateItem(item, empty);
@@ -332,23 +285,6 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 			}
 		});
 
-	}
-
-
-  protected void minifyValidation(){
-    validationPanel.setMaxWidth(0.0);
-    Region R = (Region)mainContainer.getParent();
-    double test = ((Region)mainContainer.getParent()).getWidth();
-    mainContainer.setPrefWidth(((Region)mainContainer.getParent()).getWidth());
-  }
-
-	private Article findArticleById(Long articleId) {
-		for (Article article : articles) {
-			if (articleId.equals(article.getId())) {
-				return article;
-			}
-		}
-		throw new IllegalStateException("Article with id " + articleId + " doesn't exists.");
 	}
 
 	@Override
@@ -372,9 +308,15 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 			deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
 		}
 		if (CollectionUtils.isEmpty(articles)) {
-			articles = getRestApiAccessor().getList(Article.class, null, null, "name", null, true, true);
+			articles = getRestApiAccessor().getList(Article.class, null, null, "code", null, true, true);
 		}
-		orderLineTable.getItems().addAll(getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+entity.getId(), true, false));
+    orderLines = new ArrayList<OrderLineProperty>();
+    List<OrderLine> lines = getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+entity.getId(), true, false);
+    for (OrderLine line : lines) {
+      orderLines.add(new OrderLineProperty(line));
+    }
+    orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
+		//orderLineTable.getItems().addAll(orderLines);
 		if (CollectionUtils.isEmpty(units)) {
 			units = getRestApiAccessor().getList(Unit.class, false);
 		}
@@ -385,13 +327,15 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		doInBackground(new SaveOrderLineTaskCreator(event.getEntity()));
 	}
 
-	private OrderLine findOrderLine(Long orderLineId) {
-		for (OrderLine orderLine : orderLineTable.getItems()) {
+	private int findOrderLineIndex(Long orderLineId) {
+    int counter = -1;
+		for (OrderLineProperty orderLine : orderLines) {
+      counter++;
 			if (orderLine.getId().equals(orderLineId)) {
-				return orderLine;
+				return counter;
 			}
 		}
-		throw new IllegalStateException("Can't find OrderLine with id=" + orderLineId);
+		throw new IllegalStateException("Can't find OrderLineProperty with id=" + orderLineId);
 	}
 
 }

@@ -36,13 +36,13 @@ public class ReportService {
 	@Value("#{systemProperties.getProperty('user.home')}")
 	private String userHome;
 
-	public String createInvoiceReport(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLine> orderLines)
+	public String createInvoiceReport(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLineProperty> orderLines)
 			throws ReportServiceException {
 		List<OrderLineReport> reportCollection = new ArrayList<OrderLineReport>();
-		for (OrderLine orderLine : orderLines) {
+		for (OrderLineProperty orderLine : orderLines) {
 			OrderLineReport reportItem = new OrderLineReport();
 			reportItem.setOrderLine(orderLine);
-			Article article = EntityCollectionUtils.findById(articles, orderLine.getArticle());
+			Article article = EntityCollectionUtils.findById(articles, orderLine.getArticleId());
       if(article.getName()==null)
 			  reportItem.setArticleName(article.getDescription());
       else

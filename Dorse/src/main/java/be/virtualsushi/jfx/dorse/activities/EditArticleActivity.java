@@ -314,6 +314,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 	}
 
 	@Override
+  @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization(Article editingEntity) {
     if(editingEntity.getId()!=null){
       stockButton.setVisible(true);
@@ -323,9 +324,9 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
       stockButton.setVisible(false);
       idField.setVisible(false);
     }
-		acceptableArticleTypes = getRestApiAccessor().getList(ArticleType.class, false);
-		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, false);
-		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);
+		acceptableArticleTypes = (List<ArticleType>)getRestApiAccessor().getResponse(ArticleType.class, false).getData();
+		acceptableSuppliers = (List<Supplier>)getRestApiAccessor().getResponse(Supplier.class, false).getData();
+		acceptableUnits = (List<Unit>)getRestApiAccessor().getResponse(Unit.class, false).getData();
     copyDateField.setDateFormat(new SimpleDateFormat(getResources().getString("input.date.format")));
     copyDateField.getCalendarView().setShowTodayButton(true);
 	}

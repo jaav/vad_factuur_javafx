@@ -28,6 +28,8 @@ import javafx.util.Callback;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -48,6 +50,7 @@ import com.google.common.eventbus.Subscribe;
 @Component
 @Scope("prototype")
 public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoice> {
+  private static final Logger log = LoggerFactory.getLogger(ViewInvoiceActivity.class);
 
 	private class ActionsBar extends HBox {
 
@@ -103,13 +106,18 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 				@Override
 				protected OrderLineProperty call() throws Exception {
-					getRestApiAccessor().save(new OrderLine((OrderLineProperty) getParameters()[0]));
-          return (OrderLineProperty) getParameters()[0];
+          OrderLineProperty lineProp = (OrderLineProperty) getParameters()[0];
+					Long id = getRestApiAccessor().save(new OrderLine(lineProp));
+          lineProp.setId(id);
+          return lineProp;
 				}
 
 				@Override
 				protected void onSuccess(OrderLineProperty value) {
-          int index = findOrderLineIndex(value.getId());
+          if(!hasOrderLine(value)){
+            orderLines.add(value);
+            orderLineTable.getItems().add(value);
+          }
           hideLoadingMask();
 				}
 
@@ -182,7 +190,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 		@Override
 		public DorseBackgroundTask<String> createTask() {
-			return new DorseBackgroundTask<String>(this, invoice, invoiceAddress, deliveryAddress, articles, orderLines) {
+			return new DorseBackgroundTask<String>(this, invoice, invoiceAddress, deliveryAddress, orderLines) {
 
 				@Override
 				protected void onPreExecute() {
@@ -193,7 +201,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@Override
 				protected String call() throws Exception {
 					return reportService.createInvoiceReport((Invoice) getParameters()[0], (Address) getParameters()[1], (Address) getParameters()[2],
-							(List<Article>) getParameters()[3], (List<OrderLineProperty>) getParameters()[4]);
+							(List<OrderLineProperty>) getParameters()[3]);
 				}
 
 				@Override
@@ -201,7 +209,14 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 					hideLoadingMask();
 					getEventBus().post(new ShowReportEvent(value));
 				}
-			};
+
+        @Override
+        protected void onError(Throwable exception) {
+          log.warn(exception.getMessage());
+          hideLoadingMask();
+          super.onError(exception);    //To change body of overridden methods use File | Settings | File Templates.
+        }
+      };
 		}
 
 	}
@@ -228,7 +243,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 	private TableColumn<OrderLineProperty, Float> priceColumn, discountColumn, lineTotalColumn;
 
 	@FXML
-	private TableColumn<OrderLineProperty, Integer> quantityColumn;
+	private TableColumn<OrderLineProperty, Integer> quantityColumn, freeQColumn;
 
 	private Address invoiceAddressValue, deliveryAddressValue;
 
@@ -242,6 +257,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 	protected void handleAddOrderLine(ActionEvent event) {
     OrderLineProperty line  = new OrderLineProperty();
     line.setOrderId(Long.parseLong(idField.getText()));
+    line.setApplyFree(true);
 		showDialog(getResources().getString("new.order.line.dialog.title"), EditOrderLineDialog.class, articles, units, line);
 	}
 
@@ -260,6 +276,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		discountColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Float>("unitDiscount"));
 		quantityColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Integer>("quantity"));
     priceColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Float>("articlePrice"));
+    freeQColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Integer>("articleFreeQuantity"));
     articleNameColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, String>("articleName"));
     codeColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, String>("articleCode"));
     lineTotalColumn.setCellValueFactory(new MyPropertyValueFactory<OrderLineProperty, Float>("lineTotal"));
@@ -300,6 +317,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 	}
 
 	@Override
+  @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization(Invoice entity) {
 		if (entity.getInvoiceAddress() != null) {
 			invoiceAddressValue = getRestApiAccessor().get(entity.getInvoiceAddress(), Address.class);
@@ -308,17 +326,17 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 			deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
 		}
 		if (CollectionUtils.isEmpty(articles)) {
-			articles = getRestApiAccessor().getList(Article.class, null, null, "code", null, true, true);
+			articles = (List<Article>)getRestApiAccessor().getResponse(Article.class, null, null, "code", null, true, true).getData();
 		}
     orderLines = new ArrayList<OrderLineProperty>();
-    List<OrderLine> lines = getRestApiAccessor().getList(OrderLine.class, null, null, "id", "invoice="+entity.getId(), true, false);
+    List<OrderLine> lines = (List<OrderLine>)getRestApiAccessor().getResponse(OrderLine.class, null, null, "id", "invoice="+entity.getId(), true, false).getData();
     for (OrderLine line : lines) {
       orderLines.add(new OrderLineProperty(line));
     }
     orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
 		//orderLineTable.getItems().addAll(orderLines);
 		if (CollectionUtils.isEmpty(units)) {
-			units = getRestApiAccessor().getList(Unit.class, false);
+			units = (List<Unit>)getRestApiAccessor().getResponse(Unit.class, false).getData();
 		}
 	}
 
@@ -337,5 +355,14 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		}
 		throw new IllegalStateException("Can't find OrderLineProperty with id=" + orderLineId);
 	}
+
+  private boolean hasOrderLine(OrderLineProperty orderLineProperty) {
+ 		for (OrderLineProperty orderLine : orderLines) {
+ 			if (orderLine.getId().equals(orderLineProperty.getId())) {
+ 				return true;
+ 			}
+ 		}
+ 		return false;
+ 	}
 
 }

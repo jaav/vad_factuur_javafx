@@ -2,7 +2,7 @@ package be.virtualsushi.jfx.dorse.restapi;
 
 import java.util.*;
 
-import be.virtualsushi.jfx.dorse.model.Sector;
+import be.virtualsushi.jfx.dorse.model.ServerResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
@@ -70,7 +70,7 @@ public class RestApiAccessor extends RestTemplate {
  		return getList(entityClass, offset, count, orderOn, fullInfo, false, null, parameters);
  	}*/
 
-  public <E extends BaseEntity> List<E> getList(Class<E> entityClass, boolean fullInfo) {
+  /*public <E extends BaseEntity> List<E> getList(Class<E> entityClass, boolean fullInfo) {
  		return getList(entityClass, null, null, "id", null, fullInfo, false);
  	}
 
@@ -87,6 +87,27 @@ public class RestApiAccessor extends RestTemplate {
       e.printStackTrace();
     }
 		return result;
+	}*/
+
+  public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, boolean fullInfo) {
+ 		return getResponse(entityClass, null, null, "id", null, fullInfo, false);
+ 	}
+
+	public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, Integer offset, Integer count, String orderOn, String additionalCondition, boolean fullInfo, boolean includesNonActive) {
+    ServerResponse response = null;
+		ArrayList<E> data = new ArrayList<E>();
+		String url = serviceUri + getEntityListSubPath(entityClass);
+    Map<String,?> urlVariables = getUrlVariables(offset, count, orderOn, fullInfo, includesNonActive, additionalCondition);
+    if(url.charAt(url.length()-1)=='&') url = url.substring(0, url.length()-1);
+		log.debug("Getting list of " + entityClass + " URL: " + url);
+    try{
+      System.out.println("results in = " + getResponseSubtypeClass(entityClass));
+		  response = getForObject(url, getResponseSubtypeClass(entityClass), urlVariables);
+      //result.addAll(Arrays.asList(ids));
+    } catch (Exception e){
+      e.printStackTrace();
+    }
+		return response;
 	}
 
   /*public List<Sector> getSubSectors(Long parent_id){
@@ -115,12 +136,16 @@ public class RestApiAccessor extends RestTemplate {
 		return getForObject(url, clazz, id);
 	}
 
-	public <E extends BaseEntity> void save(E entity) {
+	public <E extends BaseEntity> Long save(E entity) {
     entity.setActive(true);
-		if (entity.getId() == null) {
-			postForObject(serviceUri + getEntitySubPath(entity.getClass()), entity, entity.getClass());
+		if (entity.getId() == null || entity.getId()==0) {
+      BaseEntity e = postForObject(serviceUri + getEntitySubPath(entity.getClass()), entity, entity.getClass());
+      if(e!=null)
+        return e.getId();
+      else return null;
 		} else {
 			postForObject(serviceUri + getEntitySubPath(entity.getClass()) + "/{id}", entity, entity.getClass(), entity.getId());
+      return entity.getId();
 		}
 	}
 
@@ -178,6 +203,7 @@ public class RestApiAccessor extends RestTemplate {
       urlVariables.put("additionalCondition", additionalCondition);
     else
       urlVariables.put("additionalCondition", "");
+    urlVariables.put("count", "true");
     return urlVariables;
   }
 
@@ -193,7 +219,8 @@ public class RestApiAccessor extends RestTemplate {
         .append("orderOn={orderOn}&")
         .append("fullInfo={fullInfo}&")
         .append("includesNonActive={includesNonActive}&")
-        .append("additionalCondition={additionalCondition}");
+        .append("additionalCondition={additionalCondition}&")
+        .append("count={count}");
     return result.toString();
 	}
 
@@ -205,5 +232,14 @@ public class RestApiAccessor extends RestTemplate {
 			throw new RuntimeException("Unable to create array class for " + entityClass.getName(), e);
 		}
 	}
+
+  @SuppressWarnings("unchecked")
+ 	private <E extends BaseEntity> Class<ServerResponse> getResponseSubtypeClass(Class<E> entityClass) {
+ 		try {
+ 			return (Class<ServerResponse>) Class.forName(entityClass.getName() + "Response");
+ 		} catch (ClassNotFoundException e) {
+ 			throw new RuntimeException("Unable to create array class for " + entityClass.getName(), e);
+ 		}
+ 	}
 
 }

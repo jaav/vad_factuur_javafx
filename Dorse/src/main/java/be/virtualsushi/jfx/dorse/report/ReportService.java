@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse.report;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import be.virtualsushi.jfx.dorse.model.*;
@@ -15,6 +16,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +38,9 @@ public class ReportService {
 	@Value("#{systemProperties.getProperty('user.home')}")
 	private String userHome;
 
-	public String createInvoiceReport(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLineProperty> orderLines)
+	public String createInvoiceReport(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<OrderLineProperty> orderLines)
 			throws ReportServiceException {
-		List<OrderLineReport> reportCollection = new ArrayList<OrderLineReport>();
+		/*List<OrderLineReport> reportCollection = new ArrayList<OrderLineReport>();
 		for (OrderLineProperty orderLine : orderLines) {
 			OrderLineReport reportItem = new OrderLineReport();
 			reportItem.setOrderLine(orderLine);
@@ -50,8 +52,8 @@ public class ReportService {
 			reportItem.setCode(article.getCode());
 			reportItem.setPrice(article.getPrice());
 			reportCollection.add(reportItem);
-		}
-
+		}*/
+    List<OrderLineProperty> decoupled = decoupleFreeArticles(orderLines);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("invoiceCode", invoice.getCode());
 		parameters.put("invoiceId", invoice.getId());
@@ -88,7 +90,7 @@ public class ReportService {
 		try {
 			outStream = new FileOutputStream(out);
 			JasperPrint print = JasperFillManager.fillReport(new ClassPathResource("invoice_printout.jasper").getInputStream(), parameters, new JRBeanCollectionDataSource(
-					reportCollection));
+          decoupled));
 			JRExporter exporter = new JRPdfExporter();
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outStream);
@@ -106,5 +108,38 @@ public class ReportService {
 	private String createOutputFileUri(String invoiceCode) {
 		return userHome + File.separator + String.format(PDF_REPORT_FILE_NAME_PATTER, invoiceCode);
 	}
+
+  private List<OrderLineProperty> decoupleFreeArticles(List<OrderLineProperty> orderLines){
+    List<OrderLineProperty> decoupled = new ArrayList<OrderLineProperty>();
+    for (OrderLineProperty orderLine : orderLines) {
+      if(orderLine.getApplyFree() && orderLine.getArticleFreeQuantity()>0){
+        try {
+          if(orderLine.getArticleFreeQuantity()<orderLine.getQuantity()){
+            OrderLineProperty free = (OrderLineProperty)BeanUtils.cloneBean(orderLine);
+            free.setQuantity(orderLine.getArticleFreeQuantity());
+            free.setArticlePrice(0F);
+            free.setUnitDiscount(0F);
+            free.setLineTotal(0F);
+            orderLine.setQuantity(orderLine.getQuantity()-orderLine.getArticleFreeQuantity());
+            decoupled.add(orderLine);
+            decoupled.add(free);
+          }
+          else
+            decoupled.add(orderLine);
+        } catch (IllegalAccessException e) {
+          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (InstantiationException e) {
+          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (InvocationTargetException e) {
+          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (NoSuchMethodException e) {
+          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+      }
+      else
+        decoupled.add(orderLine);
+    }
+    return decoupled;
+  }
 
 }

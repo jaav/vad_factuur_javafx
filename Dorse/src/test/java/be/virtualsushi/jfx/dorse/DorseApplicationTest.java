@@ -23,4 +23,10 @@ public class DorseApplicationTest {
 		Class<E[]> c = (Class<E[]>) Class.forName("[L" + eclass.getName() + ";");
 		System.out.println(c.getName());
 	}
+
+  @Test
+  public void jsonTest() throws ClassNotFoundException {
+
+  }
+
 }

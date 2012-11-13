@@ -65,10 +65,11 @@ public class ViewArticleActivity extends AbstractViewEntityActivity<VBox, Articl
 	}
 
   @Override
+  @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization(Article entity) {
-		acceptableTypes = getRestApiAccessor().getList(ArticleType.class, false);
-		acceptableUnits = getRestApiAccessor().getList(Unit.class, false);
-		acceptableSuppliers = getRestApiAccessor().getList(Supplier.class, false);
+    acceptableTypes = (List<ArticleType>)getRestApiAccessor().getResponse(ArticleType.class, false).getData();
+    acceptableSuppliers = (List<Supplier>)getRestApiAccessor().getResponse(Supplier.class, false).getData();
+    acceptableUnits = (List<Unit>)getRestApiAccessor().getResponse(Unit.class, false).getData();
 	}
 
 }

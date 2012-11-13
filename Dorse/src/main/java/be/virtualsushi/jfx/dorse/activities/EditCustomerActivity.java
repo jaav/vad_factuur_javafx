@@ -163,6 +163,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	}
 
 	@Override
+  @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization(Customer editingEntity) {
     if(editingEntity.getId()!=null){
       idField.setVisible(true);
@@ -170,7 +171,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
     else{
       idField.setVisible(false);
     }
-		acceptableSectors = getRestApiAccessor().getList(Sector.class, null, null, null, "parent is null", false, false);
+		acceptableSectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, null, null, null, "parent is null", false, false).getData();
 	}
 
 	@Subscribe
@@ -197,8 +198,9 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 		fieldsMap.put("sector", sectorField);
 	}
 
+  @SuppressWarnings("unchecked")
   private void showSubSectors(Long sector_id){
-    acceptableSubSectors = (List)getRestApiAccessor().getList(Sector.class, null, null, "name", "parent="+sector_id, true, false);
+    acceptableSubSectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, null, null, "name", "parent="+sector_id, true, false).getData();
     subSectorField.setItems(FXCollections.observableArrayList(acceptableSubSectors));
   }
 

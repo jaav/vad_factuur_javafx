@@ -17,12 +17,14 @@ public class OrderLineProperty {
  	private SimpleLongProperty id;
   //private ArticleProperty article;
  	private SimpleIntegerProperty quantity;
+  private SimpleBooleanProperty applyFree;
  	private SimpleFloatProperty unitDiscount;
   private SimpleLongProperty orderId;
   private SimpleLongProperty articleId;
   private SimpleStringProperty articleName; 
   private SimpleFloatProperty articlePrice; 
   private SimpleStringProperty articleCode;
+  private SimpleIntegerProperty articleFreeQuantity;
   private SimpleFloatProperty lineTotal;
   
 
@@ -34,6 +36,11 @@ public class OrderLineProperty {
   public SimpleIntegerProperty quantityProperty() {
     if (quantity == null) quantity = new SimpleIntegerProperty(this, "quantity");
     return quantity;
+  }
+
+  public SimpleBooleanProperty applyFreeProperty() {
+    if (applyFree == null) applyFree = new SimpleBooleanProperty(this, "applyFree");
+    return applyFree;
   }
 
   public SimpleFloatProperty unitDiscountProperty() {
@@ -71,6 +78,11 @@ public class OrderLineProperty {
     return articlePrice;
   }
 
+  public SimpleIntegerProperty articleFreeQuantityProperty() {
+    if (articleFreeQuantity == null) articleFreeQuantity = new SimpleIntegerProperty(this, "articleFreeQuantity");
+    return articleFreeQuantity;
+  }
+
   public OrderLineProperty(OrderLine line) {
     if(line.getId()!=null)
       idProperty().set(line.getId());
@@ -80,6 +92,8 @@ public class OrderLineProperty {
       quantityProperty().set(line.getQuantity());
     if(line.getUnitDiscount()!=null)
       unitDiscountProperty().set(line.getUnitDiscount());
+    if(line.getApplyFree()!=null)
+      applyFreeProperty().set(line.getApplyFree());
     if(line.getArticle()!=null){
       if(line.getArticle().getId()!=null)
         articleIdProperty().set(line.getArticle().getId());
@@ -89,11 +103,26 @@ public class OrderLineProperty {
         articleCodeProperty().set(line.getArticle().getCode());
       if(line.getArticle().getPrice()!=null)
         articlePriceProperty().set(line.getArticle().getPrice());
-      float formatted;
-      formatted = quantityProperty().get()*(articlePriceProperty().get()-unitDiscountProperty().get());
-      formatted = ((float)((int)(formatted*100)))/100;
-      lineTotal = new SimpleFloatProperty(formatted);
+      if(line.getArticle().getFreeQuantity()!=null)
+        if(line.getApplyFree())
+          articleFreeQuantityProperty().set(line.getArticle().getFreeQuantity());
+        else
+          articleFreeQuantityProperty().set(0);
+      lineTotal = new SimpleFloatProperty(getFormattedTotalPrice(applyFreeProperty().get(), quantityProperty().get(), articleFreeQuantityProperty().get(), articlePriceProperty().get(), unitDiscountProperty().get()));
     }
+  }
+
+
+
+  public static Float getFormattedTotalPrice(Boolean applyFree, Integer q, Integer freeQ, Float price, Float discount){
+    float formatted;
+    if(applyFree && freeQ>0){
+      formatted = (q-freeQ)*(price-discount);
+      if(formatted<0) formatted=0F;
+    }
+    else
+      formatted = q*(price-discount);
+    return((float)((int)(formatted*100)))/100;
   }
 
   public OrderLineProperty() {
@@ -172,6 +201,22 @@ public class OrderLineProperty {
 
   public void setArticlePrice(Float articlePrice) {
     articlePriceProperty().set(articlePrice);
+  }
+
+  public Integer getArticleFreeQuantity(){
+    return articleFreeQuantityProperty().get();
+  }
+
+  public void setArticleFreeQuantity(Integer freeArticleQuantity) {
+    articleFreeQuantityProperty().set(freeArticleQuantity);
+  }
+
+  public Boolean getApplyFree(){
+    return applyFreeProperty().get();
+  }
+
+  public void setApplyFree(Boolean applyFree){
+    applyFreeProperty().set(applyFree);
   }
 
 }

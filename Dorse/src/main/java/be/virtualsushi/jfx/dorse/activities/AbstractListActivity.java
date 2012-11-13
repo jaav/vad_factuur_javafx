@@ -1,14 +1,13 @@
 package be.virtualsushi.jfx.dorse.activities;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 
+import be.virtualsushi.jfx.dorse.events.dialogs.FilterEvent;
+import be.virtualsushi.jfx.dorse.model.ServerResponse;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
+import com.google.common.eventbus.Subscribe;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -33,10 +32,8 @@ import be.virtualsushi.jfx.dorse.control.DetailsButton;
 import be.virtualsushi.jfx.dorse.control.EditButton;
 import be.virtualsushi.jfx.dorse.control.table.EntityPropertyTableColumn;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
-import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUiActivity<BorderPane> {
 
@@ -46,7 +43,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 	@Autowired
 	protected ActivityNavigator activityNavigator;
 
-	private class LoadPageDataTaskCreator implements TaskCreator<DorseBackgroundTask<List<E>>> {
+	private class LoadPageDataTaskCreator implements TaskCreator<DorseBackgroundTask<ServerResponse>> {
 
 		private final Integer from;
 		private final Integer quantity;
@@ -74,8 +71,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
   		}
 
 		@Override
-		public DorseBackgroundTask<List<E>> createTask() {
-			return new DorseBackgroundTask<List<E>>(this, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive) {
+		public DorseBackgroundTask<ServerResponse> createTask() {
+			return new DorseBackgroundTask<ServerResponse>(this, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive) {
 
 				@Override
 				protected void onPreExecute() {
@@ -84,30 +81,93 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 				@SuppressWarnings("unchecked")
 				@Override
-				protected List<E> call() throws Exception {
+				protected ServerResponse call() throws Exception {
           try{
 					doCustomBackgroundInitialization();
-            return getRestApiAccessor().getList(
+            return getRestApiAccessor().getResponse(
                 (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
                 getInteger(0), getInteger(1), getString(2), getString(3),
                 getBoolean(4, true), getBoolean(5, false));
           }
           catch (Exception e){
             e.printStackTrace();
-            return new ArrayList<E>();
+            return null;
           }
 				}
 
 				@Override
-				protected void onSuccess(List<E> value) {
-					createPage(value);
+				protected void onSuccess(ServerResponse value) {
+          listContainer.setCenter(createPage(value));
+          listPage.setPageCount((int) Math.ceil(value.getMetaData().getCount() / getItemsPerPageCount()));
 					hideLoadingMask();
 				}
 			};
 		}
 	}
 
-	private class DeleteEntityTaskCreator implements TaskCreator<DorseBackgroundTask<List<E>>> {
+  private class FilterPageDataTaskCreator implements TaskCreator<DorseBackgroundTask<ServerResponse>> {
+
+			private final Integer from;
+			private final Integer quantity;
+			private final String orderOn;
+	    private final Boolean fullInfo;
+	    private final Boolean includesNonActive;
+	    private final String additionalCondition;
+
+			public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, boolean includesNonActive, String additionalCondition) {
+				this.from = from;
+				this.quantity = quantity;
+				this.orderOn = orderOn;
+	      this.fullInfo = fullInfo;
+	      this.additionalCondition = additionalCondition;
+	      this.includesNonActive = includesNonActive;
+			}
+
+	    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo) {
+	  			this.from = from;
+	  			this.quantity = quantity;
+	  			this.orderOn = orderOn;
+	        this.fullInfo = fullInfo;
+	        this.additionalCondition = null;
+	        this.includesNonActive = null;
+	  		}
+
+			@Override
+			public DorseBackgroundTask<ServerResponse> createTask() {
+				return new DorseBackgroundTask<ServerResponse>(this, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive) {
+
+					@Override
+					protected void onPreExecute() {
+						showLoadingMask();
+					}
+
+					@SuppressWarnings("unchecked")
+					@Override
+					protected ServerResponse call() throws Exception {
+	          try{
+						doCustomBackgroundInitialization();
+	            return getRestApiAccessor().getResponse(
+	                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+	                getInteger(0), getInteger(1), getString(2), getString(3),
+	                getBoolean(4, true), getBoolean(5, false));
+	          }
+	          catch (Exception e){
+	            e.printStackTrace();
+	            return null;
+	          }
+					}
+
+					@Override
+					protected void onSuccess(ServerResponse value) {
+	          listContainer.setCenter(createPage(value));
+	          listPage.setPageCount((int) Math.ceil(value.getMetaData().getCount() / getItemsPerPageCount()));
+						hideLoadingMask();
+					}
+				};
+			}
+		}
+
+	private class DeleteEntityTaskCreator implements TaskCreator<DorseBackgroundTask<ServerResponse>> {
 
 		private final E entity;
 
@@ -116,8 +176,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		}
 
 		@Override
-		public DorseBackgroundTask<List<E>> createTask() {
-			return new DorseBackgroundTask<List<E>>(this, entity) {
+		public DorseBackgroundTask<ServerResponse> createTask() {
+			return new DorseBackgroundTask<ServerResponse>(this, entity) {
 
 				@Override
 				protected void onPreExecute() {
@@ -126,14 +186,14 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 				@SuppressWarnings("unchecked")
 				@Override
-				protected List<E> call() throws Exception {
+				protected ServerResponse call() throws Exception {
 					getRestApiAccessor().delete((E) getParameters()[0]);
-					return getRestApiAccessor().getList((Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+					return getRestApiAccessor().getResponse((Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
               0, getItemsPerPageCount(), ORDER_ON, null, true, false);
 				}
 
 				@Override
-				protected void onSuccess(List<E> value) {
+				protected void onSuccess(ServerResponse value) {
 					listPage.setCurrentPageIndex(0);
 					createPage(value);
 					hideLoadingMask();
@@ -222,19 +282,22 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		}
 	}
 
-	private void createPage(List<E> data) {
-		TableView<E> table = new TableView<E>();
-		table.setMaxHeight(Double.MAX_VALUE);
-		table.setMaxWidth(Double.MAX_VALUE);
-		fillTableColumns(table);
-		table.setItems(FXCollections.observableArrayList(data));
-		listContainer.setCenter(table);
-	}
-
 	@FXML
 	public void handleAddAction(ActionEvent event) {
 		goTo(getEditActivityName());
 	}
+
+  @FXML
+ 	protected void handleLaunchFilter(ActionEvent event){
+    //show the corresponding filter dialog
+  }
+
+  @Subscribe
+ 	public void onFilter(FilterEvent event) {
+    System.out.println("event = " + event);
+    System.out.println("event.getEntity().getClass().getName() = " + event.getEntity().getClass().getName());
+    doInBackground(new LoadPageDataTaskCreator(event.getEntity()));
+ 	}
 
 	protected Integer getItemsPerPageCount() {
 		return 20;
@@ -307,5 +370,18 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 	protected abstract AppActivitiesNames getEditActivityName();
 
   protected abstract Boolean getFullInfo();
+
+  protected abstract TableView createPage(ServerResponse serverResponse);
+
+
+
+  /*private void createPage(ServerResponse serverResponse) {
+ 		TableView<? extends BaseEntity> table = new TableView<? extends BaseEntity>();
+ 		table.setMaxHeight(Double.MAX_VALUE);
+ 		table.setMaxWidth(Double.MAX_VALUE);
+ 		fillTableColumns(table);
+ 		table.setItems(FXCollections.observableArrayList(serverResponse.getData()));
+ 		listContainer.setCenter(table);
+ 	}*/
 
 }

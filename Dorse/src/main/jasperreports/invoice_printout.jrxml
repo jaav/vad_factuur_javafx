@@ -37,87 +37,22 @@
 	<parameter name="goods" class="java.lang.Float"/>
 	<parameter name="total" class="java.lang.Float"/>
 	<parameter name="tpt" class="java.lang.Float"/>
-	<field name="orderLine" class="be.virtualsushi.jfx.dorse.model.OrderLine"/>
 	<field name="articleName" class="java.lang.String"/>
-	<field name="price" class="java.lang.Float"/>
-	<field name="code" class="java.lang.String"/>
+	<field name="articlePrice" class="java.lang.Float"/>
+	<field name="articleCode" class="java.lang.String"/>
+	<field name="quantity" class="java.lang.Integer"/>
+	<field name="unitDiscount" class="java.lang.Float"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
 		<band height="205">
-			<frame>
-				<reportElement uuid="f5631b94-4ac3-41df-b2f2-0ff8000034d5" mode="Opaque" x="250" y="79" width="272" height="68" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textField>
-					<reportElement uuid="9787eb06-a2b2-41e6-9e7b-5467499a9660" x="5" y="45" width="267" height="20">
-						<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
-					</reportElement>
-					<textElement>
-						<font size="12" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{deliveryAddress}.getZipcode()+" "+$P{invoiceAddress}.getCity()]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="5" y="25" width="267" height="20">
-						<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
-					</reportElement>
-					<textElement>
-						<font size="12" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{invoiceAddress}.getAddress()]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement uuid="37c8e09e-eb14-49ca-9ec7-7e9d692fde46" x="5" y="5" width="267" height="20"/>
-					<textElement>
-						<font size="12" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[($P{customer}!=null?$P{customer}:"")]]></textFieldExpression>
-				</textField>
-			</frame>
 			<line>
 				<reportElement uuid="927662ee-31fb-4c08-b8e9-65fd02cbadec" x="0" y="204" width="555" height="1"/>
 				<graphicElement>
 					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</line>
-			<frame>
-				<reportElement uuid="0872e33e-8af5-47e9-8dee-7a69a7990f79" x="83" y="5" width="471" height="58"/>
-				<staticText>
-					<reportElement uuid="a9e4b189-1a03-4a8e-8af2-9399bf990f36" x="0" y="1" width="453" height="23"/>
-					<textElement textAlignment="Center">
-						<font size="14" isBold="true"/>
-					</textElement>
-					<text><![CDATA[VERENIGING VOOR ALCOHOL- EN ANDERE DRUGPROBLEMEN]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="265" y="22" width="187" height="12"/>
-					<textElement textAlignment="Right"/>
-					<text><![CDATA[Tel: 02/423.03.33 ]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="266" y="33" width="186" height="12"/>
-					<textElement textAlignment="Right"/>
-					<text><![CDATA[Fax: 02/423.03.34 ]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="266" y="44" width="186" height="12"/>
-					<textElement textAlignment="Right"/>
-					<text><![CDATA[Rekening nummer: 433-1078045-12 ]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="2" y="24" width="187" height="12"/>
-					<textElement/>
-					<text><![CDATA[Vanderlindenstraat 15]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="2" y="36" width="187" height="12"/>
-					<textElement/>
-					<text><![CDATA[1030 Brussel]]></text>
-				</staticText>
-				<line>
-					<reportElement uuid="7f888661-776a-4c1e-8e49-c7166c7e2e5d" x="2" y="16" width="451" height="1"/>
-				</line>
-			</frame>
 			<textField>
 				<reportElement uuid="495fdd1c-568b-4ad5-a121-01652c7cf569" x="60" y="183" width="210" height="22" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
@@ -137,9 +72,49 @@
 				<textElement/>
 				<textFieldExpression><![CDATA["Leveringsadres: "+($P{person}!=null?$P{person}:"Onthaal")+", "+$P{deliveryAddress}.getAddress()+", "+$P{deliveryAddress}.getZipcode()+" "+$P{deliveryAddress}.getCity()]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement uuid="089a6c48-70e7-414b-99f7-d8c92898a474" x="4" y="0" width="70" height="70"/>
-				<imageExpression><![CDATA["/Users/jefw/Documents/virtualsushi/customers/vad/vadfactuur/Code/vad_factuur_javafx/Dorse/src/main/resources/be/virtualsushi/jfx/dorse/resources/logo_sq.png"]]></imageExpression>
+			<staticText>
+				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="113" width="254" height="12"/>
+				<textElement/>
+				<text><![CDATA[Vanderlindenstraat 15 - 1030 Brussel]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="126" width="254" height="12"/>
+				<textElement/>
+				<text><![CDATA[Tel: 02/423.03.33 - Fax: 02/423.03.34 ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="139" width="254" height="12"/>
+				<textElement/>
+				<text><![CDATA[Rekening nummer: 433-1078045-12 ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="332" y="29" width="221" height="20">
+					<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{invoiceAddress}.getAddress()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="37c8e09e-eb14-49ca-9ec7-7e9d692fde46" x="332" y="8" width="221" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{customer}!=null?$P{customer}:"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9787eb06-a2b2-41e6-9e7b-5467499a9660" x="332" y="49" width="221" height="20">
+					<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{deliveryAddress}.getZipcode()+" "+$P{invoiceAddress}.getCity()]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RealSize">
+				<reportElement uuid="13acd14c-cf77-47e0-a1f7-acee78c40527" x="0" y="0" width="280" height="110"/>
+				<imageExpression><![CDATA["/Users/jefw/Documents/virtualsushi/customers/vad/VAD_logo_400.png"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -190,17 +165,17 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="406" y="0" width="70" height="26"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{orderLine}.getQuantity()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="477" y="0" width="75" height="26"/>
+				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="477" y="0" width="76" height="26"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($F{price} - ($F{orderLine}.getUnitDiscount()!=null?$F{orderLine}.getUnitDiscount():0)) * $F{orderLine}.getQuantity()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{articlePrice} - ($F{unitDiscount}!=null?$F{unitDiscount}:0)) * $F{quantity}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="4" y="0" width="76" height="26"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articleCode}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="80" y="0" width="246" height="26"/>
@@ -210,7 +185,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="326" y="0" width="80" height="26"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articlePrice}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement uuid="71329195-cc28-4601-a89d-4774551ef3f0" x="0" y="27" width="555" height="1" forecolor="#CCCCCC"/>

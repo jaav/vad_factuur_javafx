@@ -5,6 +5,7 @@
 <?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
 <?import be.virtualsushi.jfx.dorse.control.ComboBoxField?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.CheckBox?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 <?import be.virtualsushi.jfx.dorse.control.FloatNumberField?>
 <?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
@@ -25,11 +26,6 @@
 		<ComboBoxField fx:id="articleField"
 			GridPane.columnIndex="0" GridPane.rowIndex="1" fieldWidth="300" />
 
-		<FieldLabel value="%article.info" GridPane.columnIndex="1"
-			GridPane.rowIndex="0" />
-		<Label fx:id="articleInfoField" GridPane.columnIndex="1"
-			GridPane.rowIndex="1" prefWidth="300" />
-
 		<FieldLabel value="%discount" GridPane.columnIndex="0"
 			GridPane.rowIndex="2" />
 		<FloatNumberField fx:id="discountField"
@@ -42,13 +38,20 @@
 		<IntegerNumberField fx:id="quantityField"
 			GridPane.columnIndex="1" GridPane.rowIndex="3" fieldWidth="300" />
 
+        <FieldLabel value="%applyFree" GridPane.columnIndex="0"
+            GridPane.rowIndex="4" />
+        <CheckBox fx:id="applyFreeCheck" GridPane.columnIndex="1"
+                    GridPane.rowIndex="4" />
+        <IntegerNumberField fx:id="freeQuantityField" visible="false"
+      			GridPane.columnIndex="1" GridPane.rowIndex="4"  />
+
 		<FieldLabel value="%line.total" GridPane.columnIndex="0"
-			GridPane.rowIndex="4" />
+			GridPane.rowIndex="5" />
 		<Label fx:id="lineTotalField" GridPane.columnIndex="1"
-			GridPane.rowIndex="4" prefWidth="300" />
+			GridPane.rowIndex="5" prefWidth="300" />
 
 		<ControlsButtonsBar GridPane.columnIndex="1"
-			GridPane.rowIndex="5" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+			GridPane.rowIndex="6" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
 			onCancelAction="#handleCancel" saveButtonTitle="%save"
 			cancelButtonTitle="%cancel" />
 

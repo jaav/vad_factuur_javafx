@@ -237,8 +237,9 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	}
 
 	@Override
+  @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization(Invoice editingEntity) {
-		acceptableCustomers = getRestApiAccessor().getList(Customer.class, false);
+		acceptableCustomers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, false).getData();
 	}
 
 	@Override

@@ -31,6 +31,9 @@ public class OrderLine extends BaseEntity {
  	@NotNull
  	private Long orderId;
 
+  @JsonProperty("apply_free")
+ 	private Boolean applyFree;
+
   private Float lineTotal;
 
   public OrderLine(OrderLineProperty lineProperty) {
@@ -39,9 +42,11 @@ public class OrderLine extends BaseEntity {
     this.article.setCode(lineProperty.getArticleCode());
     this.article.setName(lineProperty.getArticleName());
     this.article.setPrice(lineProperty.getArticlePrice());
+    this.article.setFreeQuantity(lineProperty.getArticleFreeQuantity());
     this.orderId = lineProperty.getOrderId();
     this.quantity = lineProperty.getQuantity();
     this.unitDiscount = lineProperty.getUnitDiscount();
+    this.applyFree = lineProperty.getApplyFree();
     this.setId(lineProperty.getId());
   }
 
@@ -86,5 +91,13 @@ public class OrderLine extends BaseEntity {
 
   public void setLineTotal(Float lineTotal) {
     this.lineTotal = lineTotal;
+  }
+
+  public Boolean getApplyFree() {
+    return applyFree;
+  }
+
+  public void setApplyFree(Boolean applyFree) {
+    this.applyFree = applyFree;
   }
 }

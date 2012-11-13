@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
 <?import be.virtualsushi.jfx.dorse.control.AddButton?>
+<?import be.virtualsushi.jfx.dorse.control.FilterButton?>
 <?import java.lang.String?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
@@ -21,6 +22,7 @@
 			<Label fx:id="listTitle" styleClass="activity-title" />
 
 			<AddButton onAction="#handleAddAction" />
+            <FilterButton onAction="#handleLaunchFilter" />
 		</HBox>
 	</top>
 	

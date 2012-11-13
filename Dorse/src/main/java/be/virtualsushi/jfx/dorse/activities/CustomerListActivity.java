@@ -2,7 +2,10 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.model.Article;
+import be.virtualsushi.jfx.dorse.model.ServerResponse;
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -104,9 +107,10 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 	}
 
 	@Override
+  @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization() {
 		if (CollectionUtils.isEmpty(sectors)) {
-			sectors = getRestApiAccessor().getList(Sector.class, false);
+			sectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, false).getData();
 		}
 	}
 
@@ -123,5 +127,16 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
   @Override
   protected Boolean getFullInfo() {
     return true;
+  } 
+  
+  @Override  
+  @SuppressWarnings("unchecked")
+  protected TableView createPage(ServerResponse serverResponse) {
+    TableView<Customer> table = new TableView<Customer>();
+    table.setMaxHeight(Double.MAX_VALUE);
+    table.setMaxWidth(Double.MAX_VALUE);
+    fillTableColumns(table);
+    table.setItems(FXCollections.observableArrayList((List<Customer>) serverResponse.getData()));
+    return table;
   }
 }

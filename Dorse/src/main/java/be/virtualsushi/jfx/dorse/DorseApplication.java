@@ -3,6 +3,11 @@ package be.virtualsushi.jfx.dorse;
 import java.util.ResourceBundle;
 
 import be.virtualsushi.jfx.dorse.activities.*;
+import be.virtualsushi.jfx.dorse.dialogs.AbstractFilterDialog;
+import be.virtualsushi.jfx.dorse.events.ShowFilterDialogEvent;
+import be.virtualsushi.jfx.dorse.model.Article;
+import be.virtualsushi.jfx.dorse.model.ServerResponse;
+import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 import be.virtualsushi.jfx.dorse.utils.AppVariables;
 import com.zenjava.jfxflow.navigation.DefaultNavigationManager;
 import com.zenjava.jfxflow.navigation.Place;
@@ -67,7 +72,6 @@ public class DorseApplication extends Application {
 		BorderPane rootNode = new BorderPane();
     activityNavigator.goTo(HOME);
 		initializeDialogs();
-
 		rootNode.setCenter(browser);
 		Scene scene = new Scene(rootNode, 1200, 800);
 		stage.setScene(scene);
@@ -136,6 +140,15 @@ public class DorseApplication extends Application {
 		showDialog(customDialog);
 		dialogContent.onShow(event.getParameters());
 	}
+
+  @Subscribe
+ 	public void onShowFilterDialog(ShowFilterDialogEvent event) {
+ 		customDialog.setTitle(event.getDialogTitle());
+ 		AbstractFilterDialog dialogContent = applicationContext.getBean(event.getFilterDialogControllerClass());
+ 		customDialog.setContent(dialogContent.asNode());
+ 		showDialog(customDialog);
+ 		dialogContent.onShow();
+ 	}
 
 	@Subscribe
 	public void onShowLoadingMask(ShowLoadingMaskEvent event) {

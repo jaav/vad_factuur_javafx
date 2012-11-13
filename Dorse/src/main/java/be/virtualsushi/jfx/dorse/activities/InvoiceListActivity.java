@@ -1,8 +1,12 @@
 package be.virtualsushi.jfx.dorse.activities;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
+import be.virtualsushi.jfx.dorse.model.Article;
+import be.virtualsushi.jfx.dorse.model.ServerResponse;
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -79,5 +83,16 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
   @Override
   protected Boolean getFullInfo() {
     return true;
+  } 
+  
+  @Override  
+  @SuppressWarnings("unchecked")
+  protected TableView createPage(ServerResponse serverResponse) {
+    TableView<Invoice> table = new TableView<Invoice>();
+    table.setMaxHeight(Double.MAX_VALUE);
+    table.setMaxWidth(Double.MAX_VALUE);
+    fillTableColumns(table);
+    table.setItems(FXCollections.observableArrayList((List<Invoice>) serverResponse.getData()));
+    return table;
   }
 }

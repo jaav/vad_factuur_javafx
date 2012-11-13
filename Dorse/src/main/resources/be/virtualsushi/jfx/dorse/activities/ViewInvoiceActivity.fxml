@@ -55,7 +55,7 @@
 
 			<ViewAddressControl fx:id="invoiceAddressField">
 				<padding>
-					<Insets bottom="5" left="20" right="5" top="10" />
+					<Insets bottom="5" left="20" right="5" top="0" />
 				</padding>
 			</ViewAddressControl>
 
@@ -64,7 +64,7 @@
 
 			<ViewAddressControl fx:id="deliveryAddressField">
 				<padding>
-					<Insets bottom="5" left="20" right="5" top="10" />
+					<Insets bottom="5" left="20" right="5" top="0" />
 				</padding>
 			</ViewAddressControl>
 
@@ -80,6 +80,7 @@
 			<TableColumn fx:id="priceColumn" minWidth="80" text="%price" />
 			<TableColumn fx:id="discountColumn" minWidth="80" text="%discount" />
 			<TableColumn fx:id="quantityColumn" minWidth="80" text="%quantity" />
+            <TableColumn fx:id="freeQColumn" minWidth="80" text="%free_quantity" />
 			<TableColumn fx:id="lineTotalColumn" minWidth="80"
 				text="%line.total" />
 			<TableColumn fx:id="actionsColumn" minWidth="80" text="%actions" />

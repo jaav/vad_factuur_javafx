@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import be.virtualsushi.jfx.dorse.dialogs.AbstractFilterDialog;
+import be.virtualsushi.jfx.dorse.events.*;
 import be.virtualsushi.jfx.dorse.utils.AppVariables;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,10 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import be.virtualsushi.jfx.dorse.dialogs.AbstractDialog;
-import be.virtualsushi.jfx.dorse.events.CancelDialogEvent;
-import be.virtualsushi.jfx.dorse.events.HideDialogEvent;
-import be.virtualsushi.jfx.dorse.events.ShowDialogEvent;
-import be.virtualsushi.jfx.dorse.events.ShowLoadingMaskEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.LoginSuccessfulEvent;
 import be.virtualsushi.jfx.dorse.fxml.IUiComponent;
 import be.virtualsushi.jfx.dorse.fxml.UiBinder;
@@ -178,6 +176,10 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
 	protected void showDialog(String dialogTitle, Class<? extends AbstractDialog> componentClass, Object... parameters) {
 		getEventBus().post(new ShowDialogEvent(dialogTitle, componentClass, parameters));
 	}
+
+  protected void showFilterDialog(String dialogTitle, Class<? extends AbstractFilterDialog> componentClass) {
+ 		getEventBus().post(new ShowFilterDialogEvent(dialogTitle, componentClass));
+ 	}
 
 	protected void hideDialog(Class<? extends AbstractDialog> componentClass) {
 		getEventBus().post(new HideDialogEvent());

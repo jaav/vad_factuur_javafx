@@ -1,5 +1,11 @@
 package be.virtualsushi.jfx.dorse.restapi;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import be.virtualsushi.jfx.dorse.model.ServerResponse;
@@ -90,14 +96,14 @@ public class RestApiAccessor extends RestTemplate {
 	}*/
 
   public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, boolean fullInfo) {
- 		return getResponse(entityClass, null, null, "id", null, fullInfo, false);
+ 		return getResponse(entityClass, null, null, null, "id", null, fullInfo, false);
  	}
 
-	public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, Integer offset, Integer count, String orderOn, String additionalCondition, boolean fullInfo, boolean includesNonActive) {
+	public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, BaseEntity entity, Integer offset, Integer count, String orderOn, String additionalCondition, boolean fullInfo, boolean includesNonActive) {
     ServerResponse response = null;
 		ArrayList<E> data = new ArrayList<E>();
 		String url = serviceUri + getEntityListSubPath(entityClass);
-    Map<String,?> urlVariables = getUrlVariables(offset, count, orderOn, fullInfo, includesNonActive, additionalCondition);
+    Map<String,?> urlVariables = getUrlVariables(entity, offset, count, orderOn, fullInfo, includesNonActive, additionalCondition);
     if(url.charAt(url.length()-1)=='&') url = url.substring(0, url.length()-1);
 		log.debug("Getting list of " + entityClass + " URL: " + url);
     try{
@@ -177,7 +183,7 @@ public class RestApiAccessor extends RestTemplate {
 		return StringUtils.uncapitalize(entityClass.getSimpleName());
 	}
 
-  private Map getUrlVariables(Integer offset, Integer count, String orderOn, boolean fullInfo, boolean includesNonActive, String additionalCondition){
+  private Map getUrlVariables(BaseEntity entity, Integer offset, Integer count, String orderOn, boolean fullInfo, boolean includesNonActive, String additionalCondition){
     Map<String, String> urlVariables = new HashMap<String, String>();
     if (offset != null)
       urlVariables.put("from", ""+offset);
@@ -199,8 +205,17 @@ public class RestApiAccessor extends RestTemplate {
       urlVariables.put("includesNonActive", "true");
     else
       urlVariables.put("includesNonActive", "false");
-    if(StringUtils.isNotBlank(additionalCondition))
+    if(StringUtils.isNotBlank(additionalCondition) && entity!=null){
+      String filter = getFilterCondition(entity);
+      if(StringUtils.isNotBlank(filter))
+        urlVariables.put("additionalCondition", additionalCondition+" and "+filter);
+      else
+        urlVariables.put("additionalCondition", additionalCondition);
+    }
+    else if(StringUtils.isNotBlank(additionalCondition))
       urlVariables.put("additionalCondition", additionalCondition);
+    else if(entity!=null)
+      urlVariables.put("additionalCondition", getFilterCondition(entity));
     else
       urlVariables.put("additionalCondition", "");
     urlVariables.put("count", "true");
@@ -241,5 +256,36 @@ public class RestApiAccessor extends RestTemplate {
  			throw new RuntimeException("Unable to create array class for " + entityClass.getName(), e);
  		}
  	}
+
+  private String getFilterCondition(BaseEntity entity) {
+    StringBuffer filter = new StringBuffer();
+    BeanInfo info = null;
+    try {
+      info = Introspector.getBeanInfo(entity.getClass(), Object.class);
+      PropertyDescriptor[] props = info.getPropertyDescriptors();
+      for (PropertyDescriptor pd : props) {
+        String name = pd.getName();
+        Class clazz = pd.getPropertyType();
+        Object value = pd.getReadMethod().invoke(entity);
+        if(value!=null){
+          if(clazz.equals(String.class)) value = " like '%"+value+"%'";
+          else if(clazz.equals(Date.class)) value = " is after '"+value+"'";
+          else value = " = "+value;
+          value = value + " and ";
+          filter.append(value);
+        }
+      }
+      return filter.substring(0, filter.length()-5);
+    } catch (IntrospectionException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      return "";
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      return "";
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      return "";
+    }
+  }
 
 }

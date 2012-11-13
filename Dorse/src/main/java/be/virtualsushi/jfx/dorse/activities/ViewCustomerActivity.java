@@ -64,7 +64,7 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
         @SuppressWarnings("unchecked")
         protected List<Address> call() throws Exception {
           getRestApiAccessor().save((Address) getParameters()[0]);
-          return (List<Address>)getRestApiAccessor().getResponse(Address.class, null, null, "id", "customer=" + getEntity().getId(), true, false).getData();
+          return (List<Address>)getRestApiAccessor().getResponse(Address.class, null, null, null, "id", "customer=" + getEntity().getId(), true, false).getData();
         }
 
         @Override
@@ -110,7 +110,7 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
         @SuppressWarnings("unchecked")
         protected List<Address> call() throws Exception {
           getRestApiAccessor().delete((Address) getParameters()[0]);
-          return (List<Address>)getRestApiAccessor().getResponse(Address.class, null, null, "id", "customer=" + getEntity().getId(), true, false).getData();
+          return (List<Address>)getRestApiAccessor().getResponse(Address.class, null, null, null, "id", "customer=" + getEntity().getId(), true, false).getData();
         }
 
         @Override
@@ -157,7 +157,7 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
         @SuppressWarnings("unchecked")
         protected List<Person> call() throws Exception {
           getRestApiAccessor().save((Person) getParameters()[0]);
-          return (List<Person>)getRestApiAccessor().getResponse(Person.class, null, null, "id", "customer=" + getEntity().getId(), true, false).getData();
+          return (List<Person>)getRestApiAccessor().getResponse(Person.class, null, null, null, "id", "customer=" + getEntity().getId(), true, false).getData();
         }
 
         @Override
@@ -202,7 +202,7 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
           @SuppressWarnings("unchecked")
           protected List<Person> call() throws Exception {
             getRestApiAccessor().delete((Person) getParameters()[0]);
-            return (List<Person>)getRestApiAccessor().getResponse(Person.class, null, null, "id", "customer=" + getEntity().getId(), true, false).getData();
+            return (List<Person>)getRestApiAccessor().getResponse(Person.class, null, null, null, "id", "customer=" + getEntity().getId(), true, false).getData();
           }
 
           @Override

@@ -51,6 +51,17 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
     private final Boolean fullInfo;
     private final Boolean includesNonActive;
     private final String additionalCondition;
+    private final BaseEntity filter;
+
+    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, boolean includesNonActive, String additionalCondition, BaseEntity filter) {
+      this.from = from;
+      this.quantity = quantity;
+      this.orderOn = orderOn;
+      this.fullInfo = fullInfo;
+      this.additionalCondition = additionalCondition;
+      this.includesNonActive = includesNonActive;
+      this.filter = filter;
+    }
 
 		public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, boolean includesNonActive, String additionalCondition) {
 			this.from = from;
@@ -59,20 +70,32 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
       this.fullInfo = fullInfo;
       this.additionalCondition = additionalCondition;
       this.includesNonActive = includesNonActive;
+      this.filter = null;
 		}
 
     public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo) {
-  			this.from = from;
-  			this.quantity = quantity;
-  			this.orderOn = orderOn;
-        this.fullInfo = fullInfo;
-        this.additionalCondition = null;
-        this.includesNonActive = null;
-  		}
+      this.from = from;
+      this.quantity = quantity;
+      this.orderOn = orderOn;
+      this.fullInfo = fullInfo;
+      this.additionalCondition = null;
+      this.includesNonActive = null;
+      this.filter = null;
+    }
+
+    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, BaseEntity filter) {
+      this.from = from;
+      this.quantity = quantity;
+      this.orderOn = orderOn;
+      this.fullInfo = fullInfo;
+      this.additionalCondition = null;
+      this.includesNonActive = null;
+      this.filter = filter;
+    }
 
 		@Override
 		public DorseBackgroundTask<ServerResponse> createTask() {
-			return new DorseBackgroundTask<ServerResponse>(this, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive) {
+			return new DorseBackgroundTask<ServerResponse>(this, filter, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive) {
 
 				@Override
 				protected void onPreExecute() {
@@ -86,8 +109,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 					doCustomBackgroundInitialization();
             return getRestApiAccessor().getResponse(
                 (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-                getInteger(0), getInteger(1), getString(2), getString(3),
-                getBoolean(4, true), getBoolean(5, false));
+                getBaseEntity(0), getInteger(1), getInteger(2), getString(3), getString(4),
+                getBoolean(5, true), getBoolean(6, false));
           }
           catch (Exception e){
             e.printStackTrace();
@@ -104,68 +127,6 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 			};
 		}
 	}
-
-  private class FilterPageDataTaskCreator implements TaskCreator<DorseBackgroundTask<ServerResponse>> {
-
-			private final Integer from;
-			private final Integer quantity;
-			private final String orderOn;
-	    private final Boolean fullInfo;
-	    private final Boolean includesNonActive;
-	    private final String additionalCondition;
-
-			public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, boolean includesNonActive, String additionalCondition) {
-				this.from = from;
-				this.quantity = quantity;
-				this.orderOn = orderOn;
-	      this.fullInfo = fullInfo;
-	      this.additionalCondition = additionalCondition;
-	      this.includesNonActive = includesNonActive;
-			}
-
-	    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo) {
-	  			this.from = from;
-	  			this.quantity = quantity;
-	  			this.orderOn = orderOn;
-	        this.fullInfo = fullInfo;
-	        this.additionalCondition = null;
-	        this.includesNonActive = null;
-	  		}
-
-			@Override
-			public DorseBackgroundTask<ServerResponse> createTask() {
-				return new DorseBackgroundTask<ServerResponse>(this, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive) {
-
-					@Override
-					protected void onPreExecute() {
-						showLoadingMask();
-					}
-
-					@SuppressWarnings("unchecked")
-					@Override
-					protected ServerResponse call() throws Exception {
-	          try{
-						doCustomBackgroundInitialization();
-	            return getRestApiAccessor().getResponse(
-	                (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-	                getInteger(0), getInteger(1), getString(2), getString(3),
-	                getBoolean(4, true), getBoolean(5, false));
-	          }
-	          catch (Exception e){
-	            e.printStackTrace();
-	            return null;
-	          }
-					}
-
-					@Override
-					protected void onSuccess(ServerResponse value) {
-	          listContainer.setCenter(createPage(value));
-	          listPage.setPageCount((int) Math.ceil(value.getMetaData().getCount() / getItemsPerPageCount()));
-						hideLoadingMask();
-					}
-				};
-			}
-		}
 
 	private class DeleteEntityTaskCreator implements TaskCreator<DorseBackgroundTask<ServerResponse>> {
 
@@ -189,7 +150,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 				protected ServerResponse call() throws Exception {
 					getRestApiAccessor().delete((E) getParameters()[0]);
 					return getRestApiAccessor().getResponse((Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-              0, getItemsPerPageCount(), ORDER_ON, null, true, false);
+              null, 0, getItemsPerPageCount(), ORDER_ON, null, true, false);
 				}
 
 				@Override
@@ -245,6 +206,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 	}
 
+  protected BaseEntity filter = null;
+
 	@FXML
 	public Pagination listPage;
 
@@ -266,7 +229,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 			@Override
 			public Node call(Integer param) {
 				listContainer.getChildren().clear();
-				doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo()));
+				doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
 				return listContainer;
 			}
 		});
@@ -277,6 +240,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 		super.started();
 
 		if (getParameter(FORCE_RELOAD_PARAMETER, Boolean.class, false)) {
+      filter = null;
 			listPage.setCurrentPageIndex(0);
 			doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo()));
 		}
@@ -296,7 +260,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
  	public void onFilter(FilterEvent event) {
     System.out.println("event = " + event);
     System.out.println("event.getEntity().getClass().getName() = " + event.getEntity().getClass().getName());
-    doInBackground(new LoadPageDataTaskCreator(event.getEntity()));
+    filter = event.getEntity();
+    doInBackground(new LoadPageDataTaskCreator(0, getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
  	}
 
 	protected Integer getItemsPerPageCount() {

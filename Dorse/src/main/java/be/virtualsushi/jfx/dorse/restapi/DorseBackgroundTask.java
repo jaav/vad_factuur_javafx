@@ -1,5 +1,6 @@
 package be.virtualsushi.jfx.dorse.restapi;
 
+import be.virtualsushi.jfx.dorse.model.BaseEntity;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -98,6 +99,18 @@ public abstract class DorseBackgroundTask<E> extends BackgroundTask<E> {
  		} catch (Exception e) {
  			e.printStackTrace();
       return defaultBool;
+ 		}
+ 	}
+
+  @SuppressWarnings("unchecked")
+  protected BaseEntity getBaseEntity(int place) {
+ 		try {
+      if(getParameters()[place]!=null)
+ 			  return (BaseEntity) getParameters()[place];
+      else return null;
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+      return null;
  		}
  	}
 

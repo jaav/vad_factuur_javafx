@@ -326,10 +326,10 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 			deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
 		}
 		if (CollectionUtils.isEmpty(articles)) {
-			articles = (List<Article>)getRestApiAccessor().getResponse(Article.class, null, null, "code", null, true, true).getData();
+			articles = (List<Article>)getRestApiAccessor().getResponse(Article.class, null, null, null, "code", null, true, true).getData();
 		}
     orderLines = new ArrayList<OrderLineProperty>();
-    List<OrderLine> lines = (List<OrderLine>)getRestApiAccessor().getResponse(OrderLine.class, null, null, "id", "invoice="+entity.getId(), true, false).getData();
+    List<OrderLine> lines = (List<OrderLine>)getRestApiAccessor().getResponse(OrderLine.class, null, null, null, "id", "invoice="+entity.getId(), true, false).getData();
     for (OrderLine line : lines) {
       orderLines.add(new OrderLineProperty(line));
     }

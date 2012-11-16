@@ -67,14 +67,8 @@
 
             <FieldLabel value="%subSector" GridPane.columnIndex="0"
          				GridPane.rowIndex="6" />
-            <ComboBox fx:id="subSectorField" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
-                <!--items>
-                  <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="%select_sector_first" />
-                  </FXCollections>
-                </items-->
-            </ComboBox>
-
+            <EditableList fx:id="subSectorField" GridPane.columnIndex="1"
+                          GridPane.rowIndex="6" fieldWidth="360" />
 			<ControlsButtonsBar GridPane.columnIndex="1"
 				GridPane.rowIndex="8" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
 				onCancelAction="#handleCancel" saveButtonTitle="%save"

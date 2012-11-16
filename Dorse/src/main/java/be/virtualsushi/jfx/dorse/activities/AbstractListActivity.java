@@ -2,7 +2,9 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.lang.reflect.ParameterizedType;
 
-import be.virtualsushi.jfx.dorse.events.dialogs.FilterEvent;
+import be.virtualsushi.jfx.dorse.events.CancelFilterEvent;
+import be.virtualsushi.jfx.dorse.events.ClearFilterEvent;
+import be.virtualsushi.jfx.dorse.events.FilterEvent;
 import be.virtualsushi.jfx.dorse.model.ServerResponse;
 import be.virtualsushi.jfx.dorse.navigation.ActivityNavigator;
 import com.google.common.eventbus.Subscribe;
@@ -120,8 +122,10 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
 				@Override
 				protected void onSuccess(ServerResponse value) {
-          listContainer.setCenter(createPage(value));
-          listPage.setPageCount((int) Math.ceil(value.getMetaData().getCount() / getItemsPerPageCount()));
+          if(value!=null){
+            listContainer.setCenter(createPage(value));
+            listPage.setPageCount((int) Math.ceil(value.getMetaData().getCount() / (double)getItemsPerPageCount()));
+          }
 					hideLoadingMask();
 				}
 			};
@@ -253,7 +257,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
   @FXML
  	protected void handleLaunchFilter(ActionEvent event){
-    //show the corresponding filter dialog
+    //show the corresponding filter dialog and possible add some lists to it as parameter
   }
 
   @Subscribe
@@ -262,6 +266,20 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
     System.out.println("event.getEntity().getClass().getName() = " + event.getEntity().getClass().getName());
     filter = event.getEntity();
     doInBackground(new LoadPageDataTaskCreator(0, getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
+    hideFilterDialog();
+ 	}
+
+  @Subscribe
+ 	public void onClearFilter(ClearFilterEvent event) {
+    System.out.println("event = " + event);
+    filter = null;
+    doInBackground(new LoadPageDataTaskCreator(0, getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
+    hideFilterDialog();
+ 	}
+
+  @Subscribe
+ 	public void onCancelFilter(CancelFilterEvent event) {
+ 		hideFilterDialog();
  	}
 
 	protected Integer getItemsPerPageCount() {

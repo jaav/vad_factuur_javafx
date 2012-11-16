@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.model.Status;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -116,6 +117,9 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	@FXML
 	private ComboBoxField<Customer> customerField;
 
+  @FXML
+ 	private ComboBoxField<Status> statusField;
+
 	@FXML
 	private VBox deliveryAddressBox, invoiceAddressBox;
 
@@ -123,6 +127,8 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	private ValidationErrorPanel validationPanel;
 
 	private List<Customer> acceptableCustomers;
+
+  private List<Customer> acceptableStatuses;
 
 	private ToggleGroup deliveryAddressToggleGroup;
 	private ToggleGroup invoiceAddressToggleGroup;
@@ -134,7 +140,8 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 
 			@Override
 			public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
-				doInBackground(new GetCustomerTaskCreator(newValue.getId()));
+        if(newValue!=null && newValue.getId()>=0)
+				  doInBackground(new GetCustomerTaskCreator(newValue.getId()));
 			}
 		});
 		deliveryAddressToggleGroup = new ToggleGroup();
@@ -202,6 +209,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		numberField.setValue(editingInvoice.getCode());
 		remarkField.setValue(editingInvoice.getRemark());
 		customerField.setAcceptableValues(acceptableCustomers);
+    statusField.setAcceptableValues(getStatuses());
 		if (editingInvoice.getCustomer() != null) {
 			mapCustomer(editingInvoice);
 		}
@@ -233,6 +241,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		}
 		result.setDeliveryDate(new Date());
 		result.setPaidDate(new Date());
+    result.setStatus(statusField.getValue().getId());
 		return result;
 	}
 
@@ -240,6 +249,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
   @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization(Invoice editingEntity) {
 		acceptableCustomers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, false).getData();
+    acceptableCustomers.add(0, Customer.getEmptyCustomer());
 	}
 
 	@Override
@@ -266,4 +276,13 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		fieldsMap.put("customer", customerField);
 	}
 
+  @Override
+  protected void clearForm() {
+    numberField.setValue("");
+    remarkField.setValue("");
+    customerField.setValue(Customer.getEmptyCustomer());
+    statusField.setValue(Status.getEmptyStatus());
+    invoiceAddressBox.getChildren().clear();
+    deliveryAddressBox.getChildren().clear();
+  }
 }

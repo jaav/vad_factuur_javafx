@@ -325,8 +325,11 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
       idField.setVisible(false);
     }
 		acceptableArticleTypes = (List<ArticleType>)getRestApiAccessor().getResponse(ArticleType.class, false).getData();
+    acceptableArticleTypes.add(0, ArticleType.getEmptyArticleType());
 		acceptableSuppliers = (List<Supplier>)getRestApiAccessor().getResponse(Supplier.class, false).getData();
+    acceptableSuppliers.add(0, Supplier.getEmptySupplier());
 		acceptableUnits = (List<Unit>)getRestApiAccessor().getResponse(Unit.class, false).getData();
+    acceptableUnits.add(0, Unit.getEmptyUnit());
     copyDateField.setDateFormat(new SimpleDateFormat(getResources().getString("input.date.format")));
     copyDateField.getCalendarView().setShowTodayButton(true);
 	}
@@ -354,4 +357,18 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		fieldsMap.put("description", descriptionField);
 	}
 
+  @Override
+  protected void clearForm() {
+    nameField.setValue("");
+    codeField.setValue("");
+    copyDateField.setSelectedDate(null);
+    vatField.getSelectionModel().clearSelection();
+    descriptionField.setValue("");
+    typeField.setValue(ArticleType.getEmptyArticleType());
+    supplierField.setValue(Supplier.getEmptySupplier());
+    weightField.setValue(0);
+    priceField.setValue(0F);
+    freeQuantityField.setValue(0);
+    unitField.setValue(Unit.getEmptyUnit());
+  }
 }

@@ -1,7 +1,8 @@
 package be.virtualsushi.jfx.dorse.dialogs;
 
 import be.virtualsushi.jfx.dorse.events.CancelFilterEvent;
-import be.virtualsushi.jfx.dorse.events.dialogs.FilterEvent;
+import be.virtualsushi.jfx.dorse.events.ClearFilterEvent;
+import be.virtualsushi.jfx.dorse.events.FilterEvent;
 import be.virtualsushi.jfx.dorse.fxml.UiComponentBean;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 import com.google.common.eventbus.EventBus;
@@ -41,14 +42,18 @@ public abstract class AbstractFilterDialog<E extends BaseEntity> extends UiCompo
   }
 
   @FXML
+  @SuppressWarnings("unchecked")
+  public void handleClearFilter(ActionEvent event) {
+    postFilterEvent(new ClearFilterEvent(this.getClass()));
+  }
+
+  @FXML
  	protected void handleSave(ActionEvent event) {
  	}
 
-  public void onShow() {
-    if (HasValidationDialog.class.isInstance(this)) {
-      resetValidationPanel((HasValidationDialog) this);
-    }
-  }
+  public void onShow(Object... parameters) {
+ 		//fill comboboxes and stuff
+ 	}
 
   @SuppressWarnings("unchecked")
   protected void postFilterEvent(Object event) {

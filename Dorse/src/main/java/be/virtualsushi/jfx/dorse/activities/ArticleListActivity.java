@@ -81,6 +81,7 @@ public class ArticleListActivity extends AbstractListActivity<Article> {
 	protected void doCustomBackgroundInitialization() {
 		if (CollectionUtils.isEmpty(suppliers)) {
 			suppliers = (List<Supplier>)getRestApiAccessor().getResponse(Supplier.class, false).getData();
+      suppliers.add(0, Supplier.getEmptySupplier());
 		}
 	}
 
@@ -106,7 +107,8 @@ public class ArticleListActivity extends AbstractListActivity<Article> {
     table.setMaxHeight(Double.MAX_VALUE);
     table.setMaxWidth(Double.MAX_VALUE);
     fillTableColumns(table);
-    table.setItems(FXCollections.observableArrayList((List<Article>) serverResponse.getData()));
+    if(serverResponse!=null && serverResponse.getData()!=null)
+      table.setItems(FXCollections.observableArrayList((List<Article>) serverResponse.getData()));
     return table;
   }
   @Override

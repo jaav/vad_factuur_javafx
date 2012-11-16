@@ -108,4 +108,11 @@ public class Customer extends BaseEntity implements Listable {
 		this.person = person;
 	}
 
+  public static Customer getEmptyCustomer(){
+    Customer empty = new Customer();
+    empty.setId(-1L);
+    empty.setName("");
+    return empty;
+  }
+
 }

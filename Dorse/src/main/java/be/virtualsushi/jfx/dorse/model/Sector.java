@@ -48,4 +48,11 @@ public class Sector extends BaseEntity implements Listable {
 		return getPrintName();
 	}
 
+  public static Sector getEmptySector(){
+    Sector empty = new Sector();
+    empty.setId(-1L);
+    empty.setName("");
+    return empty;
+  }
+
 }

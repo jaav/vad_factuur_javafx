@@ -119,7 +119,7 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 		}
 	}
 
-  private void clearFields(){
+  /*private void clearFields(){
     Parent root = title.getScene().getRoot();
     Set<Node> inputfields = new HashSet<Node>();
     inputfields.addAll(root.lookupAll("TextField"));
@@ -129,6 +129,8 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
     inputfields.addAll(root.lookupAll("FloatNumberField"));
     inputfields.addAll(root.lookupAll("ComboBox"));
     inputfields.addAll(root.lookupAll("EditableList"));
+    inputfields.addAll(root.lookupAll("ComboBoxField"));
+
     Object nil = null;
     for (Node inputfield : inputfields) {
       try {
@@ -161,15 +163,23 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
       } catch (Exception e) {
         e.printStackTrace();
       }
+      try {
+        Method clear = inputfield.getClass().getDeclaredMethod("clear");
+        if(clear!=null) clear.invoke(inputfield);
+      } catch (IllegalAccessException e) {
+      } catch (InvocationTargetException e) {
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
-  }
+  }*/
 
 	@Override
 	protected void started() {
 		super.started();
 
 		clearInvalid();
-    clearFields();
+    clearForm();
 		if (getParameter(ENTITY_ID_PARAMETER, Long.class, null) != null) {
 			title.setText(getResources().getString(getEditTitleKey()));
 		} else {
@@ -201,7 +211,9 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 		return true;
 	}
 
-	protected abstract String getEditTitleKey();
+	protected abstract void clearForm();
+
+  protected abstract String getEditTitleKey();
 
 	protected abstract String getNewTitleKey();
 

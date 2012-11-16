@@ -38,8 +38,10 @@
             <TextField fx:id="numberField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             <FieldLabel value="%customer" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
             <ComboBoxField fx:id="customerField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <FieldLabel value="%status" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <ComboBoxField fx:id="statusField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.columnSpan="2"
-                     GridPane.rowIndex="3" prefHeight="200">
+                     GridPane.rowIndex="4" prefHeight="200">
                 <Tab text="%deliveryAddress">
                     <VBox>
                         <ScrollPane minHeight="100.0" prefHeight="200" styleClass="border-fix">
@@ -63,12 +65,12 @@
                     </VBox>
                 </Tab>
             </TabPane>
-            <FieldLabel value="%remark" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <FieldLabel value="%remark" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
             <TextAreaField fx:id="remarkField" fieldHeight="100.0" fieldWidth="400.0" GridPane.columnIndex="1"
-                           GridPane.rowIndex="4"/>
+                           GridPane.rowIndex="5"/>
             <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel"
                                 onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1"
-                                GridPane.rowIndex="6"/>
+                                GridPane.rowIndex="7"/>
         </GridPane>
     </VBox>
     <ValidationErrorPanel fx:id="validationPanel" visible="false"/>

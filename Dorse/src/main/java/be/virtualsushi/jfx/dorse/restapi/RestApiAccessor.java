@@ -267,11 +267,12 @@ public class RestApiAccessor extends RestTemplate {
         String name = pd.getName();
         Class clazz = pd.getPropertyType();
         Object value = pd.getReadMethod().invoke(entity);
-        if(value!=null){
+        if(value!=null && !name.equals("new") && !name.equals("printName")){
           if(clazz.equals(String.class)) value = " like '%"+value+"%'";
-          else if(clazz.equals(Date.class)) value = " is after '"+value+"'";
+          else if(clazz.equals(Date.class)) value = " > '"+value+"'";
+          else if(BaseEntity.class.isAssignableFrom(clazz)) value = " = "+(((BaseEntity)value).getId());
           else value = " = "+value;
-          value = value + " and ";
+          value = name+value+" and ";
           filter.append(value);
         }
       }

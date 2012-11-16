@@ -1,11 +1,11 @@
 package be.virtualsushi.jfx.dorse.activities;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import be.virtualsushi.jfx.dorse.dialogs.AbstractFilterDialog;
 import be.virtualsushi.jfx.dorse.events.*;
+import be.virtualsushi.jfx.dorse.model.Invoice;
+import be.virtualsushi.jfx.dorse.model.Status;
 import be.virtualsushi.jfx.dorse.utils.AppVariables;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -73,6 +73,8 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
   public static final String USERNAME_KEY = "username";
 
   public static final String USERNAME_ID = "user_id";
+
+  public List<Status> statuses;
 
 	/**
 	 * Called any time activity get active.
@@ -177,13 +179,17 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
 		getEventBus().post(new ShowDialogEvent(dialogTitle, componentClass, parameters));
 	}
 
-  protected void showFilterDialog(String dialogTitle, Class<? extends AbstractFilterDialog> componentClass) {
- 		getEventBus().post(new ShowFilterDialogEvent(dialogTitle, componentClass));
+  protected void showFilterDialog(String dialogTitle, Class<? extends AbstractFilterDialog> componentClass, Object... parameters) {
+ 		getEventBus().post(new ShowFilterDialogEvent(dialogTitle, componentClass, parameters));
  	}
 
 	protected void hideDialog(Class<? extends AbstractDialog> componentClass) {
 		getEventBus().post(new HideDialogEvent());
 	}
+
+  protected void hideFilterDialog() {
+ 		getEventBus().post(new HideFilterDialogEvent());
+ 	}
 
 	protected void showLoadingMask() {
 		getEventBus().post(new ShowLoadingMaskEvent());
@@ -330,5 +336,30 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
 		});
 		executeTask(task);
 	}
+
+  public List<Status> getStatuses(){
+    hasStatuses();
+    return statuses;
+  }
+
+  public Status getStatus(int id){
+    hasStatuses();
+    for (Status status : statuses) {
+      if(status.getId()==id) return status;
+    }
+    return null;
+  }
+
+  private void hasStatuses(){
+    if(statuses==null){
+      statuses = new ArrayList<Status>();
+      statuses.add(Status.getEmptyStatus());
+      statuses.add(new Status(1, Status.PREPARED));
+      statuses.add(new Status(2, Status.SENT));
+      statuses.add(new Status(3, Status.INVOICED));
+      statuses.add(new Status(4, Status.REMINDED));
+      statuses.add(new Status(5, Status.PAID));
+    }
+  }
 
 }

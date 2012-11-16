@@ -1,4 +1,4 @@
-package be.virtualsushi.jfx.dorse.events.dialogs;
+package be.virtualsushi.jfx.dorse.events;
 
 import be.virtualsushi.jfx.dorse.events.SaveEntityEvent;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;

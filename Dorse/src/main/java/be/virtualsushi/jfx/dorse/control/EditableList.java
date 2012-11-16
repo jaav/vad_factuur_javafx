@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -55,6 +56,10 @@ public class EditableList<V extends Listable> extends HBox implements HasValue<V
 	public List<V> getAcceptableValues() {
 		return comboBox.getItems();
 	}
+
+  public SingleSelectionModel getSelectionModel(){
+    return comboBox.getSelectionModel();
+  }
 
 	public void setEditHandler(EventHandler<ActionEvent> value) {
 		addButton.setOnAction(value);

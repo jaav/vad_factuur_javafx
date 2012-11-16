@@ -32,12 +32,13 @@ public class ArticleFilterDialog extends AbstractFilterDialog {
 	private VBox container;
 
 	@FXML
-	private TextField nameField;
+	private TextField nameField, codeField;
 
   @Override
   protected Article getFilterEntity() {
     Article result = new Article();
     result.setName(nameField.getValue());
+    result.setCode(codeField.getValue());
     return result;
   }
 }

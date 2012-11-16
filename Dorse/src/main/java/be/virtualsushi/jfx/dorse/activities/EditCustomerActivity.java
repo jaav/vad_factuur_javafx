@@ -5,6 +5,7 @@ import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_CUSTO
 import java.util.*;
 
 import be.virtualsushi.jfx.dorse.control.*;
+import be.virtualsushi.jfx.dorse.model.Status;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -78,7 +79,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 	private EditableList<Sector> sectorField;
 
   @FXML
- 	protected ComboBox subSectorField;
+ 	protected EditableList<Sector> subSectorField;
 
 	@FXML
 	private ValidationErrorPanel validationPanel;
@@ -103,12 +104,15 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
         ComboBox sectorCombo = (ComboBox)actionEvent.getSource();
         Sector selectedSector = (Sector)sectorCombo.getValue();
         Long id = selectedSector.getId();
-        if(id!=null) showSubSectors(id);
-        subSectorField.setValue(null);
+        if(id!=null && id>=0)
+          showSubSectors(id);
+        else
+          hideSubsectors();
+        subSectorField.getSelectionModel().clearSelection();
       }
     });
-    if(subSectorField.getItems().size()==0)
-      subSectorField.getItems().add(getResources().getString("select_sector_first"));
+    if(subSectorField.getAcceptableValues().size()==0)
+      subSectorField.getAcceptableValues().add(new Sector(getResources().getString("select_sector_first")));
 	}
 
 	@Override
@@ -134,7 +138,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 		vatField.setValue(editingEntity.getVat());
 		remarkField.setValue(editingEntity.getRemark());
 		mapSector(editingEntity);
-    List l = subSectorField.getItems();
+    List l = subSectorField.getAcceptableValues();
     if(editingEntity.getSubsector()!=null) subSectorField.setValue(getSubSector(editingEntity.getSubsector()));
 	}
 
@@ -172,6 +176,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
       idField.setVisible(false);
     }
 		acceptableSectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, null, null, null, null, "parent is null", false, false).getData();
+    acceptableSectors.add(0, Sector.getEmptySector());
 	}
 
 	@Subscribe
@@ -201,7 +206,12 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
   @SuppressWarnings("unchecked")
   private void showSubSectors(Long sector_id){
     acceptableSubSectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, null, null, null, "name", "parent="+sector_id, true, false).getData();
-    subSectorField.setItems(FXCollections.observableArrayList(acceptableSubSectors));
+    acceptableSubSectors.add(0, Sector.getEmptySector());
+    subSectorField.setAcceptableValues(acceptableSubSectors);
+  }
+
+  private void hideSubsectors(){
+    subSectorField.getAcceptableValues().clear();
   }
 
   private Sector getSubSector(Long id){
@@ -209,6 +219,15 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
       if(acceptableSubSector.getId().equals(id)) return acceptableSubSector;
     }
     return null;
+  }
+
+  @Override
+  protected void clearForm() {
+    nameField.setValue("");
+    remarkField.setValue("");
+    ibanField.setValue("");
+    vatField.setValue("");
+    sectorField.setValue(Sector.getEmptySector());
   }
 
 }

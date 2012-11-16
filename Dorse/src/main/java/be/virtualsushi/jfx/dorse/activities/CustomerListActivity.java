@@ -1,11 +1,15 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import be.virtualsushi.jfx.dorse.dialogs.CustomerFilterDialog;
 import be.virtualsushi.jfx.dorse.model.Article;
 import be.virtualsushi.jfx.dorse.model.ServerResponse;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -26,6 +30,7 @@ import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 public class CustomerListActivity extends AbstractListActivity<Customer> {
 
 	private List<Sector> sectors;
+  private List<Sector> parentSectors;
 
 	@Override
 	protected String getTitle() {
@@ -111,8 +116,16 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 	protected void doCustomBackgroundInitialization() {
 		if (CollectionUtils.isEmpty(sectors)) {
 			sectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, false).getData();
+      createParentSectorsList(sectors);
 		}
 	}
+
+  private void createParentSectorsList(List<Sector> sectors){
+    parentSectors = new ArrayList<Sector>();
+    for (Sector sector : sectors) {
+      if(sector.getParent()==null) parentSectors.add(sector);
+    }
+  }
 
 	@Override
 	protected AppActivitiesNames getViewActivityName() {
@@ -139,4 +152,10 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
     table.setItems(FXCollections.observableArrayList((List<Customer>) serverResponse.getData()));
     return table;
   }
+
+  @Override
+  @FXML
+ 	protected void handleLaunchFilter(ActionEvent event) {
+    showFilterDialog(getResources().getString("customer.filter.dialog.title"), CustomerFilterDialog.class, parentSectors);
+ 	}
 }

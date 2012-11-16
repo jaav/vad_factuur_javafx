@@ -1,6 +1,7 @@
 package be.virtualsushi.jfx.dorse.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -170,5 +171,4 @@ public class Invoice extends BaseEntity {
 	public void setDeliveryDate(Date deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
-
 }

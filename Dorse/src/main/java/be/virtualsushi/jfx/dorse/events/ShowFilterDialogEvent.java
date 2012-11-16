@@ -7,10 +7,12 @@ public class ShowFilterDialogEvent {
 
 	private final Class<? extends AbstractFilterDialog> dialogControllerClass;
 	private final String dialogTitle;
+  private final Object[] parameters;
 
-	public ShowFilterDialogEvent(String title, Class<? extends AbstractFilterDialog> dialogControllerClass) {
+	public ShowFilterDialogEvent(String title, Class<? extends AbstractFilterDialog> dialogControllerClass, Object... parameters) {
 		this.dialogControllerClass = dialogControllerClass;
 		this.dialogTitle = title;
+    this.parameters = parameters;
 	}
 
 	public Class<? extends AbstractFilterDialog> getFilterDialogControllerClass() {
@@ -20,5 +22,9 @@ public class ShowFilterDialogEvent {
 	public String getDialogTitle() {
 		return dialogTitle;
 	}
+
+  public Object[] getParameters() {
+ 		return parameters;
+ 	}
 
 }

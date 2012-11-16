@@ -4,7 +4,7 @@ import java.util.ResourceBundle;
 
 import be.virtualsushi.jfx.dorse.activities.*;
 import be.virtualsushi.jfx.dorse.dialogs.AbstractFilterDialog;
-import be.virtualsushi.jfx.dorse.events.ShowFilterDialogEvent;
+import be.virtualsushi.jfx.dorse.events.*;
 import be.virtualsushi.jfx.dorse.model.Article;
 import be.virtualsushi.jfx.dorse.model.ServerResponse;
 import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
@@ -28,9 +28,6 @@ import be.virtualsushi.jfx.dorse.control.DialogPopup;
 import be.virtualsushi.jfx.dorse.control.LoadingMask;
 import be.virtualsushi.jfx.dorse.dialogs.AbstractDialog;
 import be.virtualsushi.jfx.dorse.dialogs.LoginDialog;
-import be.virtualsushi.jfx.dorse.events.HideDialogEvent;
-import be.virtualsushi.jfx.dorse.events.ShowDialogEvent;
-import be.virtualsushi.jfx.dorse.events.ShowLoadingMaskEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.AuthorizationRequiredEvent;
 import be.virtualsushi.jfx.dorse.events.authentication.LoginSuccessfulEvent;
 import be.virtualsushi.jfx.dorse.events.report.ShowReportEvent;
@@ -58,6 +55,7 @@ public class DorseApplication extends Application {
 	private Dialog customDialog;
 	private LoadingMask loadingMask;
 	private Dialog currentlyShowingDialog;
+  private Dialog currentlyShowingFilterDialog;
 	private Browser browser;
 	private AnnotationConfigApplicationContext applicationContext;
 
@@ -146,8 +144,8 @@ public class DorseApplication extends Application {
  		customDialog.setTitle(event.getDialogTitle());
  		AbstractFilterDialog dialogContent = applicationContext.getBean(event.getFilterDialogControllerClass());
  		customDialog.setContent(dialogContent.asNode());
- 		showDialog(customDialog);
- 		dialogContent.onShow();
+ 		showFilterDialog(customDialog);
+ 		dialogContent.onShow(event.getParameters());
  	}
 
 	@Subscribe
@@ -156,9 +154,14 @@ public class DorseApplication extends Application {
 	}
 
 	@Subscribe
-	public void onHideDiloag(HideDialogEvent event) {
+	public void onHideDialog(HideDialogEvent event) {
 		hideCurrentlyShowingDialog();
 	}
+
+  @Subscribe
+ 	public void onHideFilterDialog(HideFilterDialogEvent event) {
+ 		hideCurrentlyShowingFilterDialog();
+ 	}
 
 	@Subscribe
 	public void onShowReport(ShowReportEvent event) {
@@ -173,10 +176,25 @@ public class DorseApplication extends Application {
 		currentlyShowingDialog = dialogToShow;
 	}
 
+  private void showFilterDialog(Dialog dialogToShow) {
+ 		if (currentlyShowingFilterDialog != null) {
+       currentlyShowingFilterDialog.hide();
+ 		}
+ 		dialogToShow.show(browser);
+    currentlyShowingFilterDialog = dialogToShow;
+ 	}
+
 	private void hideCurrentlyShowingDialog() {
 		if (currentlyShowingDialog != null) {
 			currentlyShowingDialog.hide();
 			currentlyShowingDialog = null;
 		}
 	}
+
+  private void hideCurrentlyShowingFilterDialog() {
+ 		if (currentlyShowingFilterDialog != null) {
+       currentlyShowingFilterDialog.hide();
+       currentlyShowingFilterDialog = null;
+ 		}
+ 	}
 }

@@ -3,25 +3,28 @@ package be.virtualsushi.jfx.dorse.activities;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import be.virtualsushi.jfx.dorse.model.Article;
-import be.virtualsushi.jfx.dorse.model.ServerResponse;
+import be.virtualsushi.jfx.dorse.dialogs.InvoiceFilterDialog;
+import be.virtualsushi.jfx.dorse.model.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import be.virtualsushi.jfx.dorse.control.table.EntityStringPropertyValueFactory;
 import be.virtualsushi.jfx.dorse.fxml.FxmlFile;
-import be.virtualsushi.jfx.dorse.model.Invoice;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 
 @Component
 @Scope("prototype")
 @FxmlFile("ListActivity.fxml")
 public class InvoiceListActivity extends AbstractListActivity<Invoice> {
+  private List<Customer> customers;
 
 	@Override
 	protected String getTitle() {
@@ -56,7 +59,16 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 		TableColumn<Invoice, Float> shippingColumn = createTableColumn("shipping");
 		shippingColumn.setMinWidth(70);
 
-		TableColumn<Invoice, String> statusColumn = createTableColumn("status");
+		TableColumn<Invoice, String> statusColumn = createTableColumn("status", new EntityStringPropertyValueFactory<Invoice>() {
+
+					@Override
+					protected void setPropertyValue(ObjectProperty<String> property, Invoice value) {
+            if(value.getStatus()!=null)
+						  property.set(getStatus(value.getStatus()).getName());
+            else
+              property.set(getResources().getString("N/A"));
+					}
+				});
 		statusColumn.setMinWidth(100);
 
 		TableColumn<Invoice, Float> totalColumn = createTableColumn("total");
@@ -66,8 +78,12 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 	}
 
 	@Override
+  @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization() {
-
+    if (CollectionUtils.isEmpty(customers)) {
+      customers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, null, null, null, "name", "", false, false).getData();
+      customers.add(0, Customer.getEmptyCustomer());
+    }
 	}
 
 	@Override
@@ -95,4 +111,10 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
     table.setItems(FXCollections.observableArrayList((List<Invoice>) serverResponse.getData()));
     return table;
   }
+
+  @Override
+  @FXML
+ 	protected void handleLaunchFilter(ActionEvent event) {
+    showFilterDialog(getResources().getString("customer.filter.dialog.title"), InvoiceFilterDialog.class, customers);
+ 	}
 }

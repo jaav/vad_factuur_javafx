@@ -4,8 +4,11 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import be.virtualsushi.jfx.dorse.model.ServerResponse;
@@ -25,6 +28,7 @@ import org.apache.http.impl.client.DecompressingHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +46,9 @@ public class RestApiAccessor extends RestTemplate {
 
 	@Value("${base.service.uri}")
 	private String serviceUri;
+
+  @Value("${sql.date.format}")
+  private String sqlDateFormat;
 
 	private HttpClient httpClient;
 
@@ -97,6 +104,10 @@ public class RestApiAccessor extends RestTemplate {
 
   public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, boolean fullInfo) {
  		return getResponse(entityClass, null, null, null, "id", null, fullInfo, false);
+ 	}
+
+  public <E extends BaseEntity> ServerResponse getResponse(BaseEntity entity) {
+ 		return getResponse(entity.getClass(), entity, null, null, "id", null, true, false);
  	}
 
 	public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, BaseEntity entity, Integer offset, Integer count, String orderOn, String additionalCondition, boolean fullInfo, boolean includesNonActive) {
@@ -265,11 +276,15 @@ public class RestApiAccessor extends RestTemplate {
       PropertyDescriptor[] props = info.getPropertyDescriptors();
       for (PropertyDescriptor pd : props) {
         String name = pd.getName();
+        JsonProperty jsonProperty = pd.getReadMethod().getAnnotation(JsonProperty.class);
+        if(jsonProperty!=null)
+          name = jsonProperty.value();
+
         Class clazz = pd.getPropertyType();
         Object value = pd.getReadMethod().invoke(entity);
         if(value!=null && !name.equals("new") && !name.equals("printName")){
           if(clazz.equals(String.class)) value = " like '%"+value+"%'";
-          else if(clazz.equals(Date.class)) value = " > '"+value+"'";
+          else if(clazz.equals(Date.class)) value = " > '"+ new SimpleDateFormat(sqlDateFormat).format(value)+"'";
           else if(BaseEntity.class.isAssignableFrom(clazz)) value = " = "+(((BaseEntity)value).getId());
           else value = " = "+value;
           value = name+value+" and ";

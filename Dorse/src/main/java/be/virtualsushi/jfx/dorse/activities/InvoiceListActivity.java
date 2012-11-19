@@ -115,6 +115,6 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
   @Override
   @FXML
  	protected void handleLaunchFilter(ActionEvent event) {
-    showFilterDialog(getResources().getString("customer.filter.dialog.title"), InvoiceFilterDialog.class, customers);
+    showFilterDialog(getResources().getString("customer.filter.dialog.title"), InvoiceFilterDialog.class, customers, getStatuses());
  	}
 }

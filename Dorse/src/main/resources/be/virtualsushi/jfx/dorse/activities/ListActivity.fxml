@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import be.virtualsushi.jfx.dorse.control.AddButton?>
 <?import be.virtualsushi.jfx.dorse.control.FilterButton?>
+<?import be.virtualsushi.jfx.dorse.control.ExportButton?>
 <?import java.lang.String?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
@@ -23,6 +24,7 @@
 
 			<AddButton onAction="#handleAddAction" />
             <FilterButton onAction="#handleLaunchFilter" />
+            <ExportButton onAction="#handleLaunchExport" />
 		</HBox>
 	</top>
 	

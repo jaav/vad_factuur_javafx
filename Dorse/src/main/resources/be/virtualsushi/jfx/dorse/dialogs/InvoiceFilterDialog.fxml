@@ -19,19 +19,24 @@
 	</padding>
 	<GridPane vgap="10" hgap="10">
 
-        <FieldLabel value="%customer" GridPane.columnIndex="0"
+        <FieldLabel value="%status" GridPane.columnIndex="0"
             GridPane.rowIndex="0" />
-        <EditableList fx:id="customerField" GridPane.columnIndex="1"
+        <EditableList fx:id="statusField" GridPane.columnIndex="1"
             GridPane.rowIndex="0" fieldWidth="260" />
+
+        <FieldLabel value="%customer" GridPane.columnIndex="0"
+            GridPane.rowIndex="1" />
+        <EditableList fx:id="customerField" GridPane.columnIndex="1"
+            GridPane.rowIndex="1" fieldWidth="260" />
 
 
         <FieldLabel value="%created" GridPane.columnIndex="0"
-            GridPane.rowIndex="1" />
+            GridPane.rowIndex="2" />
         <DatePicker fx:id="creationDateField" GridPane.columnIndex="1"
-            GridPane.rowIndex="1" />
+            GridPane.rowIndex="2" />
 
 		<FilterButtonsBar GridPane.columnIndex="1"
-			GridPane.rowIndex="4" alignment="BOTTOM_RIGHT" onSaveAction="#handleFilter"
+			GridPane.rowIndex="5" alignment="BOTTOM_RIGHT" onSaveAction="#handleFilter"
 			onCancelAction="#handleCancel" onClearAction="#handleClearFilter" saveButtonTitle="%filter"
 			cancelButtonTitle="%cancel" clearButtonTitle="%clear.filter"/>
 

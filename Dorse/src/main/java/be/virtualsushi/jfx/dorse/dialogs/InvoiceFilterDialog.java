@@ -6,6 +6,7 @@ import be.virtualsushi.jfx.dorse.control.calendar.DatePicker;
 import be.virtualsushi.jfx.dorse.model.Customer;
 import be.virtualsushi.jfx.dorse.model.Invoice;
 import be.virtualsushi.jfx.dorse.model.Sector;
+import be.virtualsushi.jfx.dorse.model.Status;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.ArrayUtils;
@@ -25,6 +26,9 @@ public class InvoiceFilterDialog extends AbstractFilterDialog {
   private EditableList<Customer> customerField;
 
   @FXML
+  private EditableList<Status> statusField;
+
+  @FXML
  	private DatePicker creationDateField;
 
   @Override
@@ -32,6 +36,7 @@ public class InvoiceFilterDialog extends AbstractFilterDialog {
     Invoice result = new Invoice();
     result.setCustomer(customerField.getValue());
     result.setCreationDate(creationDateField.getSelectedDate());
+    if(statusField.getValue()!=null) result.setStatus(statusField.getValue().getId());
     return result;
   }
 
@@ -39,7 +44,7 @@ public class InvoiceFilterDialog extends AbstractFilterDialog {
  	@Override
  	public void onShow(Object... parameters) {
  		super.onShow(parameters);
-    customerField.getScene().getStylesheets().add("calendarstyle.css");
+    List<String> styles = this.asNode().getScene().getStylesheets();
     creationDateField.setDateFormat(new SimpleDateFormat(getResources().getString("input.date.format")));
     creationDateField.getCalendarView().setShowTodayButton(true);
     creationDateField.setLocale(Locale.GERMAN);
@@ -47,5 +52,8 @@ public class InvoiceFilterDialog extends AbstractFilterDialog {
  		if (ArrayUtils.isNotEmpty(parameters)) {
        customerField.setAcceptableValues((List<Customer>)parameters[0]);
  		}
+    if (ArrayUtils.isNotEmpty(parameters)) {
+      statusField.setAcceptableValues((List<Status>)parameters[1]);
+    }
  	}
 }

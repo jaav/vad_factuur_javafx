@@ -74,6 +74,7 @@ public class DorseApplication extends Application {
 		Scene scene = new Scene(rootNode, 1200, 800);
 		stage.setScene(scene);
 		scene.getStylesheets().add("style.css");
+    scene.getStylesheets().add("calendarstyle.css");
 		stage.show();
 
 	}

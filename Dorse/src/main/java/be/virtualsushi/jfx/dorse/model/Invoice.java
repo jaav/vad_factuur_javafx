@@ -38,10 +38,6 @@ public class Invoice extends BaseEntity {
 
 	private Float vat;
 
-	@JsonProperty("creation_date")
-	@JsonSerialize(using = CustomDateSerializer.class)
-	@JsonDeserialize(using = CustomDateDeserializer.class)
-	@NotNull
 	private Date creationDate;
 
 	@JsonProperty("delivery_date")
@@ -124,6 +120,10 @@ public class Invoice extends BaseEntity {
 		this.vat = vat;
 	}
 
+  @JsonProperty("creation_date")
+ 	@JsonSerialize(using = CustomDateSerializer.class)
+ 	@JsonDeserialize(using = CustomDateDeserializer.class)
+ 	@NotNull
 	public Date getCreationDate() {
 		return creationDate;
 	}

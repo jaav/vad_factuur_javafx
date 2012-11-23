@@ -40,7 +40,7 @@ public class OrderLine extends BaseEntity {
     this.article = new Article();
     this.article.setId(lineProperty.getArticleId());
     this.article.setCode(lineProperty.getArticleCode());
-    this.article.setName(lineProperty.getArticleName());
+    this.article.setArticleName(lineProperty.getArticleName());
     this.article.setPrice(lineProperty.getArticlePrice());
     this.article.setFreeQuantity(lineProperty.getArticleFreeQuantity());
     this.orderId = lineProperty.getOrderId();

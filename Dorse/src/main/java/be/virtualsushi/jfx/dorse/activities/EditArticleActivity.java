@@ -221,7 +221,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 			stockIdField.setText(String.valueOf(editingArticle.getStock().getId()));
 		}
 		codeField.setValue(editingArticle.getCode());
-		nameField.setValue(editingArticle.getName());
+		nameField.setValue(editingArticle.getArticleName());
 		descriptionField.setValue(editingArticle.getDescription());
 		priceField.setValue(editingArticle.getPrice());
     freeQuantityField.setValue(editingArticle.getFreeQuantity());
@@ -264,7 +264,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 	protected Article getEditedEntity() {
 		Article result = getEntity();
 		result.setCode(codeField.getValue());
-		result.setName(nameField.getValue());
+		result.setArticleName(nameField.getValue());
 		result.setDescription(descriptionField.getValue());
 		if (typeField.getValue() != null) {
 			result.setArticleType(typeField.getValue().getId());

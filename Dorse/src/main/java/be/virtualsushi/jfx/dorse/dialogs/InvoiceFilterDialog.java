@@ -13,6 +13,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,7 +38,21 @@ public class InvoiceFilterDialog extends AbstractFilterDialog {
     result.setCustomer(customerField.getValue());
     result.setCreationDate(creationDateField.getSelectedDate());
     if(statusField.getValue()!=null) result.setStatus(statusField.getValue().getId());
+    result.setSortType((String)sortTypeSelectorField.getValue());
+    result.setColumnName((String)columnSelectorField.getValue());
     return result;
+  }
+
+  @Override
+  protected List<String> getColumnNames() {
+    List<String> names = new ArrayList<String>();
+    names.add("");
+    names.add("Id");
+    names.add("Customername");
+    names.add("Code");
+    names.add("Total");
+    names.add("Creation date");
+    return names;
   }
 
   @SuppressWarnings("unchecked")

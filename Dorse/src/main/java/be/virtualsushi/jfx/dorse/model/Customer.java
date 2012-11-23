@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 public class Customer extends BaseEntity implements Listable {

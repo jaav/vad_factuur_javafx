@@ -22,7 +22,7 @@ public class ArticleProperty {
   public ArticleProperty(Article article) {
     idProperty().set(article.getId());
     priceProperty().set(article.getPrice());
-    nameProperty().set(article.getName());
+    nameProperty().set(article.getArticleName());
     codeProperty().set(article.getCode());
   }
 
@@ -81,7 +81,7 @@ public class ArticleProperty {
   public Article get(){
     Article a = new Article();
     a.setCode(this.getCode());
-    a.setName(this.getName());
+    a.setArticleName(this.getName());
     a.setId(this.getId());
     a.setPrice(this.getPrice());
     return a;
@@ -90,7 +90,7 @@ public class ArticleProperty {
   public void set(Article article) {
     idProperty().set(article.getId());
     priceProperty().set(article.getPrice());
-    nameProperty().set(article.getName());
+    nameProperty().set(article.getArticleName());
     codeProperty().set(article.getCode());
   }
 }

@@ -91,6 +91,7 @@
 
 		<Button text="%add.order.line" onAction="#handleAddOrderLine" />
 		<Button text="%print.invoice" onAction="#handlePrintInvoice" />
+        <Button text="%print.reminder" onAction="#handlePrintReminder" />
 
 	</HBox>
 </VBox>

@@ -1,5 +1,7 @@
 package be.virtualsushi.jfx.dorse.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 public class Supplier extends IdNamePairEntity {
 
   public static Supplier getEmptySupplier(){
@@ -9,4 +11,11 @@ public class Supplier extends IdNamePairEntity {
     return empty;
   }
 
+  public Supplier(Long id) {
+    this.setId(id);
+  }
+
+  public Supplier() {
+    super();
+  }
 }

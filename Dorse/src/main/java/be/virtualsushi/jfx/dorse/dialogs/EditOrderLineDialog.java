@@ -71,7 +71,7 @@ public class EditOrderLineDialog extends AbstractDialog implements HasValidation
     editingOrderLine.setArticleId(articleField.getValue().getId());
     editingOrderLine.setArticleCode(articleField.getValue().getCode());
     editingOrderLine.setArticlePrice(articleField.getValue().getPrice());
-    editingOrderLine.setArticleName(articleField.getValue().getName());
+    editingOrderLine.setArticleName(articleField.getValue().getArticleName());
     if(applyFreeCheck.isSelected()){
       editingOrderLine.setApplyFree(true);
       editingOrderLine.setArticleFreeQuantity(articleField.getValue().getFreeQuantity());

@@ -17,27 +17,19 @@ import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
 
 public class Article extends BaseEntity implements Listable {
 
-	@JsonProperty("article_type")
-	@NotNull
 	private Long articleType;
 
 	@NotBlank
 	private String code;
 
-	@NotBlank
-	private String name;
+	private String articleName;
 
 	private String description;
 
-	@JsonProperty("listPrice")
-	@NotNull
 	private Float price;
 
-  @JsonProperty("freeQuantity")
- 	@NotNull
  	private Integer freeQuantity;
 
-  @JsonProperty("stock")
  	private Stock stock;
 
 	private Long unit;
@@ -45,16 +37,8 @@ public class Article extends BaseEntity implements Listable {
 	@NotNull
 	private Integer weight;
 
-	@JsonProperty("create_date")
-	@JsonSerialize(using = CustomDateSerializer.class)
-	@JsonDeserialize(using = CustomDateDeserializer.class)
-	@NotNull
 	private Date creationDate;
 
-  @JsonProperty("copyDate")
- 	@JsonSerialize(using = CustomDateSerializer.class)
- 	@JsonDeserialize(using = CustomDateDeserializer.class)
- 	@NotNull
  	private Date copyDate;
 
 	@NotNull
@@ -63,11 +47,10 @@ public class Article extends BaseEntity implements Listable {
 	@NotNull
 	private Long creator;
 
-	@NotNull
-  @JsonSerialize(using = CustomFloatSerializer.class)
- 	@JsonDeserialize(using = CustomFloatDeserializer.class)
 	private Float vat;
 
+  @JsonProperty("article_type")
+ 	@NotNull
 	public Long getArticleType() {
 		return articleType;
 	}
@@ -84,15 +67,17 @@ public class Article extends BaseEntity implements Listable {
 		this.code = code;
 	}
 
-	public String getName() {
-		return name;
-	}
+  @JsonProperty("name")
+	@NotBlank
+  public String getArticleName() {
+    return articleName;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setArticleName(String articleName) {
+    this.articleName = articleName;
+  }
 
-	public String getDescription() {
+  public String getDescription() {
 		return description;
 	}
 
@@ -100,6 +85,7 @@ public class Article extends BaseEntity implements Listable {
 		this.description = description;
 	}
 
+ 	@NotNull
 	public Float getPrice() {
 		return price;
 	}
@@ -108,6 +94,8 @@ public class Article extends BaseEntity implements Listable {
 		this.price = price;
 	}
 
+  @JsonProperty("freeQuantity")
+ 	@NotNull
   public Integer getFreeQuantity() {
     return freeQuantity;
   }
@@ -132,6 +120,10 @@ public class Article extends BaseEntity implements Listable {
 		this.weight = weight;
 	}
 
+  @JsonProperty("create_date")
+ 	@JsonSerialize(using = CustomDateSerializer.class)
+ 	@JsonDeserialize(using = CustomDateDeserializer.class)
+ 	@NotNull
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -140,6 +132,10 @@ public class Article extends BaseEntity implements Listable {
 		this.creationDate = creationDate;
 	}
 
+  @JsonProperty("copyDate")
+ 	@JsonSerialize(using = CustomDateSerializer.class)
+ 	@JsonDeserialize(using = CustomDateDeserializer.class)
+ 	@NotNull
   public Date getCopyDate() {
     return copyDate;
   }
@@ -164,6 +160,9 @@ public class Article extends BaseEntity implements Listable {
     this.creator = creator;
   }
 
+  @NotNull
+  @JsonSerialize(using = CustomFloatSerializer.class)
+  @JsonDeserialize(using = CustomFloatDeserializer.class)
   public Float getVat() {
 		return vat;
 	}
@@ -172,6 +171,7 @@ public class Article extends BaseEntity implements Listable {
 		this.vat = vat;
 	}
 
+  @JsonProperty("stock")
   public Stock getStock() {
     return stock;
   }
@@ -182,7 +182,7 @@ public class Article extends BaseEntity implements Listable {
 
   @Override
 	public String getPrintName() {
-		return getCode() + (StringUtils.isNotBlank(getName()) ? " - " + getName() : "");
+		return getCode() + (StringUtils.isNotBlank(getArticleName()) ? " - " + getArticleName() : "");
 	}
 
 	@Override

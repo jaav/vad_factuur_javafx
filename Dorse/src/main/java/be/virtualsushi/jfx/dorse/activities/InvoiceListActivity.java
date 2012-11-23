@@ -1,5 +1,6 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 	@Override
 	protected void fillTableColumns(TableView<Invoice> table) {
 		TableColumn<Invoice, Long> idColumn = createTableColumn("id");
+
+    TableColumn<Invoice, String> codeColumn = createTableColumn("code");
+    codeColumn.setMinWidth(100);
 
 		TableColumn<Invoice, String> customerColumn = createTableColumn("customer", new EntityStringPropertyValueFactory<Invoice>() {
 
@@ -74,14 +78,19 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 		TableColumn<Invoice, Float> totalColumn = createTableColumn("total");
 		totalColumn.setMinWidth(70);
 
-		table.getColumns().addAll(idColumn, customerColumn, dateColumn, shippingColumn, statusColumn, totalColumn, createActionsColumn());
+		table.getColumns().addAll(idColumn, codeColumn, customerColumn, dateColumn, shippingColumn, statusColumn, totalColumn, createActionsColumn());
 	}
 
-	@Override
+  @Override
+  protected void fillTableColumns(TableView<Invoice> table, String columnName, boolean asc) {
+    fillTableColumns(table);
+  }
+
+  @Override
   @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization() {
     if (CollectionUtils.isEmpty(customers)) {
-      customers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, null, null, null, "name", "", false, false).getData();
+      customers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, null, null, null, "name", "", false, false, true).getData();
       customers.add(0, Customer.getEmptyCustomer());
     }
 	}
@@ -110,6 +119,17 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
     fillTableColumns(table);
     table.setItems(FXCollections.observableArrayList((List<Invoice>) serverResponse.getData()));
     return table;
+  }
+
+  @Override
+  protected TableView createPage(ServerResponse serverResponse, String columnName, boolean asc) {
+    return createPage(serverResponse);
+  }
+
+  @Override
+  protected String createCsv(ServerResponse serverResponse, File target) {
+    exportService.createCsv((InvoiceResponse) serverResponse, target);
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override

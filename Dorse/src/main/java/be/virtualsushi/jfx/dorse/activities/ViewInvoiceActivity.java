@@ -51,6 +51,8 @@ import com.google.common.eventbus.Subscribe;
 @Scope("prototype")
 public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoice> {
   private static final Logger log = LoggerFactory.getLogger(ViewInvoiceActivity.class);
+  public static int PRINT_INVOICE = 0;
+  public static int PRINT_REMINDER = 2;
 
 	private class ActionsBar extends HBox {
 
@@ -179,18 +181,20 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		private final Address deliveryAddress;
 		private final List<Article> articles;
 		private final List<OrderLineProperty> orderLines;
+    private final int reportType;
 
-		public GenerateReportTaskCreator(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLineProperty> orderLines) {
+		public GenerateReportTaskCreator(int reportType, Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLineProperty> orderLines) {
 			this.invoice = invoice;
 			this.invoiceAddress = invoiceAddress;
 			this.deliveryAddress = deliveryAddress;
 			this.articles = articles;
 			this.orderLines = orderLines;
+      this.reportType = reportType;
 		}
 
 		@Override
 		public DorseBackgroundTask<String> createTask() {
-			return new DorseBackgroundTask<String>(this, invoice, invoiceAddress, deliveryAddress, orderLines) {
+			return new DorseBackgroundTask<String>(this, reportType, invoice, invoiceAddress, deliveryAddress, orderLines) {
 
 				@Override
 				protected void onPreExecute() {
@@ -200,8 +204,8 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@SuppressWarnings("unchecked")
 				@Override
 				protected String call() throws Exception {
-					return reportService.createInvoiceReport((Invoice) getParameters()[0], (Address) getParameters()[1], (Address) getParameters()[2],
-							(List<OrderLineProperty>) getParameters()[3]);
+					return reportService.createInvoiceReport((Integer)getParameters()[0], (Invoice) getParameters()[1], (Address) getParameters()[2], (Address) getParameters()[3],
+							(List<OrderLineProperty>) getParameters()[4]);
 				}
 
 				@Override
@@ -263,8 +267,13 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	@FXML
 	protected void handlePrintInvoice(ActionEvent event) {
-		doInBackground(new GenerateReportTaskCreator(getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLineTable.getItems()));
+		doInBackground(new GenerateReportTaskCreator(ViewInvoiceActivity.PRINT_INVOICE, getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLineTable.getItems()));
 	}
+
+  @FXML
+ 	protected void handlePrintReminder(ActionEvent event) {
+    doInBackground(new GenerateReportTaskCreator(ViewInvoiceActivity.PRINT_REMINDER, getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLineTable.getItems()));
+ 	}
 
 	@Override
 	public void initialize() {
@@ -326,10 +335,10 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 			deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
 		}
 		if (CollectionUtils.isEmpty(articles)) {
-			articles = (List<Article>)getRestApiAccessor().getResponse(Article.class, null, null, null, "code", null, true, true).getData();
+			articles = (List<Article>)getRestApiAccessor().getResponse(Article.class, null, null, null, "code", null, true, true, true).getData();
 		}
     orderLines = new ArrayList<OrderLineProperty>();
-    List<OrderLine> lines = (List<OrderLine>)getRestApiAccessor().getResponse(OrderLine.class, null, null, null, "id", "invoice="+entity.getId(), true, false).getData();
+    List<OrderLine> lines = (List<OrderLine>)getRestApiAccessor().getResponse(OrderLine.class, null, null, null, "id", "invoice="+entity.getId(), true, false, true).getData();
     for (OrderLine line : lines) {
       orderLines.add(new OrderLineProperty(line));
     }

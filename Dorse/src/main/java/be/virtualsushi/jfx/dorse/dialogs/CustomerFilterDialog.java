@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -27,8 +28,19 @@ public class CustomerFilterDialog extends AbstractFilterDialog {
   protected Customer getFilterEntity() {
     Customer result = new Customer();
     result.setName(nameField.getValue());
-    result.setSector(parentSectorField.getValue().getId());
+    if(parentSectorField.getValue()!=null) result.setSector(parentSectorField.getValue().getId());
+    result.setSortType((String)sortTypeSelectorField.getValue());
+    result.setColumnName((String)columnSelectorField.getValue());
     return result;
+  }
+
+  @Override
+  protected List<String> getColumnNames() {
+    List<String> names = new ArrayList<String>();
+    names.add("");
+    names.add("Id");
+    names.add("Name");
+    return names;
   }
 
   @SuppressWarnings("unchecked")

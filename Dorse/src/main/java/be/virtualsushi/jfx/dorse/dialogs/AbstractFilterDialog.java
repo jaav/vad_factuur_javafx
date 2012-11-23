@@ -6,11 +6,15 @@ import be.virtualsushi.jfx.dorse.events.FilterEvent;
 import be.virtualsushi.jfx.dorse.fxml.UiComponentBean;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 import com.google.common.eventbus.EventBus;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Validator;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractFilterDialog<E extends BaseEntity> extends UiComponentBean {
 
@@ -29,6 +33,11 @@ public abstract class AbstractFilterDialog<E extends BaseEntity> extends UiCompo
   public void setEventBus(EventBus eventBus) {
     this.eventBus = eventBus;
   }
+
+
+
+  @FXML
+  protected ComboBox<String> columnSelectorField, sortTypeSelectorField;
 
   @FXML
   public void handleCancel(ActionEvent event) {
@@ -52,7 +61,11 @@ public abstract class AbstractFilterDialog<E extends BaseEntity> extends UiCompo
  	}
 
   public void onShow(Object... parameters) {
- 		//fill comboboxes and stuff
+
+    columnSelectorField.setItems(FXCollections.observableArrayList(getColumnNames()));
+    sortTypeSelectorField.setItems(FXCollections.observableArrayList(getAscDesc()));
+    columnSelectorField.setValue("");
+    sortTypeSelectorField.setValue("");
  	}
 
   @SuppressWarnings("unchecked")
@@ -83,5 +96,14 @@ public abstract class AbstractFilterDialog<E extends BaseEntity> extends UiCompo
   }
 
   protected abstract E getFilterEntity();
+  protected abstract List<String> getColumnNames();
+
+  protected List<String> getAscDesc(){
+    List<String> ascDesc = new ArrayList<String>();
+    ascDesc.add("");
+    ascDesc.add("ASC");
+    ascDesc.add("DESC");
+    return ascDesc;
+  }
 
 }

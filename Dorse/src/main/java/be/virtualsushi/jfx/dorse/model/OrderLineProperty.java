@@ -97,8 +97,8 @@ public class OrderLineProperty {
     if(line.getArticle()!=null){
       if(line.getArticle().getId()!=null)
         articleIdProperty().set(line.getArticle().getId());
-      if(line.getArticle().getName()!=null)
-        articleNameProperty().set(line.getArticle().getName());
+      if(line.getArticle().getArticleName()!=null)
+        articleNameProperty().set(line.getArticle().getArticleName());
       if(line.getArticle().getCode()!=null)
         articleCodeProperty().set(line.getArticle().getCode());
       if(line.getArticle().getPrice()!=null)

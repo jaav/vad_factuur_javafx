@@ -1,9 +1,20 @@
 package be.virtualsushi.jfx.dorse.model;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 public abstract class BaseEntity {
 
 	private Long id;
   private Boolean active;
+
+  @JsonIgnore
+  private String sortType;
+
+  @JsonIgnore
+  private String columnName;
+
 
 	public Long getId() {
 		return id;
@@ -25,7 +36,28 @@ public abstract class BaseEntity {
 		return id == null;
 	}
 
-	@Override
+  public String getColumnName() {
+    if("Stock".equals(columnName)) return "stock.quantity";
+    if("Customername".equals(columnName)) return "Customer.name";
+    if("Creation date".equals(columnName)) return "creation_date";
+    return columnName;
+  }
+
+  public void setColumnName(String columnName) {
+    this.columnName = columnName;
+  }
+
+  public String getSortType() {
+    if("ASC".equals(sortType)) return "true";
+    else if(StringUtils.isBlank(sortType)) return "true";
+    else return "false";
+  }
+
+  public void setSortType(String sortType) {
+    this.sortType = sortType;
+  }
+
+  @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -49,5 +81,10 @@ public abstract class BaseEntity {
 			return false;
 		return true;
 	}
+
+  public boolean equals(Supplier compareMe) {
+     EqualsBuilder builder = new EqualsBuilder().append(this.getId(), compareMe.getId());
+     return builder.isEquals();
+  }
 
 }

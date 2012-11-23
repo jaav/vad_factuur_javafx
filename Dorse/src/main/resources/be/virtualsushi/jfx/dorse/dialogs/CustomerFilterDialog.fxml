@@ -28,8 +28,15 @@
         <EditableList fx:id="parentSectorField" GridPane.columnIndex="1"
             GridPane.rowIndex="1" fieldWidth="260" />
 
+        <FieldLabel value="%sorting" GridPane.columnIndex="0"
+            GridPane.rowIndex="2" />
+        <ComboBox fx:id="columnSelectorField" GridPane.columnIndex="1"
+            GridPane.rowIndex="2" prefWidth="200" />
+        <ComboBox fx:id="sortTypeSelectorField" GridPane.columnIndex="2"
+            GridPane.rowIndex="2" prefWidth="60" />
+
 		<FilterButtonsBar GridPane.columnIndex="1"
-			GridPane.rowIndex="3" alignment="BOTTOM_RIGHT" onSaveAction="#handleFilter"
+			GridPane.rowIndex="4" alignment="BOTTOM_RIGHT" onSaveAction="#handleFilter"
 			onCancelAction="#handleCancel" onClearAction="#handleClearFilter" saveButtonTitle="%filter"
 			cancelButtonTitle="%cancel" clearButtonTitle="%clear.filter"/>
 

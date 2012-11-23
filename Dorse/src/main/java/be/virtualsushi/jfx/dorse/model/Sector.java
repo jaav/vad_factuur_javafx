@@ -17,6 +17,10 @@ public class Sector extends BaseEntity implements Listable {
     this.name = name;
   }
 
+  public Sector(Long id) {
+    this.setId(id);
+  }
+
   @NotBlank
 	private String name;
 

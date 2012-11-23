@@ -175,7 +175,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
     else{
       idField.setVisible(false);
     }
-		acceptableSectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, null, null, null, null, "parent is null", false, false).getData();
+		acceptableSectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, null, null, null, null, "parent is null", false, false, true).getData();
     acceptableSectors.add(0, Sector.getEmptySector());
 	}
 
@@ -205,7 +205,7 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
 
   @SuppressWarnings("unchecked")
   private void showSubSectors(Long sector_id){
-    acceptableSubSectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, null, null, null, "name", "parent="+sector_id, true, false).getData();
+    acceptableSubSectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, null, null, null, "name", "parent="+sector_id, true, false, true).getData();
     acceptableSubSectors.add(0, Sector.getEmptySector());
     subSectorField.setAcceptableValues(acceptableSubSectors);
   }

@@ -35,6 +35,13 @@
         <DatePicker fx:id="creationDateField" GridPane.columnIndex="1"
             GridPane.rowIndex="2" />
 
+        <FieldLabel value="%sorting" GridPane.columnIndex="0"
+            GridPane.rowIndex="3" />
+        <ComboBox fx:id="columnSelectorField" GridPane.columnIndex="1"
+            GridPane.rowIndex="3" prefWidth="200" />
+        <ComboBox fx:id="sortTypeSelectorField" GridPane.columnIndex="2"
+            GridPane.rowIndex="3" prefWidth="60" />
+
 		<FilterButtonsBar GridPane.columnIndex="1"
 			GridPane.rowIndex="5" alignment="BOTTOM_RIGHT" onSaveAction="#handleFilter"
 			onCancelAction="#handleCancel" onClearAction="#handleClearFilter" saveButtonTitle="%filter"

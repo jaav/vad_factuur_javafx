@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import be.virtualsushi.jfx.dorse.activities.ViewInvoiceActivity;
 import be.virtualsushi.jfx.dorse.model.*;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
@@ -38,21 +39,13 @@ public class ReportService {
 	@Value("#{systemProperties.getProperty('user.home')}")
 	private String userHome;
 
-	public String createInvoiceReport(Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<OrderLineProperty> orderLines)
-			throws ReportServiceException {
-		/*List<OrderLineReport> reportCollection = new ArrayList<OrderLineReport>();
-		for (OrderLineProperty orderLine : orderLines) {
-			OrderLineReport reportItem = new OrderLineReport();
-			reportItem.setOrderLine(orderLine);
-			Article article = EntityCollectionUtils.findById(articles, orderLine.getArticleId());
-      if(article.getName()==null)
-			  reportItem.setArticleName(article.getDescription());
-      else
-        reportItem.setArticleName(article.getName());
-			reportItem.setCode(article.getCode());
-			reportItem.setPrice(article.getPrice());
-			reportCollection.add(reportItem);
-		}*/
+	public String createInvoiceReport(int iReportType, Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<OrderLineProperty> orderLines){
+    String reportType;
+    if(iReportType == ViewInvoiceActivity.PRINT_INVOICE)
+      reportType = "invoice_printout.jasper";
+    else if(iReportType == ViewInvoiceActivity.PRINT_REMINDER)
+      reportType = "reminder_printout.jasper";
+    else return null;
     List<OrderLineProperty> decoupled = decoupleFreeArticles(orderLines);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("invoiceCode", invoice.getCode());
@@ -89,17 +82,19 @@ public class ReportService {
 		FileOutputStream outStream = null;
 		try {
 			outStream = new FileOutputStream(out);
-			JasperPrint print = JasperFillManager.fillReport(new ClassPathResource("invoice_printout.jasper").getInputStream(), parameters, new JRBeanCollectionDataSource(
+			JasperPrint print = JasperFillManager.fillReport(new ClassPathResource(reportType).getInputStream(), parameters, new JRBeanCollectionDataSource(
           decoupled));
 			JRExporter exporter = new JRPdfExporter();
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outStream);
 			exporter.exportReport();
 		} catch (JRException e) {
-			throw new ReportServiceException();
+			e.printStackTrace();
 		} catch (IOException e) {
-			throw new ReportServiceException();
-		} finally {
+			e.printStackTrace();
+		} catch (Exception e) {
+      e.printStackTrace();
+    } finally {
 			IOUtils.closeQuietly(outStream);
 		}
 		return out.getAbsolutePath();

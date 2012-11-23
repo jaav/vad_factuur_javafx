@@ -103,18 +103,18 @@ public class RestApiAccessor extends RestTemplate {
 	}*/
 
   public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, boolean fullInfo) {
- 		return getResponse(entityClass, null, null, null, "id", null, fullInfo, false);
+ 		return getResponse(entityClass, null, null, null, "id", null, fullInfo, false, true);
  	}
 
   public <E extends BaseEntity> ServerResponse getResponse(BaseEntity entity) {
- 		return getResponse(entity.getClass(), entity, null, null, "id", null, true, false);
+ 		return getResponse(entity.getClass(), entity, null, null, "id", null, true, false, true);
  	}
 
-	public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, BaseEntity entity, Integer offset, Integer count, String orderOn, String additionalCondition, boolean fullInfo, boolean includesNonActive) {
+	public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, BaseEntity entity, Integer offset, Integer count, String orderOn, String additionalCondition, boolean fullInfo, boolean includesNonActive, boolean asc) {
     ServerResponse response = null;
 		ArrayList<E> data = new ArrayList<E>();
 		String url = serviceUri + getEntityListSubPath(entityClass);
-    Map<String,?> urlVariables = getUrlVariables(entity, offset, count, orderOn, fullInfo, includesNonActive, additionalCondition);
+    Map<String,?> urlVariables = getUrlVariables(entity, offset, count, orderOn, fullInfo, includesNonActive, asc, additionalCondition);
     if(url.charAt(url.length()-1)=='&') url = url.substring(0, url.length()-1);
 		log.debug("Getting list of " + entityClass + " URL: " + url);
     try{
@@ -194,7 +194,7 @@ public class RestApiAccessor extends RestTemplate {
 		return StringUtils.uncapitalize(entityClass.getSimpleName());
 	}
 
-  private Map getUrlVariables(BaseEntity entity, Integer offset, Integer count, String orderOn, boolean fullInfo, boolean includesNonActive, String additionalCondition){
+  private Map getUrlVariables(BaseEntity entity, Integer offset, Integer count, String orderOn, boolean fullInfo, boolean includesNonActive, boolean asc, String additionalCondition){
     Map<String, String> urlVariables = new HashMap<String, String>();
     if (offset != null)
       urlVariables.put("from", ""+offset);
@@ -204,10 +204,6 @@ public class RestApiAccessor extends RestTemplate {
       urlVariables.put("quantity", ""+count);
     else
       urlVariables.put("quantity", "");
-    if (orderOn != null)
-      urlVariables.put("orderOn", orderOn);
-    else
-      urlVariables.put("orderOn", "");
     if (fullInfo)
       urlVariables.put("fullInfo", "true");
     else
@@ -216,19 +212,47 @@ public class RestApiAccessor extends RestTemplate {
       urlVariables.put("includesNonActive", "true");
     else
       urlVariables.put("includesNonActive", "false");
-    if(StringUtils.isNotBlank(additionalCondition) && entity!=null){
+    if(entity!=null){
       String filter = getFilterCondition(entity);
-      if(StringUtils.isNotBlank(filter))
-        urlVariables.put("additionalCondition", additionalCondition+" and "+filter);
-      else
-        urlVariables.put("additionalCondition", additionalCondition);
+      if(StringUtils.isNotBlank(additionalCondition)){
+        if(StringUtils.isNotBlank(filter))
+          urlVariables.put("additionalCondition", additionalCondition+" and "+filter);
+        else
+          urlVariables.put("additionalCondition", additionalCondition);
+      }
+      else {
+        if(StringUtils.isNotBlank(filter))
+          urlVariables.put("additionalCondition", filter);
+        else
+          urlVariables.put("additionalCondition", "");
+      }
+      if(StringUtils.isNotBlank(entity.getColumnName())){
+        urlVariables.put("orderOn", entity.getColumnName());
+        if (StringUtils.isNotBlank(entity.getSortType()))
+          urlVariables.put("asc", entity.getSortType());
+        else
+          urlVariables.put("asc", "true");
+      }
+      else if(StringUtils.isNotBlank(orderOn)){
+        urlVariables.put("orderOn", orderOn);
+        if (asc)
+          urlVariables.put("asc", "true");
+        else
+          urlVariables.put("asc", "false");
+      }
+      else{
+        urlVariables.put("orderOn", "");
+        urlVariables.put("asc", "");
+      }
     }
-    else if(StringUtils.isNotBlank(additionalCondition))
-      urlVariables.put("additionalCondition", additionalCondition);
-    else if(entity!=null)
-      urlVariables.put("additionalCondition", getFilterCondition(entity));
-    else
-      urlVariables.put("additionalCondition", "");
+    else{//entity == null
+      if(StringUtils.isNotBlank(additionalCondition))
+        urlVariables.put("additionalCondition", additionalCondition);
+      else
+        urlVariables.put("additionalCondition", "");
+      urlVariables.put("asc", "");
+      urlVariables.put("orderOn", "");
+    }
     urlVariables.put("count", "true");
     return urlVariables;
   }
@@ -246,6 +270,7 @@ public class RestApiAccessor extends RestTemplate {
         .append("fullInfo={fullInfo}&")
         .append("includesNonActive={includesNonActive}&")
         .append("additionalCondition={additionalCondition}&")
+        .append("asc={asc}&")
         .append("count={count}");
     return result.toString();
 	}
@@ -282,16 +307,37 @@ public class RestApiAccessor extends RestTemplate {
 
         Class clazz = pd.getPropertyType();
         Object value = pd.getReadMethod().invoke(entity);
-        if(value!=null && !name.equals("new") && !name.equals("printName")){
-          if(clazz.equals(String.class)) value = " like '%"+value+"%'";
+
+
+        if(value!=null && !name.equals("new") && !name.equals("printName") && !name.equals("columnName") && !name.equals("sortType")){
+          if(clazz.equals(String.class)){
+            if(StringUtils.isNotBlank((String)value))
+              value = " like '%"+value+"%'";
+            else
+              break;
+          }
           else if(clazz.equals(Date.class)) value = " > '"+ new SimpleDateFormat(sqlDateFormat).format(value)+"'";
-          else if(BaseEntity.class.isAssignableFrom(clazz)) value = " = "+(((BaseEntity)value).getId());
+          else if(BaseEntity.class.isAssignableFrom(clazz)){
+            if(((BaseEntity)value).getId()>=0)
+              value = " = "+(((BaseEntity)value).getId());
+            else
+              break;
+          }
+          else if(clazz.equals(Long.class) || clazz.equals(Integer.class)){
+            if(((Number)value).longValue()>=0)
+              value = " = "+value;
+            else
+              break;
+          }
           else value = " = "+value;
           value = name+value+" and ";
           filter.append(value);
         }
       }
-      return filter.substring(0, filter.length()-5);
+      if(filter.length()>5)
+        return filter.substring(0, filter.length()-5);
+      else
+        return "";
     } catch (IntrospectionException e) {
       e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
       return "";

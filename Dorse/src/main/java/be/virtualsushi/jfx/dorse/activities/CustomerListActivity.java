@@ -1,11 +1,11 @@
 package be.virtualsushi.jfx.dorse.activities;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import be.virtualsushi.jfx.dorse.dialogs.CustomerFilterDialog;
-import be.virtualsushi.jfx.dorse.model.Article;
-import be.virtualsushi.jfx.dorse.model.ServerResponse;
+import be.virtualsushi.jfx.dorse.model.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -20,8 +20,6 @@ import org.springframework.stereotype.Component;
 import be.virtualsushi.jfx.dorse.control.SortButton;
 import be.virtualsushi.jfx.dorse.control.table.EntityStringPropertyValueFactory;
 import be.virtualsushi.jfx.dorse.fxml.FxmlFile;
-import be.virtualsushi.jfx.dorse.model.Customer;
-import be.virtualsushi.jfx.dorse.model.Sector;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 
 @Component
@@ -111,11 +109,17 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 		table.getColumns().addAll(idColumn, nameColumn, sectorColumn, zipColumn, locationColumn, phoneColumn, emailColumn, createActionsColumn());
 	}
 
-	@Override
+  @Override
+  protected void fillTableColumns(TableView<Customer> table, String columnName, boolean asc) {
+    fillTableColumns(table);
+  }
+
+  @Override
   @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization() {
 		if (CollectionUtils.isEmpty(sectors)) {
 			sectors = (List<Sector>)getRestApiAccessor().getResponse(Sector.class, false).getData();
+      sectors.add(0, Sector.getEmptySector());
       createParentSectorsList(sectors);
 		}
 	}
@@ -151,6 +155,17 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
     fillTableColumns(table);
     table.setItems(FXCollections.observableArrayList((List<Customer>) serverResponse.getData()));
     return table;
+  }
+
+  @Override
+  protected TableView createPage(ServerResponse serverResponse, String columnName, boolean asc) {
+    return createPage(serverResponse);
+  }
+
+  @Override
+  protected String createCsv(ServerResponse serverResponse, File target) {
+    exportService.createCsv((CustomerResponse)serverResponse, target, sectors);
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override

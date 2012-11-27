@@ -14,6 +14,7 @@
 		<jasperreports.artifactid>jasperreports</jasperreports.artifactid>
 		<jasperreports.groupid>net.sf.jasperreports</jasperreports.groupid>
 		<jasperreports.version>4.7.1</jasperreports.version>
+        <sql.date.format>yyyy-MM-dd</sql.date.format>
 	</properties>
 
 	<profiles>
@@ -36,7 +37,8 @@
 				<fx.antlib.path>${fx.home}</fx.antlib.path>
 				<fx.version>2.2</fx.version>
 				<java.compiler.version>1.7</java.compiler.version>
-				<service.uri>http://localhost:8070/</service.uri>
+                <service.uri>http://www.dorse.me/</service.uri>
+				<!--service.uri>http://localhost:8070/</service.uri-->
 			</properties>
 		</profile>
 	</profiles>
@@ -149,10 +151,23 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
+			<groupId>${jasperreports.groupid}</groupId>
 			<artifactId>jasperreports-fonts</artifactId>
 			<version>4.0.0</version>
 		</dependency>
+
+        <dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-bridge</artifactId>
+            <version>1.7</version>
+        </dependency>
+
 
 	</dependencies>
 

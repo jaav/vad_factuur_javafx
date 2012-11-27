@@ -1,12 +1,12 @@
 package be.virtualsushi.jfx.dorse.activities;
 
-import be.virtualsushi.jfx.dorse.control.DeleteButton;
-import be.virtualsushi.jfx.dorse.control.EditButton;
-import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
+import be.virtualsushi.jfx.dorse.control.*;
 import be.virtualsushi.jfx.dorse.dialogs.NewPersonDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveAddressEvent;
 import be.virtualsushi.jfx.dorse.events.dialogs.SavePersonEvent;
+import be.virtualsushi.jfx.dorse.events.report.ShowReportEvent;
 import be.virtualsushi.jfx.dorse.model.Person;
+import be.virtualsushi.jfx.dorse.report.ReportService;
 import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 import be.virtualsushi.jfx.dorse.utils.Utils;
 import com.google.common.eventbus.Subscribe;
@@ -22,10 +22,12 @@ import javafx.scene.layout.VBox;
 
 import name.antonsmirnov.javafx.dialog.Dialog;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import be.virtualsushi.jfx.dorse.control.ViewAddressControl;
 import be.virtualsushi.jfx.dorse.dialogs.NewAddressDialog;
 import be.virtualsushi.jfx.dorse.model.Address;
 import be.virtualsushi.jfx.dorse.model.Customer;
@@ -36,6 +38,7 @@ import java.util.List;
 @Component
 @Scope("prototype")
 public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Customer> {
+  private static final Logger log = LoggerFactory.getLogger(ViewInvoiceActivity.class);
 
   List<Person> persons;
   List<Address> addresses;
@@ -228,6 +231,59 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
 
     }
 
+  private class GenerateLabelTaskCreator implements TaskCreator<DorseBackgroundTask<String>> {
+
+ 		private final Customer customer;
+    private final Address address;
+    private final Person person;
+
+ 		public GenerateLabelTaskCreator(Customer customer, Address address) {
+       this.customer = customer;
+       this.address = address;
+       if(customer.getPerson()!=null && !customer.getPerson().isEmpty())
+         this.person = customer.getPerson().get(0);
+       else
+         this.person = null;
+ 		}
+
+ 		@Override
+ 		public DorseBackgroundTask<String> createTask() {
+ 			return new DorseBackgroundTask<String>(this, customer, address, person) {
+
+ 				@Override
+ 				protected void onPreExecute() {
+ 					showLoadingMask();
+ 				}
+
+ 				@SuppressWarnings("unchecked")
+ 				@Override
+ 				protected String call() throws Exception {
+           if(getParameters()[2]!=null && StringUtils.isNotBlank(((Person) getParameters()[2]).getName()))
+ 					   return reportService.createAddressLabel((Customer) getParameters()[0], (Address) getParameters()[1], (Person) getParameters()[2]);
+           else
+             return reportService.createAddressLabel((Customer) getParameters()[0], (Address) getParameters()[1]);
+ 				}
+
+ 				@Override
+ 				protected void onSuccess(String value) {
+ 					hideLoadingMask();
+ 					getEventBus().post(new ShowReportEvent(value));
+ 				}
+
+         @Override
+         protected void onError(Throwable exception) {
+           log.warn(exception.getMessage());
+           hideLoadingMask();
+           super.onError(exception);    //To change body of overridden methods use File | Settings | File Templates.
+         }
+       };
+ 		}
+
+ 	}
+
+  @Autowired
+ 	private ReportService reportService;
+
   @FXML
   protected Label idField, vatField, ibanField, remarkField;
 
@@ -311,9 +367,28 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
               .show();
         }
       });
+
+
+
+      PrintButton printButton = new PrintButton();
+      printButton.setId("print_"+address.getId());
+      printButton.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+          Button btn = (Button) event.getSource();
+          try {
+            Address address = findAddress(Long.parseLong(btn.getId().substring(btn.getId().indexOf("_") + 1)));
+            Customer customer = getCurrentCustomer();
+            doInBackground(new GenerateLabelTaskCreator(customer, address));
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
+      });
       HBox buttonContainer = new HBox();
       buttonContainer.getChildren().add(editButton);
       buttonContainer.getChildren().add(deleteButton);
+      buttonContainer.getChildren().add(printButton);
       container.getChildren().add(addressView);
       container.getChildren().add(buttonContainer);
       tab.setContent(container);
@@ -464,6 +539,10 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
  		}
  		throw new IllegalStateException("Can't find Address with id=" + addressId);
  	}
+  
+  private Customer getCurrentCustomer(){
+    return this.getEntity();
+  }
 
   public Person getCurrentPerson() {
     return currentPerson;

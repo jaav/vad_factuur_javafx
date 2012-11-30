@@ -82,6 +82,10 @@ public abstract class AbstractManageEntityActivity<N extends Node, E extends Bas
 		return entity;
 	}
 
+  protected void setEntity(E entity) {
+ 		this.entity = entity;
+ 	}
+
 	protected boolean canCreateNewEntity() {
 		return false;
 	}

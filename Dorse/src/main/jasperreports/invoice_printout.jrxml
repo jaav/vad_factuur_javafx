@@ -65,7 +65,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Factuurdatum: "+new SimpleDateFormat($R{input.date.format}).format($P{now})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Factuurdatum: "+new SimpleDateFormat($R{input.date.format}).format($P{created})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="32a907d6-c234-4ad4-91c0-733aab3606ce" x="60" y="163" width="698" height="20"/>
@@ -89,7 +89,7 @@
 			</staticText>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement uuid="ad021a47-c2d8-4e03-85a6-f8e89b30b363" x="0" y="0" width="280" height="110"/>
-				<imageExpression><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File("/Users/jefw/Documents/virtualsushi/customers/vad/VAD_logo.svg"))]]></imageExpression>
+				<imageExpression><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File("VAD_logo.svg"))]]></imageExpression>
 			</image>
 			<frame>
 				<reportElement uuid="d0cf53a0-9512-4e21-9125-82e856278750" x="348" y="69" width="205" height="69"/>

@@ -35,6 +35,9 @@ public class ReportService {
   @Value("#{systemProperties.getProperty('user.home')}")
   private String userHome;
 
+  @Value("${report.date.format}")
+  private String reportDateFormat;
+
   public String createInvoiceReport(int iReportType, Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<OrderLineProperty> orderLines) {
     String reportType;
     if (iReportType == ViewInvoiceActivity.PRINT_INVOICE)
@@ -51,6 +54,7 @@ public class ReportService {
     parameters.put("goods", invoice.getShipping());
     parameters.put("tpt", invoice.getTotal() - invoice.getShipping());
     parameters.put("total", invoice.getTotal());
+    parameters.put("report.date.format", reportDateFormat);
     parameters.put(JRParameter.REPORT_FORMAT_FACTORY, new DorseFormatFactory(resources));
     if (invoice.getCustomer() != null) {
       Customer customer = invoice.getCustomer();

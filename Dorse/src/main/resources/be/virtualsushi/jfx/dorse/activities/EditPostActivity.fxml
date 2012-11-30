@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import be.virtualsushi.jfx.dorse.control.*?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import be.virtualsushi.jfx.dorse.control.EditButton?>
+<?import be.virtualsushi.jfx.dorse.control.EditableList?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.FloatNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.TextAreaField?>
+<?import be.virtualsushi.jfx.dorse.control.TextField?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import be.virtualsushi.jfx.dorse.control.calendar.DatePicker?>
+<?import java.lang.*?>
+<?import java.lang.String?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?scenebuilder-classpath-element ../../../../../../../../out/production/dorse?>
+
+<HBox spacing="20.0" xmlns:fx="http://javafx.com/fxml">
+  <VBox spacing="20.0">
+    <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <Label fx:id="title" styleClass="activity-title" />
+    <GridPane hgap="10.0" vgap="5.0">
+      <FieldLabel value="%id" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+      <Label fx:id="idLabel" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="0" visible="false" />
+
+      <FieldLabel value="%name" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+      <TextField fx:id="nameField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+
+      <FieldLabel value="%bottom" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+      <FloatNumberField fx:id="bottomField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <FieldLabel value="%top" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <FloatNumberField fx:id="topField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <FieldLabel value="%price" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <FloatNumberField fx:id="priceField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+      <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel" onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="6" />
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+  </VBox>
+  <ValidationErrorPanel fx:id="validationPanel" visible="false" />
+</HBox>

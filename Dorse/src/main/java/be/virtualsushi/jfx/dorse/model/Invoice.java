@@ -34,6 +34,8 @@ public class Invoice extends BaseEntity {
 
 	private Float shipping;
 
+  private Float products;
+
 	private Float total;
 
 	private Float vat;
@@ -104,7 +106,15 @@ public class Invoice extends BaseEntity {
 		this.shipping = shipping;
 	}
 
-	public Float getTotal() {
+  public Float getProducts() {
+    return products;
+  }
+
+  public void setProducts(Float products) {
+    this.products = products;
+  }
+
+  public Float getTotal() {
 		return total;
 	}
 
@@ -171,4 +181,8 @@ public class Invoice extends BaseEntity {
 	public void setDeliveryDate(Date deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
+
+  public String getTotalPrice(){
+    return ""+(getShipping()+getProducts());
+  }
 }

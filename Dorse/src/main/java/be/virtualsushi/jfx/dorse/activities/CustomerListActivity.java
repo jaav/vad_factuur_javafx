@@ -149,7 +149,7 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
   @Override  
   @SuppressWarnings("unchecked")
   protected TableView createPage(ServerResponse serverResponse) {
-    TableView<Customer> table = new TableView<Customer>();
+    table = new TableView<Customer>();
     table.setMaxHeight(Double.MAX_VALUE);
     table.setMaxWidth(Double.MAX_VALUE);
     fillTableColumns(table);

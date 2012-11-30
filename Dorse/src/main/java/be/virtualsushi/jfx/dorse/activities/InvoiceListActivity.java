@@ -63,6 +63,12 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 		TableColumn<Invoice, Float> shippingColumn = createTableColumn("shipping");
 		shippingColumn.setMinWidth(70);
 
+    TableColumn<Invoice, Float> productsColumn = createTableColumn("products");
+    productsColumn.setMinWidth(70);
+
+    TableColumn<Invoice, Float> totalColumn = createTableColumn("total");
+    totalColumn.setMinWidth(70);
+
 		TableColumn<Invoice, String> statusColumn = createTableColumn("status", new EntityStringPropertyValueFactory<Invoice>() {
 
 					@Override
@@ -75,10 +81,7 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
 				});
 		statusColumn.setMinWidth(100);
 
-		TableColumn<Invoice, Float> totalColumn = createTableColumn("total");
-		totalColumn.setMinWidth(70);
-
-		table.getColumns().addAll(idColumn, codeColumn, customerColumn, dateColumn, shippingColumn, statusColumn, totalColumn, createActionsColumn());
+		table.getColumns().addAll(idColumn, codeColumn, customerColumn, dateColumn, productsColumn, shippingColumn, totalColumn, statusColumn, createActionsColumn());
 	}
 
   @Override
@@ -113,7 +116,7 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
   @Override  
   @SuppressWarnings("unchecked")
   protected TableView createPage(ServerResponse serverResponse) {
-    TableView<Invoice> table = new TableView<Invoice>();
+    table = new TableView<Invoice>();
     table.setMaxHeight(Double.MAX_VALUE);
     table.setMaxWidth(Double.MAX_VALUE);
     fillTableColumns(table);

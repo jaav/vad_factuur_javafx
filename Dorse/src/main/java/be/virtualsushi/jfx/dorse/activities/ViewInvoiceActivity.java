@@ -1,6 +1,7 @@
 package be.virtualsushi.jfx.dorse.activities;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.List;
 import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.control.table.MyPropertyValueFactory;
 import be.virtualsushi.jfx.dorse.control.table.MyRelatedPropertyValueFactory;
+import be.virtualsushi.jfx.dorse.dialogs.EditInvoicePricesDialog;
+import be.virtualsushi.jfx.dorse.events.dialogs.ChangeInvoicePricesEvent;
 import be.virtualsushi.jfx.dorse.model.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -120,7 +123,8 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
             orderLines.add(value);
             orderLineTable.getItems().add(value);
           }
-          hideLoadingMask();
+          updateInvoiceData();
+          //hideLoadingMask();
 				}
 
         @Override
@@ -162,7 +166,8 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				protected void onSuccess(OrderLineProperty value) {
           orderLineTable.getItems().remove(value);
           orderLines.remove(value);
-					hideLoadingMask();
+          updateInvoiceData();
+					//hideLoadingMask();
 				}
 
         @Override
@@ -224,12 +229,97 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		}
 
 	}
+  
+  private class LoadInvoiceTaskCreator implements TaskCreator<DorseBackgroundTask<Invoice>> {
+ 
+ 		public LoadInvoiceTaskCreator() {
+ 		}
+ 
+ 		@Override
+ 		public DorseBackgroundTask<Invoice> createTask() {
+ 			return new DorseBackgroundTask<Invoice>(this) {
+
+         @Override
+ 				protected void onPreExecute() {
+ 					showLoadingMask();
+ 				};
+ 
+ 				@SuppressWarnings("unchecked")
+ 				@Override
+ 				protected Invoice call() throws Exception {
+ 					Invoice result = getRestApiAccessor().get(getEntity().getId(), Invoice.class);
+          return result;
+ 				}
+
+         @Override
+ 				protected void onSuccess(Invoice value) {
+           mapFields(value);
+           setEntity(value);
+ 					hideLoadingMask();
+ 				}
+ 
+         @Override
+         protected void onError(Throwable exception) {
+           hideLoadingMask();
+         }
+ 
+ 			};
+ 		}
+ 
+ 	}
+  
+  
+
+  private class SaveInvoiceTaskCreator implements TaskCreator<DorseBackgroundTask<Invoice>> {
+ 
+ 		private final Invoice entity;
+ 
+ 		public SaveInvoiceTaskCreator(Invoice entityToSave) {
+ 			this.entity = entityToSave;
+ 		}
+ 
+ 		@Override
+ 		public DorseBackgroundTask<Invoice> createTask() {
+ 			return new DorseBackgroundTask<Invoice>(this, entity) {
+ 
+ 				@Override
+ 				protected void onPreExecute() {
+ 					showLoadingMask();
+ 				}
+ 
+ 				@Override
+ 				protected Invoice call() throws Exception {
+ 					getRestApiAccessor().save(entity);
+ 					return entity;
+ 				}
+ 
+ 				@Override
+ 				protected void onSuccess(Invoice value) {
+          updatePriceFields(value);
+ 					hideLoadingMask();
+ 				}
+ 
+         @Override
+         protected void onError(Throwable exception) {
+           exception.printStackTrace();
+           ValidationErrorPanel validationPanel = getValidationPanel();
+        			if (validationPanel != null) {
+        				validationPanel.clearMessages();
+               validationPanel.addMessage(getResources().getString("save_error")+"\n\n"+exception.getMessage());
+        				validationPanel.setVisible(true);
+              }
+           hideLoadingMask();
+         }
+       };
+ 		}
+ 
+ 	}
 
 	@Autowired
 	private ReportService reportService;
 
 	@FXML
-	private Label idField, customerField, createdField;
+	private Label idField, customerField, createdField, shippingField, productsField, totalField;
 
 	@FXML
 	private ViewAddressControl invoiceAddressField, deliveryAddressField;
@@ -269,6 +359,11 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 	protected void handlePrintInvoice(ActionEvent event) {
 		doInBackground(new GenerateReportTaskCreator(ViewInvoiceActivity.PRINT_INVOICE, getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLineTable.getItems()));
 	}
+
+  @FXML
+ 	protected void handleChangeAmounts(ActionEvent event) {
+		showDialog(getResources().getString("change.prices.dialog.title"), EditInvoicePricesDialog.class, getEntity());
+ 	}
 
   @FXML
  	protected void handlePrintReminder(ActionEvent event) {
@@ -321,9 +416,18 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		deliveryAddressField.setValue(deliveryAddressValue);
 		idField.setText(String.valueOf(viewingEntity.getId()));
 		customerField.setText(viewingEntity.getCustomer().getName());
+    shippingField.setText(""+viewingEntity.getShipping());
+    productsField.setText(""+viewingEntity.getProducts());
+    totalField.setText(viewingEntity.getTotalPrice());
 		createdField.setText(new SimpleDateFormat(getResources().getString("date.format")).format(viewingEntity.getCreationDate()));
 		//orderLineTable.setItems(FXCollections.observableArrayList(orderLines));
 	}
+
+  private void updatePriceFields(Invoice modifiedEntity){
+    shippingField.setText(""+modifiedEntity.getShipping());
+    productsField.setText(""+modifiedEntity.getProducts());
+    totalField.setText(modifiedEntity.getTotalPrice());
+  }
 
 	@Override
   @SuppressWarnings("unchecked")
@@ -354,6 +458,11 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		doInBackground(new SaveOrderLineTaskCreator(event.getEntity()));
 	}
 
+  @Subscribe
+ 	public void onChangeInvoicePrices(ChangeInvoicePricesEvent event) {
+ 		doInBackground(new SaveInvoiceTaskCreator(event.getEntity()));
+ 	}
+
 	private int findOrderLineIndex(Long orderLineId) {
     int counter = -1;
 		for (OrderLineProperty orderLine : orderLines) {
@@ -373,5 +482,9 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
  		}
  		return false;
  	}
+  
+  private void updateInvoiceData(){
+    doInBackground(new LoadInvoiceTaskCreator());
+  }
 
 }

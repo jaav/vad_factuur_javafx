@@ -45,6 +45,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
   public static final String FORCE_RELOAD_PARAMETER = "force_reload";
   public static String ORDER_ON = "id";
+  private Integer pagerPage = 1;
+  protected TableView<E> table;
 
   @Autowired
   protected ActivityNavigator activityNavigator;
@@ -188,7 +190,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
     }
   }
 
-  private class DeleteEntityTaskCreator implements TaskCreator<DorseBackgroundTask<ServerResponse>> {
+  private class DeleteEntityTaskCreator implements TaskCreator<DorseBackgroundTask<E>> {
 
     private final E entity;
 
@@ -197,8 +199,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
     }
 
     @Override
-    public DorseBackgroundTask<ServerResponse> createTask() {
-      return new DorseBackgroundTask<ServerResponse>(this, entity) {
+    public DorseBackgroundTask<E> createTask() {
+      return new DorseBackgroundTask<E>(this, entity) {
 
         @Override
         protected void onPreExecute() {
@@ -207,16 +209,18 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
         @SuppressWarnings("unchecked")
         @Override
-        protected ServerResponse call() throws Exception {
+        protected E call() throws Exception {
           getRestApiAccessor().delete((E) getParameters()[0]);
-          return getRestApiAccessor().getResponse((Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
-              null, 0, getItemsPerPageCount(), ORDER_ON, null, true, false, true);
+          /*return getRestApiAccessor().getResponse((Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
+              null, 0, getItemsPerPageCount(), ORDER_ON, null, true, false, true);*/
+          return (E) getParameters()[0];
         }
 
         @Override
-        protected void onSuccess(ServerResponse value) {
-          listPage.setCurrentPageIndex(0);
-          createPage(value);
+        protected void onSuccess(E value) {
+          //listPage.setCurrentPageIndex(0);
+          //createPage(value);
+          table.getItems().remove(value);
           hideLoadingMask();
         }
       };
@@ -293,6 +297,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
       public Node call(Integer param) {
         listContainer.getChildren().clear();
         doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
+        setPagerPage(param);
         return listContainer;
       }
     });
@@ -461,4 +466,11 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
       listContainer.setCenter(table);
     }*/
 
+  public Integer getPagerPage() {
+    return pagerPage;
+  }
+
+  public void setPagerPage(Integer pagerPage) {
+    this.pagerPage = pagerPage;
+  }
 }

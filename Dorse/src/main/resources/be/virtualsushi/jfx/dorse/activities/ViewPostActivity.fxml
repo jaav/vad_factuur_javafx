@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import java.lang.String?>
+<?import javafx.scene.layout.GridPane?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+
+<HBox spacing="20.0" xmlns:fx="http://javafx.com/fxml">
+<VBox fx:id="mainContainer" spacing="20" prefWidth="940.0">
+
+	<GridPane>
+		<Label fx:id="title" GridPane.columnIndex="0" GridPane.rowIndex="0">
+			<styleClass>
+				<String fx:value="activity-title" />
+			</styleClass>
+		</Label>
+		<Button text="%back" onAction="#handleGoBack"
+			GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.halignment="RIGHT"
+			GridPane.hgrow="ALWAYS" />
+	</GridPane>
+
+	<GridPane vgap="5" hgap="10">
+
+		<FieldLabel value="%id" GridPane.columnIndex="0"
+			GridPane.rowIndex="0" />
+		<Label fx:id="idLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+		<FieldLabel value="%name" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+		<Label fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="400" />
+
+        <FieldLabel value="%bottom" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+      		<Label fx:id="bottomField" GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="400" />
+
+        <FieldLabel value="%top" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+      		<Label fx:id="topField" GridPane.columnIndex="1" GridPane.rowIndex="4" prefWidth="400" />
+
+	</GridPane>
+</VBox>
+</HBox>
+

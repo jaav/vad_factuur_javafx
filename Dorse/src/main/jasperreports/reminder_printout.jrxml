@@ -27,51 +27,18 @@
 		</box>
 	</style>
 	<parameter name="invoiceCode" class="java.lang.String"/>
-	<parameter name="invoiceId" class="java.lang.Long"/>
 	<parameter name="customer" class="java.lang.String"/>
 	<parameter name="person" class="java.lang.String"/>
 	<parameter name="created" class="java.util.Date"/>
 	<parameter name="now" class="java.util.Date"/>
 	<parameter name="invoiceAddress" class="be.virtualsushi.jfx.dorse.model.Address"/>
-	<parameter name="deliveryAddress" class="be.virtualsushi.jfx.dorse.model.Address"/>
-	<parameter name="goods" class="java.lang.Float"/>
 	<parameter name="total" class="java.lang.Float"/>
-	<parameter name="tpt" class="java.lang.Float"/>
-	<field name="articleName" class="java.lang.String"/>
-	<field name="articlePrice" class="java.lang.Float"/>
-	<field name="articleCode" class="java.lang.String"/>
-	<field name="quantity" class="java.lang.Integer"/>
-	<field name="unitDiscount" class="java.lang.Float"/>
+	<parameter name="report.date.format" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="205">
-			<line>
-				<reportElement uuid="927662ee-31fb-4c08-b8e9-65fd02cbadec" x="0" y="204" width="555" height="1"/>
-				<graphicElement>
-					<pen lineWidth="1.0"/>
-				</graphicElement>
-			</line>
-			<textField>
-				<reportElement uuid="495fdd1c-568b-4ad5-a121-01652c7cf569" x="60" y="183" width="210" height="22" forecolor="#000000"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Factuurnummer: "+$P{invoiceCode}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="495fdd1c-568b-4ad5-a121-01652c7cf569" x="289" y="183" width="482" height="22" forecolor="#000000"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Factuurdatum: "+new SimpleDateFormat($R{input.date.format}).format($P{now})]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="32a907d6-c234-4ad4-91c0-733aab3606ce" x="60" y="163" width="698" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA["Leveringsadres: "+($P{person}!=null?$P{person}:"Onthaal")+", "+$P{deliveryAddress}.getAddress()+", "+$P{deliveryAddress}.getZipcode()+" "+$P{deliveryAddress}.getCity()]]></textFieldExpression>
-			</textField>
+		<band height="800">
 			<staticText>
 				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="113" width="254" height="12"/>
 				<textElement/>
@@ -110,164 +77,29 @@
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{deliveryAddress}.getZipcode()+" "+$P{invoiceAddress}.getCity()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{invoiceAddress}.getZipcode()+" "+$P{invoiceAddress}.getCity()]]></textFieldExpression>
 			</textField>
 			<image scaleImage="RealSize" isUsingCache="false">
 				<reportElement uuid="13acd14c-cf77-47e0-a1f7-acee78c40527" x="0" y="0" width="280" height="110"/>
-				<imageExpression><![CDATA["/Users/jefw/Documents/virtualsushi/customers/vad/VAD_logo_big.png"]]></imageExpression>
+                <imageExpression><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File("VAD_logo.svg"))]]></imageExpression>
 			</image>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="30">
 			<frame>
-				<reportElement uuid="153576c3-1acc-403f-b99e-6394eae385f9" mode="Opaque" x="0" y="0" width="555" height="30" backcolor="#E0E0E0"/>
+				<reportElement uuid="33ec5ef0-a089-495d-8e7d-f16be0834a3f" x="2" y="173" width="553" height="602"/>
 				<textField>
-					<reportElement uuid="0e2061ab-7fbb-4b47-97b3-3001792ee41c" x="326" y="0" width="80" height="30"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<reportElement uuid="eff1ce66-84fb-4054-b815-7f52d53c67c8" x="19" y="91" width="514" height="511"/>
+					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Eenheidsprijs"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Betreft: Achterstalige betaling\n\nEen tijdje geleden plaatste u bij ons een bestelling van documentenmateriaal.\n\nDe bestelde publicaties, voor een totaal bedrag van "+$P{total}+" euro, werden u toegezonden samen met een factuur met nummer "+$P{invoiceCode}+" op datum van "+new SimpleDateFormat($R{input.date.format}).format($P{created})+".\n\nTot op heden ontvingen wij nog geen betaling van het hierboven vermelde bedrag. Misschien is dit een vergetelheid of wordt deze brief gekruist door de overschrijving.\n\nIndien de betaling nog niet werd uitgevoerd, vragen wij u in ieder geval deze per omgaande uit te voeren.\n\nMocht er onduidelijkheid bestaan omtrent deze bestelling, aarzel dan niet opnieuw contact met ons op te nemen.\n\n\n\nDank voor uw medewerking.\n\n\n\nMet vriendelijke groeten,\n\n\n\n\nPatrick Delaere\nVAD Secretariaat"]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="ddaf6bf3-8ec3-4487-9b3e-b5da5907cd80" x="80" y="1" width="246" height="29"/>
-					<textElement verticalAlignment="Middle">
-						<font size="12" isBold="false"/>
-					</textElement>
-					<textFieldExpression><![CDATA["Omschrijving artikels"]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement uuid="0e2061ab-7fbb-4b47-97b3-3001792ee41c" x="0" y="0" width="80" height="30"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<reportElement uuid="366ef355-8332-4491-83d7-1308207bb80c" x="320" y="19" width="203" height="18"/>
+					<textElement textAlignment="Right">
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Code"]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement uuid="0e2061ab-7fbb-4b47-97b3-3001792ee41c" x="406" y="0" width="70" height="30"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="12"/>
-					</textElement>
-					<textFieldExpression><![CDATA["Aantal"]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement uuid="17069b0c-e57b-4b0b-bdd8-0ad32984a472" x="491" y="0" width="59" height="30"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="12"/>
-					</textElement>
-					<textFieldExpression><![CDATA["Waarde"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Brussel, "+new SimpleDateFormat($P{report.date.format}, new Locale("nl", "BE")).format($P{now})]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
-	</columnHeader>
-	<detail>
-		<band height="30" splitType="Stretch">
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="406" y="0" width="70" height="26"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="477" y="0" width="76" height="26"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($F{articlePrice} - ($F{unitDiscount}!=null?$F{unitDiscount}:0)) * $F{quantity}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="4" y="0" width="76" height="26"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{articleCode}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="80" y="0" width="246" height="26"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{articleName}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="326" y="0" width="80" height="26"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{articlePrice}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement uuid="71329195-cc28-4601-a89d-4774551ef3f0" x="0" y="27" width="555" height="1" forecolor="#CCCCCC"/>
-			</line>
-		</band>
-	</detail>
-	<pageFooter>
-		<band height="31" splitType="Stretch">
-			<textField>
-				<reportElement uuid="de55e61c-6e25-4997-9778-2fef8f83a7b9" x="438" y="6" width="80" height="20"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement uuid="5e608f79-3ad5-48b7-b180-336dabca3100" x="518" y="6" width="37" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageFooter>
-	<lastPageFooter>
-		<band height="125">
-			<staticText>
-				<reportElement uuid="97f54d08-0b21-474a-ae1a-2cc2b28de593" x="238" y="18" width="129" height="16"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Verzendingskosten:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="97f54d08-0b21-474a-ae1a-2cc2b28de593" x="238" y="2" width="129" height="16"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Totaal artikelen:]]></text>
-			</staticText>
-			<line>
-				<reportElement uuid="b574015d-a87e-4a82-a7fe-14a79d40f051" x="477" y="1" width="78" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="b0d2302a-b6aa-41c2-b4f1-384ebcf51565" x="477" y="34" width="78" height="1"/>
-			</line>
-			<staticText>
-				<reportElement uuid="a72c0456-05ae-4076-9f37-d013c83d8915" x="238" y="40" width="129" height="20"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Totaal te betalen:]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="a01df25e-94f7-4615-9d04-2cd6c2fc1e78" x="453" y="2" width="100" height="16"/>
-				<textElement textAlignment="Right">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{goods}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="ddd9b493-aa38-4c3e-9bbc-3e82208b9f82" x="453" y="18" width="100" height="16"/>
-				<textElement textAlignment="Right">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{tpt}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="01cd0221-e4c1-475f-84e8-eef8c4047ff7" x="453" y="40" width="100" height="16"/>
-				<textElement textAlignment="Right">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["€  "+$P{total}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="f1259349-d431-4cce-bf79-c5cf4a340c59" x="0" y="80" width="432" height="20"/>
-				<textElement/>
-				<text><![CDATA[Er wordt geen korting toegestaan - Niet BTW-plichtig]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="b29f1764-e84d-469f-9885-d4444603db52" x="2" y="104" width="552" height="20"/>
-				<textElement textAlignment="Center">
-					<font isBold="true" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[Wij verzoeken U deze factuur binnen 30 dagen na datum te voldoen met vermelding van bovenstaand factuurnr.]]></text>
-			</staticText>
-		</band>
-	</lastPageFooter>
+	</pageHeader>
 </jasperReport>

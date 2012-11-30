@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.ComboBoxField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.CheckBox?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import be.virtualsushi.jfx.dorse.control.FloatNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.IntegerNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.LongNumberField?>
+<?import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="container" xmlns:fx="http://javafx.com/fxml" spacing="10">
+	<padding>
+		<Insets top="15" right="15" bottom="15" left="15" />
+	</padding>
+    <LongNumberField fx:id="idField" visible="false" />
+	<GridPane hgap="10" vgap="10">
+
+		<FieldLabel value="%shipping" GridPane.columnIndex="0"
+			GridPane.rowIndex="0" />
+		<FloatNumberField fx:id="shippingField"
+			GridPane.columnIndex="1" GridPane.rowIndex="0" fieldWidth="300" />
+
+		<FieldLabel value="%products" GridPane.columnIndex="0"
+			GridPane.rowIndex="1" />
+		<FloatNumberField fx:id="productsField"
+			GridPane.columnIndex="1" GridPane.rowIndex="1" fieldWidth="300" />
+
+		<ControlsButtonsBar GridPane.columnIndex="1"
+			GridPane.rowIndex="3" alignment="BOTTOM_RIGHT" onSaveAction="#handleSave"
+			onCancelAction="#handleCancel" saveButtonTitle="%save"
+			cancelButtonTitle="%cancel" />
+
+	</GridPane>
+</VBox>
+

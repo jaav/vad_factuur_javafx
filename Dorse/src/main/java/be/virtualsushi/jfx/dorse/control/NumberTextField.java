@@ -23,13 +23,11 @@ public class NumberTextField extends TextField {
 
 			@Override
 			public void handle(KeyEvent event) {
-				if (!inputAllowed(event.getCode().ordinal())) {
 					String text = getText();
+          setText(text.replace(',', '.'));
 					if (text.length() > 0) {
-						setText(text.substring(0, text.length() - 1));
-						positionCaret(text.length() - 1);
+						positionCaret(text.length());
 					}
-				}
 			}
 
 		});

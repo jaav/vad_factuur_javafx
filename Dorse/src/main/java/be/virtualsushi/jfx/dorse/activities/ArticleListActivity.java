@@ -33,7 +33,6 @@ import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 public class ArticleListActivity extends AbstractListActivity<Article> {
 
 	private List<Supplier> suppliers;
-  private TableView<Article> table;
 
 	@Override
 	protected String getTitle() {

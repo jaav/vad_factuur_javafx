@@ -38,16 +38,31 @@
 					GridPane.rowIndex="0" />
 				<Label fx:id="idField" GridPane.columnIndex="1"
 					GridPane.rowIndex="0" />
+                <FieldLabel value="%products" GridPane.columnIndex="6"
+                    GridPane.rowIndex="0" />
+                <Label fx:id="productsField" GridPane.columnIndex="7"
+                    GridPane.rowIndex="0" />
 
 				<FieldLabel value="%customer" GridPane.columnIndex="0"
 					GridPane.rowIndex="1" />
 				<Label fx:id="customerField" GridPane.columnIndex="1"
 					GridPane.rowIndex="1" />
+                <FieldLabel value="%shipping" GridPane.columnIndex="6"
+                    GridPane.rowIndex="1" />
+                <Label fx:id="shippingField" GridPane.columnIndex="7"
+                    GridPane.rowIndex="1" />
 
 				<FieldLabel value="%created" GridPane.columnIndex="0"
 					GridPane.rowIndex="2" />
 				<Label fx:id="createdField" GridPane.columnIndex="1"
 					GridPane.rowIndex="2" />
+                <FieldLabel value="%total_cost" GridPane.columnIndex="6"
+                    GridPane.rowIndex="2" />
+                <Label fx:id="totalField" GridPane.columnIndex="7"
+                    GridPane.rowIndex="2" />
+                <Button text="%change.amounts" onAction="#handleChangeAmounts"
+                        GridPane.columnIndex="10" GridPane.rowIndex="2" />
+
 
 			</GridPane>
 		</Tab>

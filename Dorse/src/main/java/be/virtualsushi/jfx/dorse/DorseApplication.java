@@ -99,7 +99,9 @@ public class DorseApplication extends Application {
 
     Menu articleObject = factory.createMenu("Articles", "new", EDIT_ARTICLE, "list", LIST_ARTICLES);
 
-		menuBar.getMenus().addAll(menuVadFactuur, invoiceObject, customerObject, articleObject);
+    Menu postObject = factory.createMenu("Post", "list", LIST_POST);
+
+		menuBar.getMenus().addAll(menuVadFactuur, invoiceObject, customerObject, articleObject, postObject);
 
 		return menuBar;
 	}
@@ -111,12 +113,15 @@ public class DorseApplication extends Application {
     placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_CUSTOMER, applicationContext.getBean(EditCustomerActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_ARTICLE, applicationContext.getBean(EditArticleActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_ARTICLE, applicationContext.getBean(ViewArticleActivity.class)));
+    placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_POST, applicationContext.getBean(EditPostActivity.class)));
+    placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_POST, applicationContext.getBean(ViewPostActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.EDIT_INVOICE, applicationContext.getBean(EditInvoiceActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_CUSTOMER, applicationContext.getBean(ViewCustomerActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.VIEW_INVOICE, applicationContext.getBean(ViewInvoiceActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.LIST_CUSTOMERS, applicationContext.getBean(CustomerListActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.LIST_ARTICLES, applicationContext.getBean(ArticleListActivity.class)));
 		placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.LIST_INVOICES, applicationContext.getBean(InvoiceListActivity.class)));
+    placeResolvers.add(new AppRegexPlaceResolver(AppActivitiesNames.LIST_POST, applicationContext.getBean(PostListActivity.class)));
 	}
 
 	@Subscribe

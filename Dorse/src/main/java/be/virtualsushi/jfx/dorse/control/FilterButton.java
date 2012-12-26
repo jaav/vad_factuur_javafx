@@ -7,7 +7,7 @@ public class FilterButton extends ImageButton {
 
 	@Override
 	protected Image getImage() {
-		return Images.IMG_ADD;
+		return Images.IMG_FILTER;
 	}
 
 }

@@ -33,28 +33,6 @@ public class HomeActivity extends AbstractBrowserActivity {
     //To change body of implemented methods use File | Settings | File Templates.
   }
 
-
-  @FXML
- 	protected void startTest(ActionEvent event) {
-    String authToken = getRestApiAccessor().login("admin", "admin");
-  		if (StringUtils.isNotBlank(authToken)) {
-        try{
-          getAppVariables().put(AUTHTOKEN_KEY, authToken.substring(authToken.indexOf("___")+3));
-          getAppVariables().put(USERNAME_ID, Long.parseLong(authToken.substring(0, authToken.indexOf("___"))));
-          getAppVariables().put(USERNAME_KEY, usernameField.getText());
-        }catch(Exception e){
-          e.printStackTrace();
-          getAppVariables().put(AUTHTOKEN_KEY, "UNKNOWN");
-          getAppVariables().put(USERNAME_ID, 0);
-          getAppVariables().put(USERNAME_KEY, "UNKNOWN");
-
-        }
-        goTo(AppActivitiesNames.TEST);
-  		} else {
-  			// TODO display error message
-  		}
- 	}
-
   @FXML
  	protected void handleLoginAction  (ActionEvent event) {
  		String authToken = getRestApiAccessor().login(usernameField.getText(), passwordField.getText());

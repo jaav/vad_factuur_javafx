@@ -342,7 +342,6 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
         @Override
         public void handle(ActionEvent event) {
           Button btn = (Button) event.getSource();
-          Address address = null;
           try {
             setCurrentAddress(findAddress(Long.parseLong(btn.getId().substring(btn.getId().indexOf("_") + 1))));
           } catch (Exception e) {
@@ -405,8 +404,6 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
       HBox personBox = new HBox();
       personBox.setPrefWidth(400);
       EditButton editButton = new EditButton();
-      editButton.setScaleX(0.5);
-      editButton.setScaleY(0.5);
       editButton.setId("edit_"+person.getId());
       editButton.setOnAction(new EventHandler<ActionEvent>() {
         @Override
@@ -421,8 +418,6 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
         }
       });
       DeleteButton deleteButton = new DeleteButton();
-      deleteButton.setScaleX(0.5);
-      deleteButton.setScaleY(0.5);
       deleteButton.setId("delete_"+person.getId());
       deleteButton.setOnAction(new EventHandler<ActionEvent>() {
         @Override

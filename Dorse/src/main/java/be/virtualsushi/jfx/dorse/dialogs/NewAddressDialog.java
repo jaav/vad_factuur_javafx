@@ -40,7 +40,7 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
 	protected void handleSave(ActionEvent event) {
 		Address address = new Address();
 		address.setAddress(addressField.getValue());
-		address.setZipcode(addressField.getValue());
+		address.setZipcode(zipcodeField.getValue());
 		address.setCity(cityField.getValue());
 		address.setPhone(phoneField.getValue());
 		address.setFax(faxField.getValue());
@@ -82,6 +82,15 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
           emailField.setValue(oldAddress.getEmail());
           idField.setValue(oldAddress.getId());
         }
+      }
+      else{
+        addressField.setValue("");
+        zipcodeField.setValue("");
+        cityField.setValue("");
+        phoneField.setValue("");
+        faxField.setValue("");
+        emailField.setValue("");
+        idField.setValue(null);
       }
     }
 

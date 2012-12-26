@@ -69,6 +69,11 @@ MenuBar, Menu, MenuItem {
 	-fx-font-size: 20px;
 }
 
+.expl {
+	-fx-font-size: 20px;
+  -fx-padding-left:0;
+}
+
 .help-text {
 	-fx-font-size: 25px;
 	-fx-font-smoothing-type:gray;

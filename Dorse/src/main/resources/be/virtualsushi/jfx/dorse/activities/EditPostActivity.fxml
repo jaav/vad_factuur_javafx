@@ -37,12 +37,15 @@
 
       <FieldLabel value="%bottom" GridPane.columnIndex="0" GridPane.rowIndex="2" />
       <FloatNumberField fx:id="bottomField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label text="g." GridPane.columnIndex="3" GridPane.rowIndex="2" styleClass="expl" alignment="CENTER_LEFT" />
 
         <FieldLabel value="%top" GridPane.columnIndex="0" GridPane.rowIndex="3" />
         <FloatNumberField fx:id="topField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Label text="g." GridPane.columnIndex="3" GridPane.rowIndex="3" styleClass="expl" alignment="CENTER_LEFT" />
 
         <FieldLabel value="%price" GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <FloatNumberField fx:id="priceField" fieldWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Label text="€" GridPane.columnIndex="3" GridPane.rowIndex="4" styleClass="expl" alignment="CENTER_LEFT" />
 
       <ControlsButtonsBar alignment="BOTTOM_RIGHT" cancelButtonTitle="%cancel" onCancelAction="#handleCancel" onSaveAction="#handleSave" saveButtonTitle="%save" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="6" />
       <columnConstraints>

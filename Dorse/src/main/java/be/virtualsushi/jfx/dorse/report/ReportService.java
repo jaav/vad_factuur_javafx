@@ -38,6 +38,9 @@ public class ReportService {
   @Value("${report.date.format}")
   private String reportDateFormat;
 
+  @Value("${print.container}")
+ 	private String printContainer;
+
   public String createInvoiceReport(int iReportType, Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<OrderLineProperty> orderLines) {
     String reportType;
     if (iReportType == ViewInvoiceActivity.PRINT_INVOICE)
@@ -159,11 +162,15 @@ public class ReportService {
   }
 
   private String createOutputFileUri(String invoiceCode) {
-    return userHome + File.separator + String.format(PDF_REPORT_FILE_NAME_PATTER, invoiceCode);
+    return userHome + printContainer + File.separator + String.format(PDF_REPORT_FILE_NAME_PATTER, getApprovedName(invoiceCode));
   }
 
   private String createLabelOutputFileUri(Customer customer) {
-    return userHome + File.separator + String.format(LABEL_FILE_NAME_PATTER, customer.getName(), new Date().getTime());
+    return userHome + printContainer + File.separator + String.format(LABEL_FILE_NAME_PATTER, getApprovedName(customer.getName()), new Date().getTime());
+  }
+
+  private String getApprovedName(String original){
+    return original.replaceAll(" ", "_");
   }
 
   private List<OrderLineProperty> decoupleFreeArticles(List<OrderLineProperty> orderLines) {

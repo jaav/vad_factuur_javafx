@@ -11,17 +11,17 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml">
   <children>
-    <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0">
+    <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" alignment="TOP_CENTER">
       <children>
-        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="154.0" fitWidth="392.0" pickOnBounds="true" preserveRatio="true">
           <image>
-            <Image url="@../resources/logo.jpg" preserveRatio="false" smooth="false" />
+            <Image url="@../resources/logo.png" preserveRatio="false" smooth="false" />
           </image>
           <VBox.margin>
             <Insets />
           </VBox.margin>
         </ImageView>
-        <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="576.0" text="VAD Facturatie Programma">
+        <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="576.0" text="FACTURATIE">
           <font>
             <Font name="AppleGothic Regular" size="32.0" />
           </font>
@@ -52,11 +52,6 @@
               </font>
               <GridPane.margin>
                 <Insets top="20.0" fx:id="x5" />
-              </GridPane.margin>
-            </Button>
-            <Button fx:id="test" font="$x4" maxHeight="40.0" maxWidth="140.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" onAction="#startTest" prefHeight="40.0" prefWidth="140.0" text="Test" textFill="$x1" GridPane.columnIndex="1" GridPane.rowIndex="2">
-              <GridPane.margin>
-                <Insets left="150.0" top="20.0" />
               </GridPane.margin>
             </Button>
           </children>

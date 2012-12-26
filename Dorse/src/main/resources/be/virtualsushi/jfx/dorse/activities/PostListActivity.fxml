@@ -22,9 +22,7 @@
 		<HBox spacing="7" alignment="BASELINE_CENTER">
 			<Label fx:id="listTitle" styleClass="activity-title" />
 
-			<AddButton onAction="#handleAddAction" fx:id="addR"/>
-            <FilterButton onAction="#handleLaunchFilter" fx:id="filtR"/>
-            <ExportButton onAction="#handleLaunchExport" fx:id="exportR"/>
+			<AddButton onAction="#handleAddAction" />
 		</HBox>
 	</top>
 	

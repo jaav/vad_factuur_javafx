@@ -1,166 +1,168 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>be.virtualsushi.jfx</groupId>
-	<artifactId>dorse</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>Dorse</name>
-	<description>javafx client for dorse.me</description>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>be.virtualsushi.jfx</groupId>
+    <artifactId>dorse</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Dorse</name>
+    <description>javafx client for dorse.me</description>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>3.1.1.RELEASE</spring.version>
-		<jasperreports.artifactid>jasperreports</jasperreports.artifactid>
-		<jasperreports.groupid>net.sf.jasperreports</jasperreports.groupid>
-		<jasperreports.version>4.7.1</jasperreports.version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.version>3.1.1.RELEASE</spring.version>
+        <jasperreports.artifactid>jasperreports</jasperreports.artifactid>
+        <jasperreports.groupid>net.sf.jasperreports</jasperreports.groupid>
+        <jasperreports.version>4.7.1</jasperreports.version>
         <sql.date.format>yyyy-MM-dd</sql.date.format>
-	</properties>
+        <report.date.format>dd MMM yyyy</report.date.format>
+    </properties>
 
-	<profiles>
-		<profile>
-			<id>pavel</id>
-			<properties>
-				<fx.home>C:/Program Files/Oracle/JavaFX 2.2 SDK</fx.home>
-				<fx.version>2.2</fx.version>
-				<fx.rtlib.path>${fx.home}/rt/lib</fx.rtlib.path>
-				<fx.antlib.path>${fx.home}/lib</fx.antlib.path>
-				<java.compiler.version>1.6</java.compiler.version>
-				<service.uri>http://www.dorse.me/</service.uri>
-			</properties>
-		</profile>
-		<profile>
-			<id>jef</id>
-			<properties>
-				<fx.home>/Library/Java/JavaVirtualMachines/jdk1.7.0_06.jdk/Contents/Home/jre/lib</fx.home>
-				<fx.rtlib.path>${fx.home}</fx.rtlib.path>
-				<fx.antlib.path>${fx.home}</fx.antlib.path>
-				<fx.version>2.2</fx.version>
-				<java.compiler.version>1.7</java.compiler.version>
+    <profiles>
+        <profile>
+            <id>pavel</id>
+            <properties>
+                <fx.home>C:/Program Files/Oracle/JavaFX 2.2 SDK</fx.home>
+                <fx.version>2.2</fx.version>
+                <fx.rtlib.path>${fx.home}/rt/lib</fx.rtlib.path>
+                <fx.antlib.path>${fx.home}/lib</fx.antlib.path>
+                <java.compiler.version>1.6</java.compiler.version>
                 <service.uri>http://www.dorse.me/</service.uri>
-				<!--service.uri>http://localhost:8070/</service.uri-->
-			</properties>
-		</profile>
-	</profiles>
+            </properties>
+        </profile>
+        <profile>
+            <id>jef</id>
+            <properties>
+                <fx.home>/Library/Java/JavaVirtualMachines/jdk1.7.0_06.jdk/Contents/Home</fx.home>
+                <fx.rtlib.path>${fx.home}/jre/lib</fx.rtlib.path>
+                <fx.antlib.path>${fx.home}/lib</fx.antlib.path>
+                <fx.version>2.2</fx.version>
+                <java.compiler.version>1.7</java.compiler.version>
+                <service.uri>http://www.dorse.me/</service.uri>
+                <!--<service.uri>http://localhost:8070/</service.uri>-->
+                <print.container>/Documents/virtualsushi/customers/vad/vadfactuur/prints</print.container>
+            </properties>
+        </profile>
+    </profiles>
 
-	<repositories>
-		<repository>
-			<id>sonatype-snapshots</id>
-			<name>Sonatype OSS Snashot Repository</name>
-			<url>http://oss.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <name>Sonatype OSS Snashot Repository</name>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
-	<dependencies>
-
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>javafx</artifactId>
-			<version>${fx.version}</version>
-			<scope>system</scope>
-			<systemPath>${fx.rtlib.path}/jfxrt.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>com.zenjava</groupId>
-			<artifactId>jfxflow</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<exclusions>
-				<!-- Exclude provided javafx as we use our local one. -->
-				<exclusion>
-					<groupId>com.sun.javafx</groupId>
-					<artifactId>javafx</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.2.0.Final</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.2.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.9</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.2.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>2.2.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>13.0.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.7</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${jasperreports.groupid}</groupId>
-			<artifactId>${jasperreports.artifactid}</artifactId>
-			<version>${jasperreports.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${jasperreports.groupid}</groupId>
-			<artifactId>jasperreports-fonts</artifactId>
-			<version>4.0.0</version>
-		</dependency>
+    <dependencies>
 
         <dependency>
-			<groupId>net.sf.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>2.3</version>
-		</dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>javafx</artifactId>
+            <version>${fx.version}</version>
+            <scope>system</scope>
+            <systemPath>${fx.rtlib.path}/jfxrt.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zenjava</groupId>
+            <artifactId>jfxflow</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <!-- Exclude provided javafx as we use our local one. -->
+                <exclusion>
+                    <groupId>com.sun.javafx</groupId>
+                    <artifactId>javafx</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.2.0.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>13.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${jasperreports.groupid}</groupId>
+            <artifactId>${jasperreports.artifactid}</artifactId>
+            <version>${jasperreports.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${jasperreports.groupid}</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.3</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
@@ -169,210 +171,230 @@
         </dependency>
 
 
-	</dependencies>
+    </dependencies>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>target/jasper</directory>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-			</testResource>
-			<testResource>
-				<filtering>true</filtering>
-				<directory>src/test/resources</directory>
-			</testResource>
-		</testResources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>package</phase>
-						<configuration>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-						</configuration>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.6</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<configuration>
-							<target>
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>target/jasper</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </testResource>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <JavaFX-Version>${fx.version}+</JavaFX-Version>
+                            <Main-Class>be.virtualsushi.jfx.dorse.DorseApplication</Main-Class>
+                            <implementation-version>1.0</implementation-version>
+                            <JavaFX-Application-Class>be.virtualsushi.jfx.dorse.DorseApplication</JavaFX-Application-Class>
+                            <!-- The artifactId (name) of the jfxrt.jar ... see dependency system scope-->
+                            <Class-Path>javafx-${fx.version}.jar</Class-Path>
+                        </manifestEntries>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
 
-								<taskdef name="jfxdeploy" classname="com.sun.javafx.tools.ant.DeployFXTask"
-									classpathref="maven.plugin.classpath" />
+                                <taskdef name="jfxdeploy" classname="com.sun.javafx.tools.ant.DeployFXTask"
+                                         classpathref="maven.plugin.classpath"/>
 
-								<taskdef name="jfxsignjar" classname="com.sun.javafx.tools.ant.FXSignJarTask"
-									classpathref="maven.plugin.classpath" />
+                                <!--<taskdef name="jfxsignjar" classname="com.sun.javafx.tools.ant.FXSignJarTask"
+                                    classpathref="maven.plugin.classpath" />-->
 
 
-								<jfxdeploy width="800" height="600"
-									outdir="${project.build.directory}/deploy" outfile="${project.build.finalName}">
-									<info title="${project.name}" />
-									<application name="${project.name}"
-										mainClass="be.virtualsushi.jfx.dorse.DorseApplication" />
-									<resources>
-										<fileset dir="${project.build.directory}" includes="*.jar" />
-										<fileset dir="${project.build.directory}/dependency"
-											includes="*.jar" />
-									</resources>
-								</jfxdeploy>
+                                <jfxdeploy width="800" height="600"
+                                           outdir="${project.build.directory}/deploy"
+                                           outfile="${project.build.finalName}">
+                                    <info title="${project.name}"/>
+                                    <application name="${project.name}"
+                                                 mainClass="be.virtualsushi.jfx.dorse.DorseApplication"/>
+                                    <resources>
+                                        <fileset dir="${project.build.directory}" includes="*.jar"/>
+                                        <fileset dir="${project.build.directory}/dependency"
+                                                 includes="*.jar"/>
+                                    </resources>
+                                </jfxdeploy>
 
-								<jfxsignjar destdir="${project.build.directory}/deploy"
-									keyStore="${keystore}" storePass="${keystore.password}" alias="${key.alias}"
-									keyPass="${key.password}">
-									<fileset dir="${project.build.directory}/deploy"
-										includes="*.jar" />
-								</jfxsignjar>
+                                <!--<jfxsignjar destdir="${project.build.directory}/deploy"
+                                    keyStore="${keystore}" storePass="${keystore.password}" alias="${key.alias}"
+                                    keyPass="${key.password}">
+                                    <fileset dir="${project.build.directory}/deploy"
+                                        includes="*.jar" />
+                                </jfxsignjar>-->
 
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
 
-				<!-- this gives the ant plugin access to the ant-javafx.jar so it can 
-					run the custom ant tasks defined in there -->
-				<dependencies>
-					<dependency>
-						<groupId>com.sun.javafx</groupId>
-						<artifactId>javafx-ant</artifactId>
-						<version>${fx.version}</version>
-						<scope>system</scope>
-						<!-- change this to point to wherever you have installed JFX -->
-						<systemPath>${fx.antlib.path}/ant-javafx.jar</systemPath>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>${java.compiler.version}</source>
-					<target>${java.compiler.version}</target>
-					<debug>true</debug>
-					<optimize>true</optimize>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jasperreports-maven-plugin</artifactId>
-				<configuration>
-					<outputDirectory>${project.build.directory}/jasper</outputDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile-reports</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>${jasperreports.groupid}</groupId>
-						<artifactId>${jasperreports.artifactid}</artifactId>
-						<version>${jasperreports.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>nbm-maven-plugin</artifactId>
-				<version>3.7</version>
-				<extensions>true</extensions>
-				<configuration>
-					<useOSGiDependencies>true</useOSGiDependencies>
-					<publicPackages>
-						<publicPackage>javafx.scene.layout</publicPackage>
-						<publicPackage>javafx.application</publicPackage>
-						<publicPackage>javafx.collections</publicPackage>
-						<publicPackage>javafx.scene.control</publicPackage>
-						<publicPackage>javafx.event</publicPackage>
-						<publicPackage>javafx.geometry</publicPackage>
-						<publicPackage>javafx.beans.property</publicPackage>
-						<publicPackage>javafx.beans.value</publicPackage>
-						<publicPackage>javafx.concurrent</publicPackage>
-						<publicPackage>javafx.scene.web</publicPackage>
-						<publicPackage>javafx.fxml</publicPackage>
-					</publicPackages>
-				</configuration>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-dependency-plugin</artifactId>
-										<versionRange>
-											[2.0.0,)
-										</versionRange>
-										<goals>
-											<goal>copy-dependencies</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											jasperreports-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.0-beta-2,)
-										</versionRange>
-										<goals>
-											<goal>compile-reports</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+                <!-- this gives the ant plugin access to the ant-javafx.jar so it can
+                    run the custom ant tasks defined in there -->
+                <dependencies>
+                    <dependency>
+                        <groupId>com.sun.javafx</groupId>
+                        <artifactId>javafx-ant</artifactId>
+                        <version>${fx.version}</version>
+                        <scope>system</scope>
+                        <!-- change this to point to wherever you have installed JFX -->
+                        <systemPath>${fx.antlib.path}/ant-javafx.jar</systemPath>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.compiler.version}</source>
+                    <target>${java.compiler.version}</target>
+                    <debug>true</debug>
+                    <optimize>true</optimize>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jasperreports-maven-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/jasper</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile-reports</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>${jasperreports.groupid}</groupId>
+                        <artifactId>${jasperreports.artifactid}</artifactId>
+                        <version>${jasperreports.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <version>3.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <useOSGiDependencies>true</useOSGiDependencies>
+                    <publicPackages>
+                        <publicPackage>javafx.scene.layout</publicPackage>
+                        <publicPackage>javafx.application</publicPackage>
+                        <publicPackage>javafx.collections</publicPackage>
+                        <publicPackage>javafx.scene.control</publicPackage>
+                        <publicPackage>javafx.event</publicPackage>
+                        <publicPackage>javafx.geometry</publicPackage>
+                        <publicPackage>javafx.beans.property</publicPackage>
+                        <publicPackage>javafx.beans.value</publicPackage>
+                        <publicPackage>javafx.concurrent</publicPackage>
+                        <publicPackage>javafx.scene.web</publicPackage>
+                        <publicPackage>javafx.fxml</publicPackage>
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings
+                    only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>
+                                            [2.0.0,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>copy-dependencies</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            jasperreports-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.0-beta-2,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>compile-reports</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

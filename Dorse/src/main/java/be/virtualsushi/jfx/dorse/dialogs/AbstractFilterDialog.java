@@ -64,8 +64,8 @@ public abstract class AbstractFilterDialog<E extends BaseEntity> extends UiCompo
 
     columnSelectorField.setItems(FXCollections.observableArrayList(getColumnNames()));
     sortTypeSelectorField.setItems(FXCollections.observableArrayList(getAscDesc()));
-    columnSelectorField.setValue("");
-    sortTypeSelectorField.setValue("");
+    //columnSelectorField.setValue("");
+    //sortTypeSelectorField.setValue("");
  	}
 
   @SuppressWarnings("unchecked")

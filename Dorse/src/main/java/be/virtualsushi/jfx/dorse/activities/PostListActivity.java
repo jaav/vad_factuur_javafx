@@ -22,7 +22,7 @@ import java.util.List;
 
 @Component
 @Scope("prototype")
-@FxmlFile("ListActivity.fxml")
+@FxmlFile("PostListActivity.fxml")
 public class PostListActivity extends AbstractListActivity<Post> {
 
 	private List<Supplier> suppliers;

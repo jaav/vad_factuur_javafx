@@ -19,9 +19,9 @@ public class FilterButtonsBar extends HBox {
 		saveButton = new Button();
 		cancelButton = new Button();
     clearButton = new Button();
-		getChildren().add(saveButton);
-		getChildren().add(cancelButton);
     getChildren().add(clearButton);
+		getChildren().add(cancelButton);
+    getChildren().add(saveButton);
 	}
 
 	public ObjectProperty<EventHandler<ActionEvent>> onSaveActionProperty() {

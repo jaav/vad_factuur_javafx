@@ -232,7 +232,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
     if (editingArticle.getCopyDate() != null) {
       copyDateField.setSelectedDate(editingArticle.getCopyDate());
   		}
-    if(editingArticle.getVat()!=null) vatField.setValue(editingArticle.getVat());
+    if(editingArticle.getVat()!=null) vatField.setValue(editingArticle.getVat()+"%");
 		mapLists(editingArticle);
 	}
 
@@ -279,7 +279,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 			result.setSupplier(supplierField.getValue().getId());
 		}
     if (vatField.getValue() != null) {
-      result.setVat(Float.parseFloat(vatField.getValue().toString()));
+      result.setVat(Float.parseFloat(vatField.getValue().toString().replaceAll(" ", "").replace("%", "")));
     }
 		if (result.isNew() || result.getCreationDate() == null) {
 			result.setCreationDate(new Date());

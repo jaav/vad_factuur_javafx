@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -99,7 +100,7 @@ public class Invoice extends BaseEntity {
 	}
 
 	public Float getShipping() {
-		return shipping;
+		return shipping == null ? 0 : shipping;
 	}
 
 	public void setShipping(Float shipping) {
@@ -107,7 +108,7 @@ public class Invoice extends BaseEntity {
 	}
 
   public Float getProducts() {
-    return products;
+    return products==null ? 0 : products;
   }
 
   public void setProducts(Float products) {
@@ -182,6 +183,7 @@ public class Invoice extends BaseEntity {
 		this.deliveryDate = deliveryDate;
 	}
 
+  @JsonIgnore
   public String getTotalPrice(){
     return ""+(getShipping()+getProducts());
   }

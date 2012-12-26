@@ -7,7 +7,7 @@ public class ExportButton extends ImageButton {
 
 	@Override
 	protected Image getImage() {
-		return Images.IMG_ADD;
+		return Images.IMG_EXPORT;
 	}
 
 }

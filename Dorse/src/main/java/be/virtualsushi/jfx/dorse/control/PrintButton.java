@@ -7,7 +7,7 @@ public class PrintButton extends ImageButton {
 
 	@Override
 	protected Image getImage() {
-		return Images.IMG_DELETE;
+		return Images.IMG_PRINT;
 	}
 
 }

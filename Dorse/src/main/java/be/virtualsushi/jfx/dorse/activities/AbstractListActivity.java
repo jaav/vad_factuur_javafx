@@ -3,6 +3,7 @@ package be.virtualsushi.jfx.dorse.activities;
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
 
+import be.virtualsushi.jfx.dorse.control.*;
 import be.virtualsushi.jfx.dorse.events.CancelFilterEvent;
 import be.virtualsushi.jfx.dorse.events.ClearFilterEvent;
 import be.virtualsushi.jfx.dorse.events.FilterEvent;
@@ -18,24 +19,16 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 
+import name.antonsmirnov.javafx.dialog.Dialog;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import be.virtualsushi.jfx.dorse.control.DeleteButton;
-import be.virtualsushi.jfx.dorse.control.DetailsButton;
-import be.virtualsushi.jfx.dorse.control.EditButton;
 import be.virtualsushi.jfx.dorse.control.table.EntityPropertyTableColumn;
 import be.virtualsushi.jfx.dorse.model.BaseEntity;
 import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
@@ -73,18 +66,18 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
       this.asc = asc;
     }
 
-    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, boolean includesNonActive, String additionalCondition) {
+    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, boolean includesNonActive, String additionalCondition, BaseEntity filter) {
       this.from = from;
       this.quantity = quantity;
       this.orderOn = orderOn;
       this.fullInfo = fullInfo;
       this.additionalCondition = additionalCondition;
       this.includesNonActive = includesNonActive;
-      this.filter = null;
+      this.filter = filter;
       this.asc = true;
     }
 
-    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo) {
+    /*public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo) {
       this.from = from;
       this.quantity = quantity;
       this.orderOn = orderOn;
@@ -93,7 +86,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
       this.includesNonActive = null;
       this.filter = null;
       this.asc = true;
-    }
+    }*/
 
     public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, BaseEntity filter) {
       this.from = from;
@@ -258,7 +251,23 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
         @Override
         public void handle(ActionEvent event) {
-          doInBackground(new DeleteEntityTaskCreator(entity));
+          Button btn = (Button) event.getSource();
+          Dialog.buildConfirmation(getResources().getString("delete.dialog.title"), getResources().getString("delete.dialog.message"))
+              .addYesButton(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                  doInBackground(new DeleteEntityTaskCreator(entity));
+                }
+              })
+              .addCancelButton(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                  //To change body of implemented methods use File | Settings | File Templates.
+                }
+              })
+              .build()
+              .show();
+
         }
       });
       deleteButton.setTooltip(new Tooltip(getResources().getString("delete")));
@@ -281,6 +290,15 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
   @FXML
   public Label listTitle;
 
+  @FXML
+  public AddButton addR;
+
+  @FXML
+  public FilterButton filtR;
+
+  @FXML
+  public ExportButton exportR;
+
   private BorderPane listContainer;
 
   @Override
@@ -301,6 +319,21 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
         return listContainer;
       }
     });
+    if(addR!=null){
+      Tooltip add = new Tooltip();
+      add.setText("Nieuw");
+      addR.setTooltip(add);
+    }
+    if(filtR!=null){
+      Tooltip filter = new Tooltip();
+      filter.setText("Filter");
+      filtR.setTooltip(filter);
+    }
+    if(exportR!=null){
+      Tooltip export = new Tooltip();
+      export.setText("Export");
+      exportR.setTooltip(export);
+    }
   }
 
   @Override
@@ -308,9 +341,8 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
     super.started();
 
     if (getParameter(FORCE_RELOAD_PARAMETER, Boolean.class, false)) {
-      filter = null;
       listPage.setCurrentPageIndex(0);
-      doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo()));
+      doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
     }
   }
 

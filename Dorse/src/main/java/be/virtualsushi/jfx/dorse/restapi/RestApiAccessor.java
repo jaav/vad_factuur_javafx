@@ -28,6 +28,7 @@ import org.apache.http.impl.client.DecompressingHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -299,8 +300,13 @@ public class RestApiAccessor extends RestTemplate {
     try {
       info = Introspector.getBeanInfo(entity.getClass(), Object.class);
       PropertyDescriptor[] props = info.getPropertyDescriptors();
-      for (PropertyDescriptor pd : props) {
+      for (int i = 0; i < props.length; i++) {
+        System.out.println("i = " + i);
+        PropertyDescriptor pd = props[i];
         String name = pd.getName();
+        System.out.println("name = " + name);
+        JsonIgnore jsonIgnore = pd.getReadMethod().getAnnotation(JsonIgnore.class);
+        if(jsonIgnore!=null) continue;
         JsonProperty jsonProperty = pd.getReadMethod().getAnnotation(JsonProperty.class);
         if(jsonProperty!=null)
           name = jsonProperty.value();
@@ -313,21 +319,19 @@ public class RestApiAccessor extends RestTemplate {
           if(clazz.equals(String.class)){
             if(StringUtils.isNotBlank((String)value))
               value = " like '%"+value+"%'";
-            else
-              break;
+            else continue;
           }
           else if(clazz.equals(Date.class)) value = " > '"+ new SimpleDateFormat(sqlDateFormat).format(value)+"'";
           else if(BaseEntity.class.isAssignableFrom(clazz)){
             if(((BaseEntity)value).getId()>=0)
               value = " = "+(((BaseEntity)value).getId());
-            else
-              break;
+            else continue;
           }
-          else if(clazz.equals(Long.class) || clazz.equals(Integer.class)){
-            if(((Number)value).longValue()>=0)
+          else if(clazz.equals(Long.class) || clazz.equals(Integer.class) || clazz.equals(Float.class)){
+            long test = ((Number)value).longValue();
+            if(((Number)value).longValue()>0)
               value = " = "+value;
-            else
-              break;
+            else continue;
           }
           else value = " = "+value;
           value = name+value+" and ";

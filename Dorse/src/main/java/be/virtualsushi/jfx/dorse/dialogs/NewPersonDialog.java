@@ -72,6 +72,14 @@ public class NewPersonDialog extends AbstractDialog implements HasValidationDial
           idField.setValue(oldPerson.getId());
         }
       }
+      else{
+        titleField.setValue("");
+        nameField.setValue("");
+        emailField.setValue("");
+        phoneField.setValue("");
+        idField.setValue(null);
+
+      }
 			/*if (parameters.length > 1) {
 				personType = (Integer) parameters[1];
 			} else {

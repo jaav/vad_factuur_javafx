@@ -14,15 +14,15 @@
   <children>
     <VBox prefHeight="400.0" prefWidth="600.0" styleClass="test" AnchorPane.leftAnchor="0.0">
       <children>
-        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-          <image>
-            <Image url="@../resources/logo.jpg" preserveRatio="false" smooth="false" />
-          </image>
-          <VBox.margin>
-            <Insets />
-          </VBox.margin>
-        </ImageView>
-        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="151.0" prefWidth="576.0" text="Use the menu above and start creating new items, customers or invoices" textAlignment="CENTER" wrapText="true">
+          <ImageView fitHeight="154.0" fitWidth="392.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+              <Image url="@../resources/logo.png" preserveRatio="false" smooth="false" />
+            </image>
+            <VBox.margin>
+              <Insets />
+            </VBox.margin>
+          </ImageView>
+        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="151.0" minWidth="580.0" prefWidth="580.0" text="Gebruik bovenstaande menu om nieuwe klanten, producten en facturen aan te maken." textAlignment="CENTER" wrapText="true">
           <font>
             <Font name="AppleGothic Regular" size="32.0" />
           </font>

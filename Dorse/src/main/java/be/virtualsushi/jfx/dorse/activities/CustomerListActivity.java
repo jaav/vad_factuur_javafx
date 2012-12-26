@@ -38,13 +38,10 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void fillTableColumns(TableView<Customer> table) {
-		TableColumn<Customer, Long> idColumn = createNoHeaderTableColumn("id");
-		idColumn.setSortable(false);
-		idColumn.setGraphic(new SortButton("id", getName("id"), activityNavigator));
+		TableColumn<Customer, Long> idColumn = createTableColumn("id");
 
-		TableColumn<Customer, String> nameColumn = createNoHeaderTableColumn("name");
-		nameColumn.setMinWidth(150);
-		nameColumn.setGraphic(new SortButton("name", getName("name"), activityNavigator));
+		TableColumn<Customer, String> nameColumn = createTableColumn("name");
+    nameColumn.setMinWidth(200);
 
 		TableColumn<Customer, String> sectorColumn = createTableColumn("sector", new EntityStringPropertyValueFactory<Customer>() {
 

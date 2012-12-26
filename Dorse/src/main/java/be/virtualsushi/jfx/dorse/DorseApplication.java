@@ -91,15 +91,15 @@ public class DorseApplication extends Application {
 	private Node createMenu(MenuFactory factory) {
 		MenuBar menuBar = new MenuBar();
 
-		Menu menuVadFactuur = factory.createMenu("VADFactuur", "about", HOME, "logout", LOGOUT);
+		Menu menuVadFactuur = factory.createMenu("VADFactuur", "over", HOME, "logout", LOGOUT);
 
-		Menu invoiceObject = factory.createMenu("Invoices", "new", EDIT_INVOICE, "list", LIST_INVOICES);
+		Menu invoiceObject = factory.createMenu("Facturen", "Nieuw", EDIT_INVOICE, "Lijst", LIST_INVOICES);
 
-    Menu customerObject = factory.createMenu("Customers", "new", EDIT_CUSTOMER, "list", LIST_CUSTOMERS);
+    Menu customerObject = factory.createMenu("Klanten", "Nieuw", EDIT_CUSTOMER, "Lijst", LIST_CUSTOMERS);
 
-    Menu articleObject = factory.createMenu("Articles", "new", EDIT_ARTICLE, "list", LIST_ARTICLES);
+    Menu articleObject = factory.createMenu("Artikels", "Nieuw", EDIT_ARTICLE, "Lijst", LIST_ARTICLES);
 
-    Menu postObject = factory.createMenu("Post", "list", LIST_POST);
+    Menu postObject = factory.createMenu("Post tarieven", "Lijst", LIST_POST);
 
 		menuBar.getMenus().addAll(menuVadFactuur, invoiceObject, customerObject, articleObject, postObject);
 

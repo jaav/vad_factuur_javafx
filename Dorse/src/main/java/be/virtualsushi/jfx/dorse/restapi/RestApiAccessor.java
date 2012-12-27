@@ -214,6 +214,8 @@ public class RestApiAccessor extends RestTemplate {
     else
       urlVariables.put("includesNonActive", "false");
     if(entity!=null){
+
+      //Check for additional 'where' conditions
       String filter = getFilterCondition(entity);
       if(StringUtils.isNotBlank(additionalCondition)){
         if(StringUtils.isNotBlank(filter))
@@ -227,6 +229,8 @@ public class RestApiAccessor extends RestTemplate {
         else
           urlVariables.put("additionalCondition", "");
       }
+
+      //check for ordering conditions
       if(StringUtils.isNotBlank(entity.getColumnName())){
         urlVariables.put("orderOn", entity.getColumnName());
         if (StringUtils.isNotBlank(entity.getSortType()))
@@ -301,10 +305,8 @@ public class RestApiAccessor extends RestTemplate {
       info = Introspector.getBeanInfo(entity.getClass(), Object.class);
       PropertyDescriptor[] props = info.getPropertyDescriptors();
       for (int i = 0; i < props.length; i++) {
-        System.out.println("i = " + i);
         PropertyDescriptor pd = props[i];
         String name = pd.getName();
-        System.out.println("name = " + name);
         JsonIgnore jsonIgnore = pd.getReadMethod().getAnnotation(JsonIgnore.class);
         if(jsonIgnore!=null) continue;
         JsonProperty jsonProperty = pd.getReadMethod().getAnnotation(JsonProperty.class);

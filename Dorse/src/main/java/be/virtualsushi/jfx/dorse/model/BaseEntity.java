@@ -38,7 +38,7 @@ public abstract class BaseEntity {
 
   public String getColumnName() {
     if("Stock".equals(columnName)) return "stock.quantity";
-    if("Customername".equals(columnName)) return "Customer.name";
+    if("Customername".equals(columnName)) return "customer.name";
     if("Creation date".equals(columnName)) return "creation_date";
     return columnName;
   }

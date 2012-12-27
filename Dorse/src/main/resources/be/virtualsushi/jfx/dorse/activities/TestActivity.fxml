@@ -22,7 +22,7 @@
               <Insets />
             </VBox.margin>
           </ImageView>
-        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="151.0" minWidth="580.0" prefWidth="580.0" text="Gebruik bovenstaande menu om nieuwe klanten, producten en facturen aan te maken." textAlignment="CENTER" wrapText="true">
+        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="151.0" minWidth="580.0" prefWidth="580.0" text="Gebruik bovenstaand menu om nieuwe klanten, producten en facturen aan te maken." textAlignment="CENTER" wrapText="true">
           <font>
             <Font name="AppleGothic Regular" size="32.0" />
           </font>

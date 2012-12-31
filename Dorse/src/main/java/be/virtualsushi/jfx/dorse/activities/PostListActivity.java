@@ -111,4 +111,19 @@ public class PostListActivity extends AbstractListActivity<Post> {
   protected String createCsv(ServerResponse serverResponse, File target) {
     return null;
   }
+
+  @Override
+  protected String getDefaultOrder() {
+    return "id";
+  }
+
+  @Override
+  protected Boolean getDefaultAsc() {
+    return Boolean.TRUE;
+  }
+
+  /*@Override
+  protected void setDependingList() {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }*/
 }

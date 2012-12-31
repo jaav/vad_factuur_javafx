@@ -107,6 +107,10 @@ public class RestApiAccessor extends RestTemplate {
  		return getResponse(entityClass, null, null, null, "id", null, fullInfo, false, true);
  	}
 
+  public <E extends BaseEntity> ServerResponse getResponse(Class<E> entityClass, String orderOn, boolean fullInfo, boolean asc) {
+ 		return getResponse(entityClass, null, null, null, orderOn, null, fullInfo, false, asc);
+ 	}
+
   public <E extends BaseEntity> ServerResponse getResponse(BaseEntity entity) {
  		return getResponse(entity.getClass(), entity, null, null, "id", null, true, false, true);
  	}
@@ -255,8 +259,14 @@ public class RestApiAccessor extends RestTemplate {
         urlVariables.put("additionalCondition", additionalCondition);
       else
         urlVariables.put("additionalCondition", "");
-      urlVariables.put("asc", "");
-      urlVariables.put("orderOn", "");
+      if(StringUtils.isNotBlank(orderOn))
+        urlVariables.put("orderOn", orderOn);
+      else
+        urlVariables.put("orderOn", "");
+      if(!asc)
+        urlVariables.put("asc", "false");
+      else
+        urlVariables.put("asc", "true");
     }
     urlVariables.put("count", "true");
     return urlVariables;

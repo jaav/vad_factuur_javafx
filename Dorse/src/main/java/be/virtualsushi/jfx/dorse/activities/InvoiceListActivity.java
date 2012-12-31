@@ -24,7 +24,7 @@ import be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames;
 @Component
 @Scope("prototype")
 @FxmlFile("ListActivity.fxml")
-public class InvoiceListActivity extends AbstractListActivity<Invoice> {
+public class  InvoiceListActivity extends AbstractListActivity<Invoice> {
   private List<Customer> customers;
 
 	@Override
@@ -134,6 +134,21 @@ public class InvoiceListActivity extends AbstractListActivity<Invoice> {
     exportService.createCsv((InvoiceResponse) serverResponse, target);
     return null;  //To change body of implemented methods use File | Settings | File Templates.
   }
+
+  @Override
+  protected String getDefaultOrder() {
+    return Invoice.DEFAULT_COLUMN;
+  }
+
+  @Override
+  protected Boolean getDefaultAsc() {
+    return Invoice.DEFAULT_ASC;
+  }
+
+  /*@Override
+  protected void setDependingList() {
+    dependingList = customers;
+  }*/
 
   @Override
   @FXML

@@ -17,6 +17,9 @@ import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
 
 public class Article extends BaseEntity implements Listable {
 
+  public static String DEFAULT_COLUMN = "code";
+  public static Boolean DEFAULT_ASC = Boolean.TRUE;
+
 	private Long articleType;
 
 	@NotBlank
@@ -95,7 +98,6 @@ public class Article extends BaseEntity implements Listable {
 	}
 
   @JsonProperty("freeQuantity")
- 	@NotNull
   public Integer getFreeQuantity() {
     return freeQuantity;
   }
@@ -123,7 +125,6 @@ public class Article extends BaseEntity implements Listable {
   @JsonProperty("create_date")
  	@JsonSerialize(using = CustomDateSerializer.class)
  	@JsonDeserialize(using = CustomDateDeserializer.class)
- 	@NotNull
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -135,7 +136,6 @@ public class Article extends BaseEntity implements Listable {
   @JsonProperty("copyDate")
  	@JsonSerialize(using = CustomDateSerializer.class)
  	@JsonDeserialize(using = CustomDateDeserializer.class)
- 	@NotNull
   public Date getCopyDate() {
     return copyDate;
   }
@@ -160,7 +160,6 @@ public class Article extends BaseEntity implements Listable {
     this.creator = creator;
   }
 
-  @NotNull
   @JsonSerialize(using = CustomFloatSerializer.class)
   @JsonDeserialize(using = CustomFloatDeserializer.class)
   public Float getVat() {

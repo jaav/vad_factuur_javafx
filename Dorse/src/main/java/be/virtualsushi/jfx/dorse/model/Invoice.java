@@ -16,6 +16,9 @@ import be.virtualsushi.jfx.dorse.model.jsonserialization.CustomDateSerializer;
 
 public class Invoice extends BaseEntity {
 
+  public static String DEFAULT_COLUMN = "id";
+  public static Boolean DEFAULT_ASC = Boolean.FALSE;
+
 	@NotNull
 	private Customer customer;
 
@@ -30,7 +33,6 @@ public class Invoice extends BaseEntity {
 	@NotBlank
 	private String code;
 
-	@NotBlank
 	private String remark;
 
 	private Float shipping;
@@ -134,7 +136,6 @@ public class Invoice extends BaseEntity {
   @JsonProperty("creation_date")
  	@JsonSerialize(using = CustomDateSerializer.class)
  	@JsonDeserialize(using = CustomDateDeserializer.class)
- 	@NotNull
 	public Date getCreationDate() {
 		return creationDate;
 	}

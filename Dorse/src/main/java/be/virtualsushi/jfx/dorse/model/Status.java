@@ -9,11 +9,11 @@ package be.virtualsushi.jfx.dorse.model;
 public class Status implements Listable{
   private int id;
   private String name;
-  public static final String PREPARED = "PREPARED";
-  public static final String SENT = "SENT";
-  public static final String INVOICED = "INVOICED";
-  public static final String REMINDED = "REMINDED";
-  public static final String PAID = "PAID";
+  public static final String PREPARED = "Voorbereid";
+  public static final String SENT = "Verzonden";
+  public static final String INVOICED = "Gefactureerd";
+  public static final String REMINDED = "Herinnerd";
+  public static final String PAID = "Betaald";
 
   public Status(int id, String name) {
     this.id = id;

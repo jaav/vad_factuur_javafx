@@ -26,7 +26,8 @@ import be.virtualsushi.jfx.dorse.utils.EntityCollectionUtils;
 @Service("reportSerivce")
 public class ReportService {
 
-  public static final String PDF_REPORT_FILE_NAME_PATTER = "invoice-%s.pdf";
+  public static final String PDF_INVOICE_FILE_NAME_PATTER = "invoice-%s.pdf";
+  public static final String PDF_REMINDER_FILE_NAME_PATTER = "rappel-%s.pdf";
   public static final String LABEL_FILE_NAME_PATTER = "label_%s_%s.pdf";
 
   @Autowired
@@ -54,8 +55,8 @@ public class ReportService {
     parameters.put("invoiceId", invoice.getId());
     parameters.put("created", invoice.getCreationDate());
     parameters.put("now", new Date());
-    parameters.put("goods", invoice.getShipping());
-    parameters.put("tpt", invoice.getTotal() - invoice.getShipping());
+    parameters.put("goods", invoice.getProducts());
+    parameters.put("tpt", invoice.getShipping());
     parameters.put("total", invoice.getTotal());
     parameters.put("report.date.format", reportDateFormat);
     parameters.put(JRParameter.REPORT_FORMAT_FACTORY, new DorseFormatFactory(resources));
@@ -81,7 +82,7 @@ public class ReportService {
       parameters.put("deliveryAddress", deliveryAddress);
     }
 
-    File out = new File(createOutputFileUri(invoice.getCode()));
+    File out = new File(createOutputFileUri(iReportType, invoice.getCode()));
     FileOutputStream outStream = null;
     try {
       outStream = new FileOutputStream(out);
@@ -161,8 +162,11 @@ public class ReportService {
     return out.getAbsolutePath();
   }
 
-  private String createOutputFileUri(String invoiceCode) {
-    return userHome + printContainer + File.separator + String.format(PDF_REPORT_FILE_NAME_PATTER, getApprovedName(invoiceCode));
+  private String createOutputFileUri(int iReportType, String invoiceCode) {
+    if(iReportType==ViewInvoiceActivity.PRINT_INVOICE)
+      return userHome + printContainer + File.separator + String.format(PDF_INVOICE_FILE_NAME_PATTER, getApprovedName(invoiceCode));
+    else
+      return userHome + printContainer + File.separator + String.format(PDF_REMINDER_FILE_NAME_PATTER, getApprovedName(invoiceCode));
   }
 
   private String createLabelOutputFileUri(Customer customer) {

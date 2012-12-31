@@ -215,8 +215,10 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
   }
 
   private Sector getSubSector(Long id){
-    for (Sector acceptableSubSector : acceptableSubSectors) {
-      if(acceptableSubSector.getId().equals(id)) return acceptableSubSector;
+    if(acceptableSubSectors!=null){
+      for (Sector acceptableSubSector : acceptableSubSectors) {
+        if(acceptableSubSector.getId().equals(id)) return acceptableSubSector;
+      }
     }
     return null;
   }

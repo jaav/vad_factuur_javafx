@@ -2,6 +2,7 @@ package be.virtualsushi.jfx.dorse.activities;
 
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 import be.virtualsushi.jfx.dorse.control.*;
 import be.virtualsushi.jfx.dorse.events.CancelFilterEvent;
@@ -37,9 +38,9 @@ import be.virtualsushi.jfx.dorse.restapi.DorseBackgroundTask;
 public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUiActivity<BorderPane> {
 
   public static final String FORCE_RELOAD_PARAMETER = "force_reload";
-  public static String ORDER_ON = "id";
   private Integer pagerPage = 1;
   protected TableView<E> table;
+  //protected List<? extends BaseEntity> dependingList;
 
   @Autowired
   protected ActivityNavigator activityNavigator;
@@ -88,7 +89,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
       this.asc = true;
     }*/
 
-    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, BaseEntity filter) {
+    public LoadPageDataTaskCreator(Integer from, Integer quantity, String orderOn, Boolean fullInfo, Boolean asc, BaseEntity filter) {
       this.from = from;
       this.quantity = quantity;
       this.orderOn = orderOn;
@@ -96,7 +97,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
       this.additionalCondition = null;
       this.includesNonActive = null;
       this.filter = filter;
-      this.asc = true;
+      this.asc = asc;
     }
 
     @Override
@@ -113,6 +114,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
         protected ServerResponse call() throws Exception {
           try {
             doCustomBackgroundInitialization();
+            //setDependingList();
             return getRestApiAccessor().getResponse(
                 (Class<E>) ((ParameterizedType) AbstractListActivity.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0],
                 getBaseEntity(0), getInteger(1), getInteger(2), getString(3), getString(4),
@@ -314,7 +316,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
       @Override
       public Node call(Integer param) {
         listContainer.getChildren().clear();
-        doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
+        doInBackground(new LoadPageDataTaskCreator(param * getItemsPerPageCount(), getItemsPerPageCount(), getDefaultOrder(), getFullInfo(), getDefaultAsc(), filter));
         setPagerPage(param);
         return listContainer;
       }
@@ -342,7 +344,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
     if (getParameter(FORCE_RELOAD_PARAMETER, Boolean.class, false)) {
       listPage.setCurrentPageIndex(0);
-      doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
+      doInBackground(new LoadPageDataTaskCreator(0 * getItemsPerPageCount(), getItemsPerPageCount(), getDefaultOrder(), getFullInfo(), getDefaultAsc(), filter));
     }
   }
 
@@ -390,7 +392,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
   @Subscribe
   public void onFilter(FilterEvent event) {
     filter = event.getEntity();
-    doInBackground(new LoadPageDataTaskCreator(0, getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
+    doInBackground(new LoadPageDataTaskCreator(0, getItemsPerPageCount(), getDefaultOrder(), getFullInfo(), getDefaultAsc(), filter));
     hideFilterDialog();
   }
 
@@ -398,7 +400,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
   public void onClearFilter(ClearFilterEvent event) {
     System.out.println("event = " + event);
     filter = null;
-    doInBackground(new LoadPageDataTaskCreator(0, getItemsPerPageCount(), ORDER_ON, getFullInfo(), filter));
+    doInBackground(new LoadPageDataTaskCreator(0, getItemsPerPageCount(), getDefaultOrder(), getFullInfo(), getDefaultAsc(), filter));
     hideFilterDialog();
   }
 
@@ -487,6 +489,10 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
   protected abstract TableView createPage(ServerResponse serverResponse, String columnName, boolean asc);
 
   protected abstract String createCsv(ServerResponse serverResponse, File target);
+
+  protected abstract String getDefaultOrder();
+
+  protected abstract Boolean getDefaultAsc();
 
 
   /*private void createPage(ServerResponse serverResponse) {

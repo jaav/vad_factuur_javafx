@@ -161,7 +161,7 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
 
   @Override
   protected String createCsv(ServerResponse serverResponse, File target) {
-    exportService.createCsv((CustomerResponse)serverResponse, target, sectors);
+    exportService.createCsv((CustomerResponse) serverResponse, target, sectors);
     return null;  //To change body of implemented methods use File | Settings | File Templates.
   }
 
@@ -170,4 +170,19 @@ public class CustomerListActivity extends AbstractListActivity<Customer> {
  	protected void handleLaunchFilter(ActionEvent event) {
     showFilterDialog(getResources().getString("customer.filter.dialog.title"), CustomerFilterDialog.class, parentSectors);
  	}
+
+  @Override
+  protected String getDefaultOrder() {
+    return Customer.DEFAULT_COLUMN;
+  }
+
+  @Override
+  protected Boolean getDefaultAsc() {
+    return Customer.DEFAULT_ASC;
+  }
+
+  /*@Override
+  protected void setDependingList() {
+    dependingList = sectors;
+  }*/
 }

@@ -9,6 +9,9 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class Customer extends BaseEntity implements Listable {
 
+  public static String DEFAULT_COLUMN = "name";
+  public static Boolean DEFAULT_ASC = Boolean.TRUE;
+
 	@NotBlank
 	private String name;
 
@@ -85,6 +88,7 @@ public class Customer extends BaseEntity implements Listable {
 
 	@Override
 	public String getPrintName() {
+    if(address!=null && !address.isEmpty()) return getName() + " (" + address.get(0).getCity() + ")";
 		return getName();
 	}
 

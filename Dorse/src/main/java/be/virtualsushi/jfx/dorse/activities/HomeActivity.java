@@ -38,7 +38,7 @@ public class HomeActivity extends AbstractBrowserActivity {
  		String authToken = getRestApiAccessor().login(usernameField.getText(), passwordField.getText());
  		if (StringUtils.isNotBlank(authToken)) {
        getAppVariables().put(AUTHTOKEN_KEY, authToken.substring(authToken.indexOf("___")+3));
-       getAppVariables().put(USERNAME_ID, authToken.substring(0, authToken.indexOf("___")));
+       getAppVariables().put(USERNAME_ID, Long.parseLong(authToken.substring(0, authToken.indexOf("___"))));
        getAppVariables().put(USERNAME_KEY, usernameField.getText());
        goTo(AppActivitiesNames.TEST);
  		} else {

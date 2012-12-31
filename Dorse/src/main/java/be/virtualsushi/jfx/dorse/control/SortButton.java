@@ -33,8 +33,6 @@ public class SortButton extends ImageButton {
       @Override
       public void handle(MouseEvent event) {
         log.debug("EVENT : " + event.toString());
-        String orderOn = ((Button) event.getSource()).getId();
-        AbstractListActivity.ORDER_ON = orderOn;
         activityNavigator.goTo(AppActivitiesNames.LIST_ARTICLES);
       }
     });

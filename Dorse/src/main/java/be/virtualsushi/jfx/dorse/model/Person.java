@@ -6,16 +6,13 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class Person extends BaseEntity {
 
-	@NotBlank
 	private String title;
 
 	@NotBlank
 	private String name;
 
-	@NotBlank
 	private String email;
 
-	@NotBlank
 	private String phone;
 
 	@NotNull

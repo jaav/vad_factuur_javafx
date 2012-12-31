@@ -15,7 +15,7 @@ import java.util.List;
 public class ViewPostActivity extends AbstractViewEntityActivity<VBox, Post> {
 
 	@FXML
-	private Label idLabel, idField, nameLabel, bottomLabel, topLabel;
+	private Label idField, nameLabel, bottomLabel, topLabel;
 
 	@FXML
 	private Label nameField, priceField, bottomField, topField;
@@ -24,9 +24,9 @@ public class ViewPostActivity extends AbstractViewEntityActivity<VBox, Post> {
 	protected void mapFields(Post post) {
     idField.setText(String.valueOf(post.getId()));
     nameField.setText(post.getName());
-    bottomField.setText(""+post.getBottom());
-    topField.setText(""+post.getTop());
-    priceField.setText(""+post.getPrice());
+    bottomField.setText(post.getBottom()+" g");
+    topField.setText(post.getTop()+" g");
+    priceField.setText("€ "+post.getPrice());
 	}
 
   @Override

@@ -177,6 +177,21 @@ public class ArticleListActivity extends AbstractListActivity<Article> {
     showFilterDialog(getResources().getString("article.filter.dialog.title"), ArticleFilterDialog.class);
  	}
 
+  @Override
+  protected String getDefaultOrder() {
+    return Article.DEFAULT_COLUMN;
+  }
+
+  @Override
+  protected Boolean getDefaultAsc() {
+    return Article.DEFAULT_ASC;
+  }
+
+  /*@Override
+  protected void setDependingList() {
+    dependingList = suppliers;
+  }*/
+
   /*private class SortTypeChangeListener implements InvalidationListener {
 
       @Override

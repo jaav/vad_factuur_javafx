@@ -28,7 +28,7 @@
 
 		<FieldLabel value="%id" GridPane.columnIndex="0"
 			GridPane.rowIndex="0" />
-		<Label fx:id="idLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+		<Label fx:id="idField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
 		<FieldLabel value="%name" GridPane.columnIndex="0" GridPane.rowIndex="2" />
 		<Label fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="400" />
@@ -38,6 +38,9 @@
 
         <FieldLabel value="%top" GridPane.columnIndex="0" GridPane.rowIndex="4" />
       		<Label fx:id="topField" GridPane.columnIndex="1" GridPane.rowIndex="4" prefWidth="400" />
+
+        <FieldLabel value="%price" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+      		<Label fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="5" prefWidth="400" />
 
 	</GridPane>
 </VBox>

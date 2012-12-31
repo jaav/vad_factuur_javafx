@@ -12,6 +12,7 @@ import be.virtualsushi.jfx.dorse.control.*;
 import be.virtualsushi.jfx.dorse.control.calendar.CalendarView;
 import be.virtualsushi.jfx.dorse.control.calendar.DatePicker;
 import be.virtualsushi.jfx.dorse.dialogs.*;
+import be.virtualsushi.jfx.dorse.utils.AppVariables;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -286,6 +287,7 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		}
     result.setCopyDate(copyDateField.getSelectedDate());
     HashMap test = getAppVariables();
+    AppVariables appv = getAppVariables();
     if(getAppVariables().get(AUTHTOKEN_KEY)!=null && getAppVariables().get(USERNAME_KEY)!=null)
       result.setCreator((Long)getAppVariables().get(USERNAME_ID));
 		return result;

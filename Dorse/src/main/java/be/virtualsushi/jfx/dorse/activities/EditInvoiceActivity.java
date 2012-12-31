@@ -3,10 +3,9 @@ package be.virtualsushi.jfx.dorse.activities;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.LIST_INVOICES;
 import static be.virtualsushi.jfx.dorse.navigation.AppActivitiesNames.VIEW_INVOICE;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
+import be.virtualsushi.jfx.dorse.control.*;
 import be.virtualsushi.jfx.dorse.model.Status;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,12 +18,6 @@ import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import be.virtualsushi.jfx.dorse.control.AddressesListToggle;
-import be.virtualsushi.jfx.dorse.control.ComboBoxField;
-import be.virtualsushi.jfx.dorse.control.HasValidation;
-import be.virtualsushi.jfx.dorse.control.TextAreaField;
-import be.virtualsushi.jfx.dorse.control.TextField;
-import be.virtualsushi.jfx.dorse.control.ValidationErrorPanel;
 import be.virtualsushi.jfx.dorse.dialogs.NewAddressDialog;
 import be.virtualsushi.jfx.dorse.events.dialogs.SaveAddressEvent;
 import be.virtualsushi.jfx.dorse.model.Address;
@@ -115,7 +108,7 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	private TextAreaField remarkField;
 
 	@FXML
-	private ComboBoxField<Customer> customerField;
+	private DorseComboBox<Customer> customerField;
 
   @FXML
  	private ComboBoxField<Status> statusField;
@@ -167,22 +160,34 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	private void updateAddressesPanel(Customer newValue) {
 		invoiceAddressBox.getChildren().clear();
 		deliveryAddressBox.getChildren().clear();
+    int counter = 0;
 		for (Address address : newValue.getAddress()) {
 			AddressesListToggle deliveryToggle = new AddressesListToggle(newValue.getName());
 			deliveryToggle.setToggleGroup(deliveryAddressToggleGroup);
 			deliveryToggle.setValue(address);
 			deliveryAddressBox.getChildren().add(deliveryToggle);
-			if (getEntity().getDeliveryAddress() != null && getEntity().getDeliveryAddress() == address.getId()) {
-				deliveryToggle.setSelected(true);
-			}
+      if(counter == 0){
+        deliveryToggle.setSelected(true);
+      }
+      else{
+        if (getEntity().getDeliveryAddress() != null && getEntity().getDeliveryAddress().equals(address.getId())) {
+          deliveryToggle.setSelected(true);
+        }
+      }
 
 			AddressesListToggle invoiceToggle = new AddressesListToggle(newValue.getName());
 			invoiceToggle.setToggleGroup(invoiceAddressToggleGroup);
 			invoiceToggle.setValue(address);
 			invoiceAddressBox.getChildren().add(invoiceToggle);
-			if (getEntity().getInvoiceAddress() != null && getEntity().getInvoiceAddress() == address.getId()) {
-				invoiceToggle.setSelected(true);
-			}
+      if(counter == 0){
+        invoiceToggle.setSelected(true);
+      }
+      else{
+        if (getEntity().getInvoiceAddress() != null && getEntity().getInvoiceAddress().equals(address.getId())) {
+          invoiceToggle.setSelected(true);
+        }
+      }
+      counter++;
 		}
 	}
 
@@ -219,10 +224,16 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		for (Customer customer : customerField.getAcceptableValues()) {
 			if (editingInvoice.getCustomer().equals(customer)) {
 				customerField.setValue(customer);
+        mapAddresses(editingInvoice, customer);
 				break;
 			}
 		}
 	}
+
+  private void mapAddresses(Invoice editingInvoice, Customer customer){
+//    if(editingInvoice.getDeliveryAddress()==null)
+//    customer.
+  }
 
 	@Override
 	protected Invoice getEditedEntity() {
@@ -248,8 +259,14 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	@Override
   @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization(Invoice editingEntity) {
-		acceptableCustomers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, false).getData();
-    acceptableCustomers.add(0, Customer.getEmptyCustomer());
+    if(acceptableCustomers==null){
+      acceptableCustomers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, Customer.DEFAULT_COLUMN, false, Customer.DEFAULT_ASC).getData();
+      acceptableCustomers.add(0, Customer.getEmptyCustomer());
+    }
+    if(editingEntity.getId()==null){
+      List<Invoice> previousInvoice = (List<Invoice>)getRestApiAccessor().getResponse(Invoice.class, null, 0, 1, "id", null, false, false, false).getData();
+      if(previousInvoice!=null && !previousInvoice.isEmpty()) editingEntity.setCode(getNextInvoiceCode(previousInvoice.get(0).getCode()));
+    }
 	}
 
 	@Override
@@ -273,7 +290,6 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	protected void fillFieldsMap(HashMap<String, HasValidation> fieldsMap) {
 		fieldsMap.put("code", numberField);
 		fieldsMap.put("remark", remarkField);
-		fieldsMap.put("customer", customerField);
 	}
 
   @Override
@@ -284,5 +300,22 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
     statusField.setValue(Status.getEmptyStatus());
     invoiceAddressBox.getChildren().clear();
     deliveryAddressBox.getChildren().clear();
+  }
+
+  private String getNextInvoiceCode(String previousCode){
+    Calendar c = new GregorianCalendar();
+    String s_thisMonth = null;
+    String s_thisYear = ""+c.get(Calendar.YEAR);
+    int i_thisMonth = c.get(Calendar.MONTH)+1;
+    s_thisMonth = i_thisMonth<10 ? "0"+i_thisMonth : ""+i_thisMonth;
+    if(previousCode.indexOf(s_thisMonth)>=0 && previousCode.indexOf(s_thisYear)>=0){
+      try{
+        int previousCounter = Integer.parseInt(previousCode.substring(6));
+        return s_thisYear+s_thisMonth+(previousCounter+1);
+      }
+      catch (Exception e){
+      }
+    }
+    return s_thisYear+s_thisMonth+"***";
   }
 }

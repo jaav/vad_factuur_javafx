@@ -2,6 +2,7 @@
 
 <?import be.virtualsushi.jfx.dorse.control.*?>
 <?import be.virtualsushi.jfx.dorse.control.ComboBoxField?>
+<?import be.virtualsushi.jfx.dorse.control.DorseComboBox?>
 <?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
 <?import be.virtualsushi.jfx.dorse.control.EditableList?>
 <?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
@@ -37,7 +38,7 @@
             <FieldLabel value="%number" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
             <TextField fx:id="numberField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             <FieldLabel value="%customer" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <ComboBoxField fx:id="customerField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <DorseComboBox fx:id="customerField" prefWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
             <FieldLabel value="%status" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
             <ComboBoxField fx:id="statusField" fieldWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.columnSpan="2"

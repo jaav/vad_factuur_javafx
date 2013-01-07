@@ -102,4 +102,8 @@ public class EditPostActivity extends AbstractEditActivity<HBox, Post> {
     bottomField.setValue(0F);
     topField.setValue(0F);
   }
+
+  @Override
+  protected void triggerReload() {
+  }
 }

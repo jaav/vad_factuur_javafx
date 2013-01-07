@@ -27,7 +27,7 @@
 		<Button text="%back" onAction="#handleGoBack" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" />
 	</GridPane>
 
-	<TabPane tabClosingPolicy="UNAVAILABLE" minHeight="150">
+	<TabPane tabClosingPolicy="UNAVAILABLE" minHeight="165">
 		<Tab text="%invoice.data">
 			<GridPane vgap="10" hgap="5">
 				<padding>

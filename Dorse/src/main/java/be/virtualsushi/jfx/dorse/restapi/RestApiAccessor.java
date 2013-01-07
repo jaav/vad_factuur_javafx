@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import be.virtualsushi.jfx.dorse.model.ServerResponse;
+import be.virtualsushi.jfx.dorse.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
@@ -19,6 +19,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -35,8 +36,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-
-import be.virtualsushi.jfx.dorse.model.BaseEntity;
 
 public class RestApiAccessor extends RestTemplate {
 
@@ -191,6 +190,24 @@ public class RestApiAccessor extends RestTemplate {
 		}
 		return null;
 	}
+
+  public ServerResponse getAllCustomers() {
+ 		try {
+ 			ServerResponse response = getForObject(serviceUri + "allCustomers", CustomerResponse.class);
+      return response;
+ 		} catch (Exception e) {
+ 			return null;
+ 		}
+ 	}
+
+  public ServerResponse getAllArticless() {
+ 		try {
+ 			ServerResponse response = getForObject(serviceUri + "allArticles", ArticleResponse.class);
+      return response;
+ 		} catch (Exception e) {
+ 			return null;
+ 		}
+ 	}
 
 	private String getEntitySubPath(Class<? extends BaseEntity> entityClass) {
 		if (entityClass.getAnnotation(ItemResourcePath.class) != null) {

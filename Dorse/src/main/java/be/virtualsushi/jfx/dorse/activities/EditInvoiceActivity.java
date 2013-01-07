@@ -259,9 +259,11 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	@Override
   @SuppressWarnings("unchecked")
 	protected void doCustomBackgroundInitialization(Invoice editingEntity) {
-    if(acceptableCustomers==null){
-      acceptableCustomers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, Customer.DEFAULT_COLUMN, false, Customer.DEFAULT_ASC).getData();
+    if(shouldReloadCustomers()){
+//      acceptableCustomers = (List<Customer>)getRestApiAccessor().getResponse(Customer.class, Customer.DEFAULT_COLUMN, false, Customer.DEFAULT_ASC).getData();
+      acceptableCustomers = (List<Customer>)getRestApiAccessor().getAllCustomers().getData();
       acceptableCustomers.add(0, Customer.getEmptyCustomer());
+      setReloadCustomers(false);
     }
     if(editingEntity.getId()==null){
       List<Invoice> previousInvoice = (List<Invoice>)getRestApiAccessor().getResponse(Invoice.class, null, 0, 1, "id", null, false, false, false).getData();
@@ -317,5 +319,9 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
       }
     }
     return s_thisYear+s_thisMonth+"***";
+  }
+
+  @Override
+  protected void triggerReload() {
   }
 }

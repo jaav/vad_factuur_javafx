@@ -235,20 +235,15 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
 
  		private final Customer customer;
     private final Address address;
-    private final Person person;
 
  		public GenerateLabelTaskCreator(Customer customer, Address address) {
        this.customer = customer;
        this.address = address;
-       if(customer.getPerson()!=null && !customer.getPerson().isEmpty())
-         this.person = customer.getPerson().get(0);
-       else
-         this.person = null;
  		}
 
  		@Override
  		public DorseBackgroundTask<String> createTask() {
- 			return new DorseBackgroundTask<String>(this, customer, address, person) {
+ 			return new DorseBackgroundTask<String>(this, customer, address) {
 
  				@Override
  				protected void onPreExecute() {
@@ -258,10 +253,7 @@ public class ViewCustomerActivity extends AbstractViewEntityActivity<VBox, Custo
  				@SuppressWarnings("unchecked")
  				@Override
  				protected String call() throws Exception {
-           if(getParameters()[2]!=null && StringUtils.isNotBlank(((Person) getParameters()[2]).getName()))
- 					   return reportService.createAddressLabel((Customer) getParameters()[0], (Address) getParameters()[1], (Person) getParameters()[2]);
-           else
-             return reportService.createAddressLabel((Customer) getParameters()[0], (Address) getParameters()[1]);
+           return reportService.createAddressLabel((Customer) getParameters()[0], (Address) getParameters()[1]);
  				}
 
  				@Override

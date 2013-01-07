@@ -232,4 +232,9 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
     sectorField.setValue(Sector.getEmptySector());
   }
 
+  @Override
+  protected void triggerReload() {
+    setReloadCustomers(true);
+  }
+
 }

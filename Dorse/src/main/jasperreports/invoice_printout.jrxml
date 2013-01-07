@@ -92,7 +92,7 @@
 				<imageExpression><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File("VAD_logo.svg"))]]></imageExpression>
 			</image>
 			<frame>
-				<reportElement uuid="d0cf53a0-9512-4e21-9125-82e856278750" x="348" y="69" width="205" height="69"/>
+				<reportElement uuid="d0cf53a0-9512-4e21-9125-82e856278750" x="348" y="69" width="205" height="80"/>
 				<textField>
 					<reportElement uuid="37c8e09e-eb14-49ca-9ec7-7e9d692fde46" x="0" y="0" width="204" height="20"/>
 					<textElement>
@@ -101,7 +101,7 @@
 					<textFieldExpression><![CDATA[($P{customer}!=null?$P{customer}:"")]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="0" y="20" width="204" height="20">
+					<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="0" y="40" width="204" height="20">
 						<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
 					</reportElement>
 					<textElement>
@@ -110,13 +110,22 @@
 					<textFieldExpression><![CDATA[$P{invoiceAddress}.getAddress()]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="9787eb06-a2b2-41e6-9e7b-5467499a9660" x="0" y="40" width="204" height="20">
+					<reportElement uuid="9787eb06-a2b2-41e6-9e7b-5467499a9660" x="0" y="60" width="204" height="20">
 						<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
 					</reportElement>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{deliveryAddress}.getZipcode()+" "+$P{invoiceAddress}.getCity()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="0" y="20" width="204" height="20">
+						<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["T.a.v. "+$P{invoiceAddress}.getAtt()]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

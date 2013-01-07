@@ -20,7 +20,7 @@
 				<textElement>
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{person}!=null?"T.a.v. "+$P{person}:"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{address}.getAtt()!=null?"T.a.v. "+$P{address}.getAtt():"")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="d409d92e-5064-40bb-b235-93d90fc80edc" x="0" y="40" width="390" height="20" forecolor="#000000"/>

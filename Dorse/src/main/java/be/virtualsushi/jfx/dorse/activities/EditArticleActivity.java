@@ -286,7 +286,6 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 			result.setCreationDate(new Date());
 		}
     result.setCopyDate(copyDateField.getSelectedDate());
-    HashMap test = getAppVariables();
     AppVariables appv = getAppVariables();
     if(getAppVariables().get(AUTHTOKEN_KEY)!=null && getAppVariables().get(USERNAME_KEY)!=null)
       result.setCreator((Long)getAppVariables().get(USERNAME_ID));
@@ -341,7 +340,12 @@ public class EditArticleActivity extends AbstractEditActivity<HBox, Article> {
 		return LIST_ARTICLES;
 	}
 
-	@Override
+  @Override
+  protected void triggerReload() {
+    setReloadArticles(true);
+  }
+
+  @Override
 	protected ValidationErrorPanel getValidationPanel() {
 		return validationPanel;
 	}

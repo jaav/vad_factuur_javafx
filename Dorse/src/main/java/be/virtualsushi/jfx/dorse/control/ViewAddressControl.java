@@ -27,6 +27,7 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 	private Label cityField = new Label();
 	private Label phoneField = new Label();
 	private Label emailField = new Label();
+  private Label attField = new Label();
 
 	public ViewAddressControl() {
 		super();
@@ -52,6 +53,7 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 					cityField.setText(newValue.getZipcode() + " " + newValue.getCity());
 					phoneField.setText(newValue.getPhone());
 					emailField.setText(newValue.getEmail());
+          attField.setText(newValue.getAtt());
 				}
 			}
 		});
@@ -87,13 +89,14 @@ public class ViewAddressControl extends GridPane implements IUiComponent, HasVal
 		setVgap(5d);
 		//add(addressLabel, 0, 0);
 		add(nameField, 0, 0);
-    add(addressField, 0, 1);
+    add(attField, 0, 1);
+    add(addressField, 0, 2);
 		//add(cityLabel, 0, 1);
-		add(cityField, 0, 2);
+		add(cityField, 0, 3);
 		//add(phoneLabel, 0, 2);
-		add(phoneField, 0, 3);
+		add(phoneField, 0, 4);
 		//add(emailLabel, 0, 3);
-		add(emailField, 0, 4);
+		add(emailField, 0, 5);
 	}
 
 	@Override

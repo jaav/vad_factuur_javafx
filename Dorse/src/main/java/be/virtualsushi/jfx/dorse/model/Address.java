@@ -11,6 +11,9 @@ import be.virtualsushi.jfx.dorse.restapi.ListResourcePath;
 @ListResourcePath("addresses")
 public class Address extends BaseEntity {
 
+  public static Integer INVOICE_ADDRESS = 1;
+  public static Integer DELIVERY_ADDRESS = 2;
+
 	@NotNull
 	private Long customer;
 
@@ -30,6 +33,8 @@ public class Address extends BaseEntity {
 	private String city;
 
 	private String zipcode;
+
+  private String att;
 
 	public Long getCustomer() {
 		return customer;
@@ -95,4 +100,11 @@ public class Address extends BaseEntity {
 		this.zipcode = zipcode;
 	}
 
+  public String getAtt() {
+    return att;
+  }
+
+  public void setAtt(String att) {
+    this.att = att;
+  }
 }

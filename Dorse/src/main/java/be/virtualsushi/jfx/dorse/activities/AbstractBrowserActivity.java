@@ -37,6 +37,7 @@ public abstract class AbstractBrowserActivity extends DorseUiActivity<BorderPane
 	@Override
 	public void initialize() {
 		super.initialize();
+    doCustomBackgroundInitialization();
     browserContainer = new BorderPane();
     browserContainer.setPadding(new Insets(3));
     browserContainer.setPrefHeight(Double.MAX_VALUE);

@@ -4,6 +4,8 @@ import java.util.*;
 
 import be.virtualsushi.jfx.dorse.dialogs.AbstractFilterDialog;
 import be.virtualsushi.jfx.dorse.events.*;
+import be.virtualsushi.jfx.dorse.model.Article;
+import be.virtualsushi.jfx.dorse.model.Customer;
 import be.virtualsushi.jfx.dorse.model.Invoice;
 import be.virtualsushi.jfx.dorse.model.Status;
 import be.virtualsushi.jfx.dorse.utils.AppVariables;
@@ -73,6 +75,10 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
   public static final String USERNAME_KEY = "username";
 
   public static final String USERNAME_ID = "user_id";
+
+  public static final String SHOULDREFRESHARTICLES = "should_refresh_articles";
+
+  public static final String SHOULDREFRESHCUSTOMERS = "should_refresh_customers";
 
   public List<Status> statuses;
 
@@ -362,4 +368,19 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
     }
   }
 
+  public boolean shouldReloadCustomers() {
+    return (Boolean)getAppVariables().get(SHOULDREFRESHCUSTOMERS);
+  }
+
+  public void setReloadCustomers(boolean reloadCustomers) {
+    getAppVariables().put(SHOULDREFRESHCUSTOMERS, reloadCustomers);
+  }
+
+  public boolean shouldReloadArticles() {
+    return (Boolean)getAppVariables().get(SHOULDREFRESHARTICLES);
+  }
+
+  public void setReloadArticles(boolean reloadArticles) {
+    getAppVariables().put(SHOULDREFRESHARTICLES, reloadArticles);
+  }
 }

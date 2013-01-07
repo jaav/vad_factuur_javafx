@@ -25,7 +25,7 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
 	private VBox container;
 
 	@FXML
-	private TextField addressField, cityField, zipcodeField, phoneField, faxField, emailField;
+	private TextField attField, addressField, cityField, zipcodeField, phoneField, faxField, emailField;
 
 	private ValidationErrorPanel validationPanel;
 
@@ -39,7 +39,8 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
 	@FXML
 	protected void handleSave(ActionEvent event) {
 		Address address = new Address();
-		address.setAddress(addressField.getValue());
+		address.setAtt(attField.getValue());
+    address.setAddress(addressField.getValue());
 		address.setZipcode(zipcodeField.getValue());
 		address.setCity(cityField.getValue());
 		address.setPhone(phoneField.getValue());
@@ -57,7 +58,8 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
 
 		validationPanel = new ValidationErrorPanel(false);
 		fieldsMap = new HashMap<String, HasValidation>();
-		fieldsMap.put("address", addressField);
+		fieldsMap.put("att", attField);
+    fieldsMap.put("address", addressField);
 		fieldsMap.put("city", cityField);
 		fieldsMap.put("zipcode", zipcodeField);
 		fieldsMap.put("phone", phoneField);
@@ -74,6 +76,7 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
       if(parameters.length>1){
         oldAddress = (Address) parameters[1];
         if(oldAddress!=null){
+          attField.setValue(oldAddress.getAtt());
           addressField.setValue(oldAddress.getAddress());
           zipcodeField.setValue(oldAddress.getZipcode());
           cityField.setValue(oldAddress.getCity());
@@ -84,6 +87,7 @@ public class NewAddressDialog extends AbstractDialog implements HasValidationDia
         }
       }
       else{
+        attField.setValue("");
         addressField.setValue("");
         zipcodeField.setValue("");
         cityField.setValue("");

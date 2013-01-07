@@ -63,6 +63,7 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 				@Override
 				protected void onSuccess(E value) {
 					hideLoadingMask();
+          triggerReload();
 					goTo(getListActivityName(), AbstractListActivity.FORCE_RELOAD_PARAMETER, true);
 				}
 
@@ -220,6 +221,8 @@ public abstract class AbstractEditActivity<N extends Node, E extends BaseEntity>
 	protected abstract E getEditedEntity();
 
 	protected abstract AppActivitiesNames getListActivityName();
+
+  protected abstract void triggerReload();
 
 	protected abstract ValidationErrorPanel getValidationPanel();
 

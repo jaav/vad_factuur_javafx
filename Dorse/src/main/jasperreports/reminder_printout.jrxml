@@ -55,7 +55,7 @@
 				<text><![CDATA[Rekening nummer: 433-1078045-12 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="332" y="29" width="221" height="20">
+				<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="332" y="50" width="221" height="20">
 					<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -64,14 +64,14 @@
 				<textFieldExpression><![CDATA[$P{invoiceAddress}.getAddress()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="37c8e09e-eb14-49ca-9ec7-7e9d692fde46" x="332" y="8" width="221" height="20"/>
+				<reportElement uuid="37c8e09e-eb14-49ca-9ec7-7e9d692fde46" x="332" y="10" width="221" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($P{customer}!=null?$P{customer}:"")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="9787eb06-a2b2-41e6-9e7b-5467499a9660" x="332" y="49" width="221" height="20">
+				<reportElement uuid="9787eb06-a2b2-41e6-9e7b-5467499a9660" x="332" y="70" width="221" height="20">
 					<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -81,7 +81,7 @@
 			</textField>
 			<image scaleImage="RealSize" isUsingCache="false">
 				<reportElement uuid="13acd14c-cf77-47e0-a1f7-acee78c40527" x="0" y="0" width="280" height="110"/>
-                <imageExpression><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File("VAD_logo.svg"))]]></imageExpression>
+				<imageExpression><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File("VAD_logo.svg"))]]></imageExpression>
 			</image>
 			<frame>
 				<reportElement uuid="33ec5ef0-a089-495d-8e7d-f16be0834a3f" x="2" y="173" width="553" height="602"/>
@@ -100,6 +100,15 @@
 					<textFieldExpression><![CDATA["Brussel, "+new SimpleDateFormat($P{report.date.format}, new Locale("nl", "BE")).format($P{now})]]></textFieldExpression>
 				</textField>
 			</frame>
+			<textField>
+				<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="332" y="30" width="221" height="20">
+					<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["T.a.v. "+$P{invoiceAddress}.getAtt()]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 </jasperReport>

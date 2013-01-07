@@ -102,7 +102,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
     @Override
     public DorseBackgroundTask<ServerResponse> createTask() {
-      return new DorseBackgroundTask<ServerResponse>(this, filter, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive, asc) {
+       return new DorseBackgroundTask<ServerResponse>(this, filter, from, quantity, orderOn, additionalCondition, fullInfo, includesNonActive, asc) {
 
         @Override
         protected void onPreExecute() {

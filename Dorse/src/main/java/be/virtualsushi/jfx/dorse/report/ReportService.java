@@ -8,6 +8,7 @@ import java.util.*;
 
 import be.virtualsushi.jfx.dorse.activities.ViewInvoiceActivity;
 import be.virtualsushi.jfx.dorse.model.*;
+import be.virtualsushi.jfx.dorse.restapi.RestApiAccessor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
@@ -35,6 +36,9 @@ public class ReportService {
 
   @Value("#{systemProperties.getProperty('user.home')}")
   private String userHome;
+
+  @Autowired
+ 	private RestApiAccessor restApiAccessor;
 
   @Value("${report.date.format}")
   private String reportDateFormat;
@@ -106,40 +110,14 @@ public class ReportService {
 
 
   public String createAddressLabel(Customer customer, Address address) {
-    String reportType = "labelNoPerson.jasper";
+    String reportType;
+    if(StringUtils.isBlank(address.getAtt()))
+      reportType = "labelNoPerson.jasper";
+    else
+      reportType = "label.jasper";
     HashMap<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("customer", customer.getName());
     parameters.put("address", address);
-
-    File out = new File(createLabelOutputFileUri(customer));
-    FileOutputStream outStream = null;
-    try {
-      outStream = new FileOutputStream(out);
-      JasperPrint print = JasperFillManager.fillReport(new ClassPathResource(reportType).getInputStream(), parameters, new JREmptyDataSource());
-      JRExporter exporter = new JRPdfExporter();
-      exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-      exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outStream);
-      exporter.exportReport();
-    } catch (JRException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (Exception e) {
-      e.printStackTrace();
-    } finally {
-      IOUtils.closeQuietly(outStream);
-    }
-    return out.getAbsolutePath();
-  }
-
-
-  public String createAddressLabel(Customer customer, Address address, Person person) {
-    String reportType = "label.jasper";
-    HashMap<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("customer", customer.getName());
-    parameters.put("address", address);
-    if (person != null)
-      parameters.put("person", person.getName());
 
     File out = new File(createLabelOutputFileUri(customer));
     FileOutputStream outStream = null;

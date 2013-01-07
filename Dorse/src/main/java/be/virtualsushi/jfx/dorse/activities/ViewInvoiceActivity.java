@@ -229,6 +229,48 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		}
 
 	}
+
+  /*private class GenerateLabelTaskCreator implements TaskCreator<DorseBackgroundTask<String>> {
+
+ 		private final Long invoiceId;
+    private final Integer addressType;
+
+ 		public GenerateLabelTaskCreator(Long invoiceId, Integer type) {
+       this.invoiceId = invoiceId;
+       this.addressType = type;
+ 		}
+
+ 		@Override
+ 		public DorseBackgroundTask<String> createTask() {
+ 			return new DorseBackgroundTask<String>(this, invoiceId, addressType) {
+
+ 				@Override
+ 				protected void onPreExecute() {
+ 					showLoadingMask();
+ 				}
+
+ 				@SuppressWarnings("unchecked")
+ 				@Override
+ 				protected String call() throws Exception {
+           return reportService.createAddressLabel((Long) getParameters()[0], (Integer)getParameters()[1]);
+ 				}
+
+ 				@Override
+ 				protected void onSuccess(String value) {
+ 					hideLoadingMask();
+ 					getEventBus().post(new ShowReportEvent(value));
+ 				}
+
+         @Override
+         protected void onError(Throwable exception) {
+           log.warn(exception.getMessage());
+           hideLoadingMask();
+           super.onError(exception);    //To change body of overridden methods use File | Settings | File Templates.
+         }
+       };
+ 		}
+
+ 	}*/
   
   private class LoadInvoiceTaskCreator implements TaskCreator<DorseBackgroundTask<Invoice>> {
  
@@ -438,8 +480,9 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 		if (entity.getDeliveryAddress() != null) {
 			deliveryAddressValue = getRestApiAccessor().get(entity.getDeliveryAddress(), Address.class);
 		}
-		if (CollectionUtils.isEmpty(articles)) {
-			articles = (List<Article>)getRestApiAccessor().getResponse(Article.class, Article.DEFAULT_COLUMN, true, Article.DEFAULT_ASC).getData();
+		if (shouldReloadArticles()) {
+			articles = (List<Article>)getRestApiAccessor().getAllArticless().getData();
+      setReloadArticles(false);
 		}
     orderLines = new ArrayList<OrderLineProperty>();
     List<OrderLine> lines = (List<OrderLine>)getRestApiAccessor().getResponse(OrderLine.class, null, null, null, "id", "invoice="+entity.getId(), true, false, true).getData();
@@ -486,5 +529,4 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
   private void updateInvoiceData(){
     doInBackground(new LoadInvoiceTaskCreator());
   }
-
 }

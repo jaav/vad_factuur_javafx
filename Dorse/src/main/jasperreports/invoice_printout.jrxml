@@ -68,9 +68,11 @@
 				<textFieldExpression><![CDATA["Factuurdatum: "+new SimpleDateFormat($R{input.date.format}).format($P{created})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="32a907d6-c234-4ad4-91c0-733aab3606ce" x="60" y="163" width="698" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA["Leveringsadres: "+($P{person}!=null?$P{person}+"," :"")+$P{deliveryAddress}.getAddress()+", "+$P{deliveryAddress}.getZipcode()+" "+$P{deliveryAddress}.getCity()]]></textFieldExpression>
+				<reportElement uuid="32a907d6-c234-4ad4-91c0-733aab3606ce" x="60" y="171" width="698" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Leveringsadres: "+($P{customer}!=null?$P{customer}+", ":"")+($P{invoiceAddress}.getAtt()!=null?"T.a.v. "+$P{invoiceAddress}.getAtt()+", ":"")+($P{person}!=null?$P{person}+"," :"")+$P{deliveryAddress}.getAddress()+", "+$P{deliveryAddress}.getZipcode()+" "+$P{deliveryAddress}.getCity()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="113" width="254" height="12"/>

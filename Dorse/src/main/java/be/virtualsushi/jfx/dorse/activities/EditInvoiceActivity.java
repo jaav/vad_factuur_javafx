@@ -241,12 +241,14 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 		result.setCode(numberField.getValue());
 		result.setRemark(remarkField.getValue());
 		result.setCustomer(customerField.getValue());
-		if (invoiceAddressToggleGroup.getSelectedToggle() != null) {
+		if (invoiceAddressToggleGroup.getSelectedToggle() != null)
 			result.setInvoiceAddress(((AddressesListToggle) invoiceAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
-		}
-		if (deliveryAddressToggleGroup.getSelectedToggle() != null) {
+		if (deliveryAddressToggleGroup.getSelectedToggle() != null)
 			result.setDeliveryAddress(((AddressesListToggle) deliveryAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
-		}
+    else{
+      if (invoiceAddressToggleGroup.getSelectedToggle() != null)
+        result.setDeliveryAddress(((AddressesListToggle) invoiceAddressToggleGroup.getSelectedToggle().getUserData()).getValue().getId());
+    }
 		if (result.isNew()) {
 			result.setCreationDate(new Date());
 		}

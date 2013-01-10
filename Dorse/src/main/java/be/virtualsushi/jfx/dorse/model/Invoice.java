@@ -27,7 +27,6 @@ public class Invoice extends BaseEntity {
 	private Long invoiceAddress;
 
 	@JsonProperty("del_address")
-	@NotNull
 	private Long deliveryAddress;
 
 	@NotBlank

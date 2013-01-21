@@ -33,7 +33,7 @@
 	<parameter name="created" class="java.util.Date"/>
 	<parameter name="now" class="java.util.Date"/>
 	<parameter name="invoiceAddress" class="be.virtualsushi.jfx.dorse.model.Address"/>
-	<parameter name="deliveryAddress" class="be.virtualsushi.jfx.dorse.model.Address"/>
+	<parameter name="deliveryAddressLine" class="java.lang.String"/>
 	<parameter name="goods" class="java.lang.Float"/>
 	<parameter name="total" class="java.lang.Float"/>
 	<parameter name="tpt" class="java.lang.Float"/>
@@ -72,7 +72,7 @@
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Leveringsadres: "+($P{customer}!=null?$P{customer}+", ":"")+($P{invoiceAddress}.getAtt()!=null?"T.a.v. "+$P{invoiceAddress}.getAtt()+", ":"")+($P{person}!=null?$P{person}+"," :"")+$P{deliveryAddress}.getAddress()+", "+$P{deliveryAddress}.getZipcode()+" "+$P{deliveryAddress}.getCity()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{deliveryAddressLine}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="113" width="254" height="12"/>
@@ -118,7 +118,7 @@
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{deliveryAddress}.getZipcode()+" "+$P{invoiceAddress}.getCity()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{invoiceAddress}.getZipcode()+" "+$P{invoiceAddress}.getCity()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="0" y="20" width="204" height="20">
@@ -127,7 +127,7 @@
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["T.a.v. "+$P{invoiceAddress}.getAtt()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{invoiceAddress}.getAtt()]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

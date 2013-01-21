@@ -48,6 +48,7 @@ public class ReportService {
 
   public String createInvoiceReport(int iReportType, Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<OrderLineProperty> orderLines) {
     String reportType;
+    Customer customer = null;
     if (iReportType == ViewInvoiceActivity.PRINT_INVOICE)
       reportType = "invoice_printout.jasper";
     else if (iReportType == ViewInvoiceActivity.PRINT_REMINDER)
@@ -65,7 +66,7 @@ public class ReportService {
     parameters.put("report.date.format", reportDateFormat);
     parameters.put(JRParameter.REPORT_FORMAT_FACTORY, new DorseFormatFactory(resources));
     if (invoice.getCustomer() != null) {
-      Customer customer = invoice.getCustomer();
+      customer = invoice.getCustomer();
       if (StringUtils.isNotBlank(customer.getName())) {
         parameters.put("customer", customer.getName());
       }
@@ -80,10 +81,12 @@ public class ReportService {
       }
     }
     if (invoiceAddress != null) {
+      invoiceAddress.setAtt(StringUtils.isNotBlank(invoiceAddress.getAtt()) ? "T.a.v. "+invoiceAddress.getAtt() : "");
       parameters.put("invoiceAddress", invoiceAddress);
     }
     if (deliveryAddress != null) {
-      parameters.put("deliveryAddress", deliveryAddress);
+      if(deliveryAddress.getId().equals(invoiceAddress.getId())) parameters.put("deliveryAddressLine", "");
+      else parameters.put("deliveryAddressLine", getAddressLine(deliveryAddress, customer.getName()));
     }
 
     File out = new File(createOutputFileUri(iReportType, invoice.getCode()));
@@ -184,6 +187,15 @@ public class ReportService {
         decoupled.add(orderLine);
     }
     return decoupled;
+  }
+
+  private String getAddressLine(Address address, String customerName){
+    StringBuffer sb = new StringBuffer();
+    sb.append("Leveringsadres: ");
+    sb.append(customerName!=null?customerName+", ":"");
+    sb.append((address.getAtt()!=null?"T.a.v. "+address.getAtt()+", ":""));
+    sb.append(address.getAddress()+", "+address.getZipcode()+" "+address.getCity());
+    return sb.toString();
   }
 
 }

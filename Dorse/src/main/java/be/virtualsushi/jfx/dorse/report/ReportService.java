@@ -161,7 +161,7 @@ public class ReportService {
   private List<OrderLineProperty> decoupleFreeArticles(List<OrderLineProperty> orderLines) {
     List<OrderLineProperty> decoupled = new ArrayList<OrderLineProperty>();
     for (OrderLineProperty orderLine : orderLines) {
-      if (orderLine.getApplyFree() && orderLine.getArticleFreeQuantity() > 0) {
+      if (orderLine.getArticlePrice()>0 && orderLine.getApplyFree() && orderLine.getArticleFreeQuantity() > 0) {
         try {
           if (orderLine.getArticleFreeQuantity() < orderLine.getQuantity()) {
             OrderLineProperty free = (OrderLineProperty) BeanUtils.cloneBean(orderLine);

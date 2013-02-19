@@ -54,6 +54,7 @@ public class ReportService {
     else if (iReportType == ViewInvoiceActivity.PRINT_REMINDER)
       reportType = "reminder_printout.jasper";
     else return null;
+    //List<OrderLineProperty> recoupled = recoupleArticles(orderLines);
     List<OrderLineProperty> decoupled = decoupleFreeArticles(orderLines);
     HashMap<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("invoiceCode", invoice.getCode());
@@ -157,6 +158,21 @@ public class ReportService {
   private String getApprovedName(String original){
     return original.replaceAll(" ", "_");
   }
+
+  /*private List<OrderLineProperty> recoupleArticles(List<OrderLineProperty> orderLines) {
+    List<OrderLineProperty> recoupled = new ArrayList<OrderLineProperty>();
+    for (OrderLineProperty lineProp : orderLines) {
+      if(hasSameArticle(recoupled, lineProp) 
+    }
+
+  }
+
+  private boolean hasSameArticle(List<OrderLineProperty> recoupled, OrderLineProperty lineProp){
+    for (OrderLineProperty oneRecoupled : recoupled) {
+      if(lineProp.getId().equals(oneRecoupled.getId())) return true;
+    }
+    return false;
+  }*/
 
   private List<OrderLineProperty> decoupleFreeArticles(List<OrderLineProperty> orderLines) {
     List<OrderLineProperty> decoupled = new ArrayList<OrderLineProperty>();

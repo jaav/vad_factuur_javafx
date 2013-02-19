@@ -26,6 +26,21 @@ public class OrderLineProperty {
   private SimpleStringProperty articleCode;
   private SimpleIntegerProperty articleFreeQuantity;
   private SimpleFloatProperty lineTotal;
+
+  public OrderLineProperty(OrderLineProperty existing){
+    idProperty().set(existing.idProperty().get());
+    quantityProperty().set(existing.quantityProperty().get());
+    applyFreeProperty().set(existing.applyFreeProperty().get());
+    unitDiscountProperty().set(existing.unitDiscountProperty().get());
+    lineTotalProperty().set(existing.lineTotalProperty().get());
+    orderIdProperty().set(existing.orderIdProperty().get());
+    articleIdProperty().set(existing.articleIdProperty().get());
+    articleNameProperty().set(existing.articleNameProperty().get());
+    articleCodeProperty().set(existing.articleCodeProperty().get());
+    articlePriceProperty().set(existing.articlePriceProperty().get());
+    articleFreeQuantityProperty().set(existing.articleFreeQuantityProperty().get());
+
+  }
   
 
   public SimpleLongProperty idProperty() {

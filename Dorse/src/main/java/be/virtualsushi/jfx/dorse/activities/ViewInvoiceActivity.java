@@ -203,6 +203,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 				@Override
 				protected void onPreExecute() {
+					//showDebug();
 					showLoadingMask();
 				}
 
@@ -216,6 +217,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@Override
 				protected void onSuccess(String value) {
 					hideLoadingMask();
+					//showDebug();
 					getEventBus().post(new ShowReportEvent(value));
 				}
 
@@ -399,7 +401,12 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 	@FXML
 	protected void handlePrintInvoice(ActionEvent event) {
-		doInBackground(new GenerateReportTaskCreator(ViewInvoiceActivity.PRINT_INVOICE, getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLineTable.getItems()));
+
+ 		List<OrderLineProperty> lines = new ArrayList<OrderLineProperty>();
+ 		for (OrderLineProperty lineProp : orderLines) {
+ 			lines.add(new OrderLineProperty(lineProp));
+ 		}
+		doInBackground(new GenerateReportTaskCreator(ViewInvoiceActivity.PRINT_INVOICE, getEntity(), invoiceAddressValue, deliveryAddressValue, articles, lines));
 	}
 
   @FXML
@@ -409,7 +416,11 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
   @FXML
  	protected void handlePrintReminder(ActionEvent event) {
-    doInBackground(new GenerateReportTaskCreator(ViewInvoiceActivity.PRINT_REMINDER, getEntity(), invoiceAddressValue, deliveryAddressValue, articles, orderLineTable.getItems()));
+ 		List<OrderLineProperty> lines = new ArrayList<OrderLineProperty>();
+ 		for (OrderLineProperty lineProp : orderLines) {
+ 			lines.add(new OrderLineProperty(lineProp));
+ 		}
+    	doInBackground(new GenerateReportTaskCreator(ViewInvoiceActivity.PRINT_REMINDER, getEntity(), invoiceAddressValue, deliveryAddressValue, articles, lines));
  	}
 
 	@Override
@@ -528,5 +539,12 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
   
   private void updateInvoiceData(){
     doInBackground(new LoadInvoiceTaskCreator());
+  }
+
+  private void showDebug(){
+  	System.out.println("**** "+orderLines.size());
+  	for (OrderLineProperty lineProp : orderLines) {
+  		System.out.println("--- "+lineProp.getArticleName()+" "+lineProp.getQuantity());
+  	}
   }
 }

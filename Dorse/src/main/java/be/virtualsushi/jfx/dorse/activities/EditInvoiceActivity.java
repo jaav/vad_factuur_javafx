@@ -315,7 +315,12 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
     if(previousCode.indexOf(s_thisMonth)>=0 && previousCode.indexOf(s_thisYear)>=0){
       try{
         int previousCounter = Integer.parseInt(previousCode.substring(6));
-        return s_thisYear+s_thisMonth+(previousCounter+1);
+	      previousCounter++;
+	      String s_previousCounter;
+	      if(previousCounter<10) s_previousCounter = "00"+previousCounter;
+	      else if(previousCounter<100) s_previousCounter = "0"+previousCounter;
+	      else s_previousCounter = ""+previousCounter;
+        return s_thisYear+s_thisMonth+s_previousCounter;
       }
       catch (Exception e){
       }

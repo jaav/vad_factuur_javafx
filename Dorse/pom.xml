@@ -16,6 +16,14 @@
         <jasperreports.version>4.7.1</jasperreports.version>
         <sql.date.format>yyyy-MM-dd</sql.date.format>
         <report.date.format>dd MMM yyyy</report.date.format>
+                <fx.home>/Library/Java/JavaVirtualMachines/jdk1.7.0_06.jdk/Contents/Home</fx.home>
+                <fx.rtlib.path>${fx.home}/jre/lib</fx.rtlib.path>
+                <fx.antlib.path>${fx.home}/lib</fx.antlib.path>
+                <fx.version>2.2</fx.version>
+                <java.compiler.version>1.7</java.compiler.version>
+                <service.uri>http://www.dorse.me/</service.uri>
+                <!--<service.uri>http://localhost:8070/</service.uri>-->
+                <print.container>/Documents/virtualsushi/customers/vad/vadfactuur/prints</print.container>
     </properties>
 
     <profiles>
@@ -310,6 +318,7 @@
                     <target>${java.compiler.version}</target>
                     <debug>true</debug>
                     <optimize>true</optimize>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
             <plugin>

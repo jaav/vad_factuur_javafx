@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import be.virtualsushi.jfx.dorse.control.*;
+import be.virtualsushi.jfx.dorse.dialogs.InvoiceFilterDialog;
 import be.virtualsushi.jfx.dorse.events.CancelFilterEvent;
 import be.virtualsushi.jfx.dorse.events.ClearFilterEvent;
 import be.virtualsushi.jfx.dorse.events.FilterEvent;
@@ -185,7 +186,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
     }
   }
 
-  private class DeleteEntityTaskCreator implements TaskCreator<DorseBackgroundTask<E>> {
+  protected class DeleteEntityTaskCreator implements TaskCreator<DorseBackgroundTask<E>> {
 
     private final E entity;
 
@@ -223,7 +224,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
 
   }
 
-  private class ActionsBar extends HBox {
+  protected class ActionsBar extends HBox {
 
     public ActionsBar(final E entity) {
       super();
@@ -434,7 +435,7 @@ public abstract class AbstractListActivity<E extends BaseEntity> extends DorseUi
     return result;
   }
 
-  private TableCell<E, E> createActionsCell() {
+  protected TableCell<E, E> createActionsCell() {
     return new TableCell<E, E>() {
       @Override
       protected void updateItem(E item, boolean empty) {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import be.virtualsushi.jfx.dorse.control.FieldLabel?>
+<?import be.virtualsushi.jfx.dorse.control.TextField?>
+<?import be.virtualsushi.jfx.dorse.control.LongNumberField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<?import be.virtualsushi.jfx.dorse.control.ControlsButtonsBar?>
+<?import be.virtualsushi.jfx.dorse.control.EditableList?>
+<?import be.virtualsushi.jfx.dorse.control.calendar.DatePicker?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="container" xmlns:fx="http://javafx.com/fxml" spacing="10" >
+	<padding>
+		<Insets top="15" right="15" bottom="15" left="15" />
+	</padding>
+	<GridPane vgap="10" hgap="10">
+
+
+        <FieldLabel value="%id" GridPane.columnIndex="0"
+            GridPane.rowIndex="0" />
+        <TextField fx:id="idField" GridPane.columnIndex="1"
+            GridPane.rowIndex="0" fieldWidth="200" />
+
+        <FieldLabel value="%fromDate" GridPane.columnIndex="0"
+            GridPane.rowIndex="2" />
+        <DatePicker fx:id="fromDateField" GridPane.columnIndex="1"
+            GridPane.rowIndex="2" />
+
+
+        <FieldLabel value="%toDate" GridPane.columnIndex="0"
+            GridPane.rowIndex="3" />
+        <DatePicker fx:id="toDateField" GridPane.columnIndex="1"
+            GridPane.rowIndex="3" />
+
+		<ControlsButtonsBar GridPane.columnIndex="1"
+			GridPane.rowIndex="5" alignment="BOTTOM_RIGHT" onSaveAction="#handleStats"
+			onCancelAction="#handleCancel" saveButtonTitle="%ok"
+			cancelButtonTitle="%cancel" />
+
+	</GridPane>
+</VBox>

@@ -4,10 +4,12 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -34,6 +36,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -130,6 +133,48 @@ public class RestApiAccessor extends RestTemplate {
     }
 		return response;
 	}
+
+	public ResponseEntity<StatsResponse> getStats(StatsDTO statsDTO) {
+		ResponseEntity<StatsResponse> response = null;
+		try {
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			String s_from = "1970-01-01";
+			String s_till = "2099-12-31";
+			try{
+				if(statsDTO.getFromDate()!=null) s_from = df.format(statsDTO.getFromDate());
+			} catch (Exception e){}
+			try{
+				if(statsDTO.getToDate()!=null) s_till = df.format(statsDTO.getToDate());
+			} catch (Exception e){}
+			response = getForEntity(serviceUri + "stats?from="+s_from+"&till="+s_till+"&article_id="+statsDTO.getArticle(), StatsResponse.class);
+			Object test = response;
+     return response;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/*public ResponseEntity<StatsResponse> getStats(String fromDate, String toDate, File file) {
+		ResponseEntity<StatsResponse> response = null;
+		String url = serviceUri + "stats";
+		Map<String, String> urlVariables = new HashMap<String, String>();
+    if (fromDate != null)
+      urlVariables.put("fromDate", fromDate);
+    else
+      urlVariables.put("fromDate", "");
+		if (toDate != null)
+	    urlVariables.put("toDate", toDate);
+	  else
+	    urlVariables.put("toDate", "");
+		log.debug("Getting stats via" + " URL: " + url);
+    try{
+		  response = getForEntity(url, StatsResponse.class, urlVariables);
+      //result.addAll(Arrays.asList(ids));
+    } catch (Exception e){
+      e.printStackTrace();
+    }
+		return response;
+	}*/
 
   /*public List<Sector> getSubSectors(Long parent_id){
     String url = serviceUri + "subSectors/"+ parent_id;

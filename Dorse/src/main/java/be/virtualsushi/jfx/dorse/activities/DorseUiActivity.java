@@ -189,6 +189,10 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
  		getEventBus().post(new ShowFilterDialogEvent(dialogTitle, componentClass, parameters));
  	}
 
+	protected void showStatsDialog(String dialogTitle, Article article) {
+		getEventBus().post(new ShowStatsDialogEvent(dialogTitle, article));
+	}
+
 	protected void hideDialog(Class<? extends AbstractDialog> componentClass) {
 		getEventBus().post(new HideDialogEvent());
 	}
@@ -196,6 +200,10 @@ public abstract class DorseUiActivity<V extends Node> extends AbstractActivity<S
   protected void hideFilterDialog() {
  		getEventBus().post(new HideFilterDialogEvent());
  	}
+
+	protected void hideStatsDialog() {
+		getEventBus().post(new HideStatsDialogEvent());
+	}
 
 	protected void showLoadingMask() {
 		getEventBus().post(new ShowLoadingMaskEvent());

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 
 import be.virtualsushi.jfx.dorse.activities.ViewInvoiceActivity;
@@ -61,10 +63,11 @@ public class ReportService {
     parameters.put("invoiceId", invoice.getId());
     parameters.put("created", invoice.getCreationDate());
     parameters.put("now", new Date());
-    parameters.put("goods", invoice.getProducts());
+	  parameters.put("goods", invoice.getProducts());
     parameters.put("tpt", invoice.getShipping());
     parameters.put("total", invoice.getTotal());
     parameters.put("report.date.format", reportDateFormat);
+	  parameters.put("remark", invoice.getRemark()==null?"":invoice.getRemark());
     parameters.put(JRParameter.REPORT_FORMAT_FACTORY, new DorseFormatFactory(resources));
     if (invoice.getCustomer() != null) {
       customer = invoice.getCustomer();
@@ -81,10 +84,10 @@ public class ReportService {
         }
       }
     }
-    if (invoiceAddress != null) {
-      invoiceAddress.setAtt(StringUtils.isNotBlank(invoiceAddress.getAtt()) ? "T.a.v. "+invoiceAddress.getAtt() : "");
-      parameters.put("invoiceAddress", invoiceAddress);
+    if (invoiceAddress != null && StringUtils.isNotBlank(invoiceAddress.getAtt()) && !invoiceAddress.getAtt().startsWith("T.a.v.")) {
+      invoiceAddress.setAtt("T.a.v. "+invoiceAddress.getAtt());
     }
+	  parameters.put("invoiceAddress", invoiceAddress);
     if (deliveryAddress != null) {
       if(deliveryAddress.getId().equals(invoiceAddress.getId())) parameters.put("deliveryAddressLine", "");
       else parameters.put("deliveryAddressLine", getAddressLine(deliveryAddress, customer.getName()));
@@ -174,22 +177,27 @@ public class ReportService {
     return false;
   }*/
 
+	public class OrderLineComparator<OrderLineProperty> {
+	    public boolean compare(OrderLine line1, OrderLine line2) {
+	        return line1.getArticle().getArticleName().compareTo(line2.getArticle().getArticleName())<0;
+	    }
+	}
+
   private List<OrderLineProperty> decoupleFreeArticles(List<OrderLineProperty> orderLines) {
     List<OrderLineProperty> decoupled = new ArrayList<OrderLineProperty>();
     for (OrderLineProperty orderLine : orderLines) {
       if (orderLine.getArticlePrice()>0 && orderLine.getApplyFree() && orderLine.getArticleFreeQuantity() > 0) {
         try {
-          if (orderLine.getArticleFreeQuantity() < orderLine.getQuantity()) {
-            OrderLineProperty free = (OrderLineProperty) BeanUtils.cloneBean(orderLine);
-            free.setQuantity(orderLine.getArticleFreeQuantity());
-            free.setArticlePrice(0F);
-            free.setUnitDiscount(0F);
-            free.setLineTotal(0F);
+          OrderLineProperty free = (OrderLineProperty) BeanUtils.cloneBean(orderLine);
+          free.setQuantity(orderLine.getArticleFreeQuantity());
+          free.setArticlePrice(0F);
+          free.setUnitDiscount(0F);
+          free.setLineTotal(0F);
+          if (orderLine.getQuantity() - orderLine.getArticleFreeQuantity() > 0) {
             orderLine.setQuantity(orderLine.getQuantity() - orderLine.getArticleFreeQuantity());
             decoupled.add(orderLine);
-            decoupled.add(free);
-          } else
-            decoupled.add(orderLine);
+          }
+          decoupled.add(orderLine);
         } catch (IllegalAccessException e) {
           e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (InstantiationException e) {
@@ -202,7 +210,13 @@ public class ReportService {
       } else
         decoupled.add(orderLine);
     }
-    return decoupled;
+    Collections.sort(decoupled, new Comparator<OrderLineProperty>(){
+	    @Override
+	    public int compare(OrderLineProperty line1, OrderLineProperty line2) {
+		    return line1.getArticleName().compareTo(line2.getArticleName());
+	    }
+    });
+	  return decoupled;
   }
 
   private String getAddressLine(Address address, String customerName){

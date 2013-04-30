@@ -4,6 +4,7 @@ import java.util.ResourceBundle;
 
 import be.virtualsushi.jfx.dorse.activities.*;
 import be.virtualsushi.jfx.dorse.dialogs.AbstractFilterDialog;
+import be.virtualsushi.jfx.dorse.dialogs.StatsDialog;
 import be.virtualsushi.jfx.dorse.events.*;
 import be.virtualsushi.jfx.dorse.model.Article;
 import be.virtualsushi.jfx.dorse.model.ServerResponse;
@@ -56,6 +57,7 @@ public class DorseApplication extends Application {
 	private LoadingMask loadingMask;
 	private Dialog currentlyShowingDialog;
   private Dialog currentlyShowingFilterDialog;
+	private Dialog currentlyShowingStatsDialog;
 	private Browser browser;
 	private AnnotationConfigApplicationContext applicationContext;
 
@@ -155,6 +157,15 @@ public class DorseApplication extends Application {
  	}
 
 	@Subscribe
+	public void onShowStatsDialog(ShowStatsDialogEvent event) {
+		customDialog.setTitle(event.getDialogTitle());
+		StatsDialog dialogContent = applicationContext.getBean(StatsDialog.class);
+		customDialog.setContent(dialogContent.asNode());
+		showStatsDialog(customDialog);
+		dialogContent.onShow(event.getArticle());
+	}
+
+	@Subscribe
 	public void onShowLoadingMask(ShowLoadingMaskEvent event) {
 		showDialog(loadingMask);
 	}
@@ -168,6 +179,11 @@ public class DorseApplication extends Application {
  	public void onHideFilterDialog(HideFilterDialogEvent event) {
  		hideCurrentlyShowingFilterDialog();
  	}
+
+	@Subscribe
+	public void onHideStatsDialog(HideStatsDialogEvent event) {
+		hideCurrentlyShowingStatsDialog();
+	}
 
 	@Subscribe
 	public void onShowReport(ShowReportEvent event) {
@@ -190,6 +206,14 @@ public class DorseApplication extends Application {
     currentlyShowingFilterDialog = dialogToShow;
  	}
 
+	private void showStatsDialog(Dialog dialogToShow) {
+		if (currentlyShowingStatsDialog != null) {
+      currentlyShowingStatsDialog.hide();
+		}
+		dialogToShow.show(browser);
+   currentlyShowingStatsDialog = dialogToShow;
+	}
+
 	private void hideCurrentlyShowingDialog() {
 		if (currentlyShowingDialog != null) {
 			currentlyShowingDialog.hide();
@@ -203,4 +227,11 @@ public class DorseApplication extends Application {
        currentlyShowingFilterDialog = null;
  		}
  	}
+
+	private void hideCurrentlyShowingStatsDialog() {
+		if (currentlyShowingStatsDialog != null) {
+			currentlyShowingStatsDialog.hide();
+			currentlyShowingStatsDialog = null;
+		}
+	}
 }

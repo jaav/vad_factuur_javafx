@@ -16,6 +16,8 @@ public interface Images {
 
   public static final Image IMG_EXPORT = new Image(Images.class.getResource("export.png").toString());
 
+	public static final Image IMG_STATS = new Image(Images.class.getResource("export2.png").toString());
+
   public static final Image IMG_PRINT = new Image(Images.class.getResource("print.png").toString());
 
 //	public static final Image IMG_DOWN = new Image(Images.class.getResource("down.png").toString());

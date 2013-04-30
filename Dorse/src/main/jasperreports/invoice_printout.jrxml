@@ -37,6 +37,7 @@
 	<parameter name="goods" class="java.lang.Float"/>
 	<parameter name="total" class="java.lang.Float"/>
 	<parameter name="tpt" class="java.lang.Float"/>
+	<parameter name="remark" class="java.lang.String"/>
 	<field name="articleName" class="java.lang.String"/>
 	<field name="articlePrice" class="java.lang.Float"/>
 	<field name="articleCode" class="java.lang.String"/>
@@ -61,31 +62,33 @@
 				<textFieldExpression><![CDATA["Factuurnummer: "+$P{invoiceCode}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="495fdd1c-568b-4ad5-a121-01652c7cf569" x="289" y="183" width="482" height="22" forecolor="#000000"/>
+				<reportElement uuid="495fdd1c-568b-4ad5-a121-01652c7cf569" x="289" y="183" width="266" height="22" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Factuurdatum: "+new SimpleDateFormat($R{input.date.format}).format($P{created})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="32a907d6-c234-4ad4-91c0-733aab3606ce" x="60" y="171" width="698" height="12"/>
+				<reportElement uuid="32a907d6-c234-4ad4-91c0-733aab3606ce" x="60" y="171" width="495" height="12"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{deliveryAddressLine}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="113" width="254" height="12"/>
+				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="113" width="254" height="16"/>
 				<textElement/>
 				<text><![CDATA[Vanderlindenstraat 15 - 1030 Brussel]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="126" width="254" height="12"/>
-				<textElement/>
+				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="126" width="254" height="16"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
 				<text><![CDATA[Tel: 02/422.03.00 - Email: vad@vad.be ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="139" width="254" height="12"/>
+				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="139" width="254" height="16"/>
 				<textElement/>
 				<text><![CDATA[Rekening nummer: 433-1078045-12 ]]></text>
 			</staticText>
@@ -179,12 +182,12 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="406" y="0" width="70" height="26"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("nl"))).format($F{quantity})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="477" y="0" width="76" height="26"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($F{articlePrice} - ($F{unitDiscount}!=null?$F{unitDiscount}:0)) * $F{quantity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{quantity}==0?"0,00":new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("nl"))).format(($F{articlePrice} - ($F{unitDiscount}!=null?$F{unitDiscount}:0)) * $F{quantity})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="4" y="0" width="76" height="26"/>
@@ -199,7 +202,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c17b9bd-9694-44b8-93fc-18351fe38edc" x="326" y="0" width="80" height="26"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{articlePrice}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("nl"))).format($F{articlePrice})]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement uuid="71329195-cc28-4601-a89d-4774551ef3f0" x="0" y="27" width="555" height="1" forecolor="#CCCCCC"/>
@@ -221,7 +224,7 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="125">
+		<band height="145">
 			<staticText>
 				<reportElement uuid="97f54d08-0b21-474a-ae1a-2cc2b28de593" x="238" y="18" width="129" height="16"/>
 				<textElement>
@@ -254,34 +257,39 @@
 				<textElement textAlignment="Right">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{goods}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("nl"))).format($P{goods})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="ddd9b493-aa38-4c3e-9bbc-3e82208b9f82" x="453" y="18" width="100" height="16"/>
 				<textElement textAlignment="Right">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{tpt}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("nl"))).format($P{tpt})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="01cd0221-e4c1-475f-84e8-eef8c4047ff7" x="453" y="40" width="100" height="16"/>
 				<textElement textAlignment="Right">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["€  "+$P{total}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["€  "+new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("nl"))).format(	$P{total})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f1259349-d431-4cce-bf79-c5cf4a340c59" x="0" y="80" width="432" height="20"/>
+				<reportElement uuid="f1259349-d431-4cce-bf79-c5cf4a340c59" x="0" y="100" width="432" height="20"/>
 				<textElement/>
 				<text><![CDATA[Er wordt geen korting toegestaan - Niet BTW-plichtig]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b29f1764-e84d-469f-9885-d4444603db52" x="2" y="104" width="552" height="20"/>
+				<reportElement uuid="b29f1764-e84d-469f-9885-d4444603db52" x="2" y="124" width="552" height="20"/>
 				<textElement textAlignment="Center">
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Wij verzoeken U deze factuur binnen 30 dagen na datum te voldoen met vermelding van bovenstaand factuurnr.]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="952de7d0-893d-4690-980b-4d0b50c142f2" x="0" y="60" width="552" height="40"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{remark}]]></textFieldExpression>
+			</textField>
 		</band>
 	</lastPageFooter>
 </jasperReport>

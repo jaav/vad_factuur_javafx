@@ -2,6 +2,10 @@ package be.virtualsushi.jfx.dorse.control;
 
 import java.util.List;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -13,40 +17,19 @@ import javafx.util.Callback;
 import be.virtualsushi.jfx.dorse.model.Listable;
 
 public class DorseComboBox<T extends Listable> extends ComboBox<T> {
+	private final DorseComboBox<T> fcbo = this;
+	private ObservableList<T> items;
+	private ObservableList<T> filter;
+	private String s;
+	private Object selection;
 
-
-	private class KeyHandler implements EventHandler<KeyEvent> {
-
-      private SingleSelectionModel< T > sm;
-      private String s;
-
-      public KeyHandler() {
-          sm = getSelectionModel();
-          s = "";
-      }
-
-      @Override
-      public void handle( KeyEvent event ) {
-          // handle non alphanumeric keys like backspace, delete etc
-          if( event.getCode() == KeyCode.BACK_SPACE && s.length()>0)
-              s = s.substring( 0, s.length() - 1 );
-          else s += event.getText();
-
-          if( s.length() == 0 ) {
-              sm.selectFirst();
-              return;
-          }
-          System.out.println( s );
-          for( String item: items ) {
-              if( item.startsWith( s ) ) sm.select( item );
-          }
-      }
-
-  }
 
 	public DorseComboBox() {
 		super();
-		setCellFactory(new Callback<ListView<T>, ListCell<T>>() {
+		this.items = getItems();
+		this.filter = FXCollections.observableArrayList();
+
+		this.setCellFactory(new Callback<ListView<T>, ListCell<T>>() {
 
 			@Override
 			public ListCell<T> call(ListView<T> param) {
@@ -63,6 +46,34 @@ public class DorseComboBox<T extends Listable> extends ComboBox<T> {
 				};
 			}
 		});
+
+		this.setOnKeyReleased(new KeyHandler());
+
+		this.focusedProperty().addListener(new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if (newValue == false) {
+					s = "";
+					fcbo.setItems(items);
+					fcbo.getSelectionModel().select((T) selection);
+				}
+
+			}
+		});
+
+		this.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if (newValue != null) {
+					selection = (Object) newValue;
+				}
+
+			}
+		});
+	}
+
+	public List<T> getAcceptableValues() {
+		return getItems();
 	}
 
 	public void setAcceptableValues(List<T> acceptableValues) {
@@ -70,8 +81,47 @@ public class DorseComboBox<T extends Listable> extends ComboBox<T> {
 		getItems().addAll(acceptableValues);
 	}
 
-	public List<T> getAcceptableValues() {
-		return getItems();
-	}
+	private class KeyHandler implements EventHandler<KeyEvent> {
 
+		private SingleSelectionModel<T> sm;
+
+		public KeyHandler() {
+			sm = getSelectionModel();
+			s = "";
+		}
+
+		@Override
+		public void handle(KeyEvent event) {
+			int index = sm.getSelectedIndex();
+				System.out.println("index = " + index);
+				// handle non alphanumeric keys like backspace, delete etc
+				if (event.getCode() == KeyCode.BACK_SPACE && s.length() > 0) {
+					s = s.substring(0, s.length() - 1);
+				} else if(event.getCode().isLetterKey()) {
+					filter.clear();
+					s += event.getText();
+					System.out.println("s = " + s);
+				}
+				else return;
+
+				if (s.length() == 0) {
+					fcbo.setItems(items);
+					sm.selectFirst();
+					return;
+				}
+				for (T item : items) {
+					if (item.getPrintName().toUpperCase().startsWith(s.toUpperCase())) {
+
+						filter.add(item);
+
+					}
+				}
+				fcbo.setItems(filter);
+				if(event.getCode().isLetterKey())
+					sm.selectFirst();
+				else
+					sm.select(index);
+
+		}
+	}
 }

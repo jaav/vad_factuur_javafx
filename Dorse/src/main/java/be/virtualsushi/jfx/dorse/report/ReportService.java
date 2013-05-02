@@ -48,16 +48,17 @@ public class ReportService {
   @Value("${print.container}")
  	private String printContainer;
 
-  public String createInvoiceReport(int iReportType, Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<OrderLineProperty> orderLines) {
+  public String createInvoiceReport(int iReportType, Invoice invoice, Address invoiceAddress, Address deliveryAddress, List<Article> articles, List<OrderLineProperty> orderLines) {
     String reportType;
+	  List<OrderLineProperty> sorted = sortLines(orderLines, articles);
     Customer customer = null;
     if (iReportType == ViewInvoiceActivity.PRINT_INVOICE)
       reportType = "invoice_printout.jasper";
     else if (iReportType == ViewInvoiceActivity.PRINT_REMINDER)
       reportType = "reminder_printout.jasper";
     else return null;
-    //List<OrderLineProperty> recoupled = recoupleArticles(orderLines);
-    List<OrderLineProperty> decoupled = decoupleFreeArticles(orderLines);
+    //List<OrderLineProperty> recoupled = recoupleArticles(sorted);
+    List<OrderLineProperty> decoupled = decoupleFreeArticles(sorted);
     HashMap<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("invoiceCode", invoice.getCode());
     parameters.put("invoiceId", invoice.getId());
@@ -114,6 +115,24 @@ public class ReportService {
     }
     return out.getAbsolutePath();
   }
+
+	private List<OrderLineProperty> sortLines(List<OrderLineProperty> orderLines, List<Article> articles){
+		Map<Long, OrderLineProperty> sortedMap = new TreeMap<Long, OrderLineProperty>();
+		for (OrderLineProperty orderLine : orderLines) {
+			inner:
+			for (Article article : articles) {
+				if(article.getId().compareTo(orderLine.getArticleId())==0){
+					sortedMap.put(article.getId(), orderLine);
+					break inner;
+				}
+			}
+		}
+		List<OrderLineProperty> sorted = new ArrayList<OrderLineProperty>();
+		for (Long aLong : sortedMap.keySet()) {
+			sorted.add(sortedMap.get(aLong));
+		}
+		return sorted;
+	}
 
 
   public String createAddressLabel(Customer customer, Address address) {

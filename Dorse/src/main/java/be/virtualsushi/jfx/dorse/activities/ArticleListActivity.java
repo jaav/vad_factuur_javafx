@@ -250,11 +250,13 @@ public class ArticleListActivity extends AbstractListActivity<Article> {
 						File file = fileChooser.showSaveDialog(getView().toNode().getScene().getWindow());
 						try {
 							BufferedWriter bf = new BufferedWriter(new FileWriter(file));
+							bf.write("Date\tInvoice\tArticle\tCode\tPrice\tQuantity\tDiscount\tTotal\tCustomer");
+							bf.newLine();
 							for (Stat stat : result) {
 								bf.write(stat.getDate() + "\t" + stat.getInvoice()
 										+ "\t" + stat.getArticle() + "\t" + stat.getCode()
 										+ "\t" + stat.getPrice() + "\t" + stat.getQuantity()
-										+ "\t" + stat.getDiscount() + "\t" + stat.getTotal());
+										+ "\t" + stat.getDiscount() + "\t" + stat.getTotal() + "\t" + stat.getCustomer());
 								bf.newLine();
 							}
 							bf.flush();

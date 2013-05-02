@@ -231,6 +231,7 @@ public class RestApiAccessor extends RestTemplate {
 				return auth;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 		return null;
@@ -241,6 +242,7 @@ public class RestApiAccessor extends RestTemplate {
  			ServerResponse response = getForObject(serviceUri + "allCustomers", CustomerResponse.class);
       return response;
  		} catch (Exception e) {
+			 e.printStackTrace();
  			return null;
  		}
  	}
@@ -250,6 +252,7 @@ public class RestApiAccessor extends RestTemplate {
  			ServerResponse response = getForObject(serviceUri + "allArticles", ArticleResponse.class);
       return response;
  		} catch (Exception e) {
+			 e.printStackTrace();
  			return null;
  		}
  	}

@@ -199,7 +199,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 
 		@Override
 		public DorseBackgroundTask<String> createTask() {
-			return new DorseBackgroundTask<String>(this, reportType, invoice, invoiceAddress, deliveryAddress, orderLines) {
+			return new DorseBackgroundTask<String>(this, reportType, invoice, invoiceAddress, deliveryAddress, articles, orderLines) {
 
 				@Override
 				protected void onPreExecute() {
@@ -211,7 +211,7 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@Override
 				protected String call() throws Exception {
 					return reportService.createInvoiceReport((Integer)getParameters()[0], (Invoice) getParameters()[1], (Address) getParameters()[2], (Address) getParameters()[3],
-							(List<OrderLineProperty>) getParameters()[4]);
+							(List<Article>) getParameters()[4], (List<OrderLineProperty>) getParameters()[5]);
 				}
 
 				@Override

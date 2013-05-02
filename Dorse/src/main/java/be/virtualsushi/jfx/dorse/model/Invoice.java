@@ -143,6 +143,8 @@ public class Invoice extends BaseEntity {
 		this.creationDate = creationDate;
 	}
 
+	@JsonSerialize(using = CustomDateSerializer.class)
+	@JsonDeserialize(using = CustomDateDeserializer.class)
 	public Date getPaidDate() {
 		return paidDate;
 	}

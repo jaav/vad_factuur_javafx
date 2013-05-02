@@ -17,6 +17,7 @@ public class Stat {
 	private Integer quantity;
 	private Float discount;
 	private Float total;
+	private String customer;
 
 	public String getArticle() {
 		return article;
@@ -80,5 +81,13 @@ public class Stat {
 
 	public void setTotal(Float total) {
 		this.total = total;
+	}
+
+	public String getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
 	}
 }

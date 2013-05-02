@@ -129,14 +129,22 @@ public class EditInvoiceActivity extends AbstractEditActivity<VBox, Invoice> {
 	@Override
 	public void initialize() {
 		super.initialize();
-		customerField.valueProperty().addListener(new ChangeListener<Customer>() {
+		customerField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+				if (!customerField.isFocused() && customerField.getValue().getId()>=0) {
+					doInBackground(new GetCustomerTaskCreator(customerField.getValue().getId()));
+				}
+			}
+		});
+		/*customerField.valueProperty().addListener(new ChangeListener<Customer>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
         if(newValue!=null && newValue.getId()>=0)
 				  doInBackground(new GetCustomerTaskCreator(newValue.getId()));
 			}
-		});
+		});*/
 		deliveryAddressToggleGroup = new ToggleGroup();
 		invoiceAddressToggleGroup = new ToggleGroup();
 	}

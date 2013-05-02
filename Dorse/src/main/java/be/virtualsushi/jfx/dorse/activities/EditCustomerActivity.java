@@ -103,12 +103,15 @@ public class EditCustomerActivity extends AbstractEditActivity<VBox, Customer> {
         System.out.println("There was a change => " + actionEvent);
         ComboBox sectorCombo = (ComboBox)actionEvent.getSource();
         Sector selectedSector = (Sector)sectorCombo.getValue();
-        Long id = selectedSector.getId();
-        if(id!=null && id>=0)
-          showSubSectors(id);
-        else
-          hideSubsectors();
-        subSectorField.getSelectionModel().clearSelection();
+	      if(selectedSector!=null){
+	        Long id = selectedSector.getId();
+	        if(id!=null && id>=0)
+	          showSubSectors(id);
+	        else
+	          hideSubsectors();
+	        subSectorField.getSelectionModel().clearSelection();
+		      subSectorField.getSelectionModel().selectFirst();
+	      }
       }
     });
     if(subSectorField.getAcceptableValues().size()==0)

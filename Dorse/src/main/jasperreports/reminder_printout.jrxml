@@ -102,7 +102,7 @@
 			</frame>
 			<textField>
 				<reportElement uuid="47e9a6c5-48f4-42a5-bdb3-a80324a8ef26" x="332" y="30" width="221" height="20">
-					<printWhenExpression><![CDATA[$P{invoiceAddress}!=null]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{invoiceAddress}!=null && $P{invoiceAddress}.getAtt()!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="12" isBold="true"/>

@@ -90,7 +90,14 @@
 			<staticText>
 				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="139" width="254" height="16"/>
 				<textElement/>
-				<text><![CDATA[Rekening nummer: 433-1078045-12 ]]></text>
+				<text><![CDATA[Rekening nummer: BE19 4331 0780 4512 ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4d9987ee-1827-41a8-a30c-2a0a7b3f9151" x="0" y="152" width="254" height="16"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[BIC code: KREDBEBB ]]></text>
 			</staticText>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement uuid="ad021a47-c2d8-4e03-85a6-f8e89b30b363" x="0" y="0" width="280" height="110"/>

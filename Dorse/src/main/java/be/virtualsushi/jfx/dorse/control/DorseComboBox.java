@@ -93,14 +93,17 @@ public class DorseComboBox<T extends Listable> extends ComboBox<T> {
 		@Override
 		public void handle(KeyEvent event) {
 			int index = sm.getSelectedIndex();
-				System.out.println("index = " + index);
-				// handle non alphanumeric keys like backspace, delete etc
+			System.out.println("s.length() = " + s.length());
+			System.out.println("s = " + s);
+				String text = event.getText();
 				if (event.getCode() == KeyCode.BACK_SPACE && s.length() > 0) {
 					s = s.substring(0, s.length() - 1);
-				} else if(event.getCode().isLetterKey()) {
+					filter.clear();
+				} else if(text.length()==1 && (int)text.charAt(0)>31 && (int)text.charAt(0)<127) {
+					String c = event.getCharacter();
+					String t = event.getText();
 					filter.clear();
 					s += event.getText();
-					System.out.println("s = " + s);
 				}
 				else return;
 
@@ -117,10 +120,10 @@ public class DorseComboBox<T extends Listable> extends ComboBox<T> {
 					}
 				}
 				fcbo.setItems(filter);
-				if(event.getCode().isLetterKey())
+				if(event.getText().length()>0 || index<0)
 					sm.selectFirst();
 				else
-					sm.select(index);
+					sm.selectFirst();
 
 		}
 	}

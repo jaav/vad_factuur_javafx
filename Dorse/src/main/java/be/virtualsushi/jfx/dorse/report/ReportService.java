@@ -118,7 +118,11 @@ public class ReportService {
 
 	private List<OrderLineProperty> sortLines(List<OrderLineProperty> orderLines, List<Article> articles){
 		Map<Long, OrderLineProperty> sortedMap = new TreeMap<Long, OrderLineProperty>();
+
 		for (OrderLineProperty orderLine : orderLines) {
+			sortedMap.put(orderLine.getArticleId(), orderLine);
+		}
+		/*for (OrderLineProperty orderLine : orderLines) {
 			inner:
 			for (Article article : articles) {
 				if(article.getId().compareTo(orderLine.getArticleId())==0){
@@ -126,7 +130,7 @@ public class ReportService {
 					break inner;
 				}
 			}
-		}
+		}*/
 		List<OrderLineProperty> sorted = new ArrayList<OrderLineProperty>();
 		for (Long aLong : sortedMap.keySet()) {
 			sorted.add(sortedMap.get(aLong));
@@ -208,15 +212,18 @@ public class ReportService {
       if (orderLine.getArticlePrice()>0 && orderLine.getApplyFree() && orderLine.getArticleFreeQuantity() > 0) {
         try {
           OrderLineProperty free = (OrderLineProperty) BeanUtils.cloneBean(orderLine);
-          free.setQuantity(orderLine.getArticleFreeQuantity());
           free.setArticlePrice(0F);
           free.setUnitDiscount(0F);
           free.setLineTotal(0F);
           if (orderLine.getQuantity() - orderLine.getArticleFreeQuantity() > 0) {
             orderLine.setQuantity(orderLine.getQuantity() - orderLine.getArticleFreeQuantity());
+	          orderLine.setLineTotal(orderLine.getQuantity() * orderLine.getArticlePrice());
+	          free.setQuantity(orderLine.getArticleFreeQuantity());
             decoupled.add(orderLine);
           }
-          decoupled.add(orderLine);
+	        else
+            free.setQuantity(orderLine.getQuantity());
+          decoupled.add(free);
         } catch (IllegalAccessException e) {
           e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (InstantiationException e) {
@@ -232,7 +239,7 @@ public class ReportService {
     Collections.sort(decoupled, new Comparator<OrderLineProperty>(){
 	    @Override
 	    public int compare(OrderLineProperty line1, OrderLineProperty line2) {
-		    return line1.getArticleName().compareTo(line2.getArticleName());
+		    return line1.getArticleCode().compareTo(line2.getArticleCode());
 	    }
     });
 	  return decoupled;

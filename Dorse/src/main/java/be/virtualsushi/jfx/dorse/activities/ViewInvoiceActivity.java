@@ -210,7 +210,8 @@ public class ViewInvoiceActivity extends AbstractViewEntityActivity<VBox, Invoic
 				@SuppressWarnings("unchecked")
 				@Override
 				protected String call() throws Exception {
-					return reportService.createInvoiceReport((Integer)getParameters()[0], (Invoice) getParameters()[1], (Address) getParameters()[2], (Address) getParameters()[3],
+					return reportService.createInvoiceReport((Integer)getParameters()[0], (Invoice) getParameters()[1],
+							(Address) getParameters()[2], (Address) getParameters()[3],
 							(List<Article>) getParameters()[4], (List<OrderLineProperty>) getParameters()[5]);
 				}
 
